@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene
 from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette
 from PyQt5.QtCore import Qt, QTimer
 import serial
@@ -27,8 +27,8 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         self.create_timer()
-        self.create_tabs()
-        self.setCentralWidget(self.tabs)
+        self.create_menus()
+        self.create_background_and_buttons()
         self.setWindowTitle("Interface PyQt5")
 
     def create_timer(self):
@@ -36,35 +36,36 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.read_from_serial)
         self.timer.start(1000)  # Lire toutes les secondes
 
-    def create_tabs(self):
-        self.tabs = QTabWidget()
+    def create_menus(self):
+        self.menuBar().addMenu(self.create_menu("Foo"))
+        self.menuBar().addMenu(self.create_menu("Bar"))
 
-        self.tab1 = self.create_tab("Foo", "Bouton 1")
-        self.tab2 = self.create_tab("Bar", "Bouton 2")
+    def create_menu(self, menu_name):
+        menu = QMenu(menu_name, self)
+        menu.addAction("Option 1")
+        menu.addAction("Option 2")
+        return menu
 
-        self.tabs.addTab(self.tab1, "Foo")
-        self.tabs.addTab(self.tab2, "Bar")
+    def create_background_and_buttons(self):
+        self.scene = QGraphicsScene()
+        self.view = QGraphicsView(self.scene, self)
+        self.setCentralWidget(self.view)
 
-    def create_tab(self, tab_name, button_name):
-        tab = QWidget()
-        tab.layout = QVBoxLayout()
+        pixmap = QPixmap("background.jpg")  # Remplacez "background.jpg" par votre image
+        self.scene.addPixmap(pixmap)
 
-        button = QPushButton(button_name)
-        tab.layout.addWidget(button)
+        self.button1 = QPushButton("Bouton 1", self)
+        self.button1.setStyleSheet("background-color: transparent;")
+        self.button1.move(50, 50)
 
-        tab.setLayout(tab.layout)
-
-        return tab
+        self.button2 = QPushButton("Bouton 2", self)
+        self.button2.setStyleSheet("background-color: transparent;")
+        self.button2.move(100, 100)
 
     def read_from_serial(self):
         data = self.serial_reader.read()
         if data is not None:
             print(data)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setBrush(QBrush(QPixmap("background.jpg")))  # Remplacez "background.jpg" par votre image
-        painter.drawRect(self.rect())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
