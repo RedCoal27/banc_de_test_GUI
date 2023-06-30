@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QAction, QMessageBox, QActionGroup
-from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette
+from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette, QColor, QIcon
 from PyQt5.QtCore import Qt, QTimer
 import serial
 from serial.tools.list_ports import comports
@@ -16,22 +16,25 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.serial_reader = SerialReader()
-
-        self.buttons = {}
-
         self.translator = Translator()
         self.translator.load_translations()
         self.current_language = "en"
 
+        self.serial_reader = SerialReader(self.translator, self.current_language)
+
+        self.buttons = {}
+        self.language_menu = None
+
         self.init_ui()
+
 
     def init_ui(self):
         self.create_timer()
         self.create_menus()
         self.create_background_and_buttons()
-        self.setWindowTitle("Interface PyQt5")
+        self.setWindowTitle("Benchmark GUI")
         self.setMinimumSize(600, 400)
+        self.setWindowIcon(QIcon("xfab.jpg"))
 
     def create_timer(self):
         self.timer = QTimer()
@@ -43,7 +46,8 @@ class MainWindow(QMainWindow):
         self.com_menu.aboutToShow.connect(self.update_com_menu)
         self.menuBar().addMenu(self.com_menu)
 
-        self.menuBar().addMenu(self.create_language_menu())
+        self.language_menu = self.create_language_menu()
+        self.menuBar().addMenu(self.language_menu)
 
 
     def create_menu(self, menu_name, actions):
@@ -67,22 +71,29 @@ class MainWindow(QMainWindow):
                 if self.serial_reader.ser is not None and self.serial_reader.ser.port == port:
                     action.setChecked(True)
         else:
-            self.com_menu.addAction("Aucun disponible")
+            self.com_menu.addAction(self.translator.translate("none_available", self.current_language))
 
     def create_language_menu(self):
         language_menu = QMenu(self.translator.translate("language", self.current_language), self)
+        action_group = QActionGroup(self)
+        action_group.setExclusive(True)
         for language in ["en", "fr"]:
             action = QAction(self.translator.translate(language, self.current_language), self)
+            action.setCheckable(True)
             action.triggered.connect(lambda checked, lang=language: self.change_language(lang))
+            action_group.addAction(action)
             language_menu.addAction(action)
+            if language == self.current_language:
+                action.setChecked(True)
         return language_menu
     
     def change_language(self, lang):
         self.current_language = lang
+        self.serial_reader.current_language = lang
+        self.language_menu.setTitle(self.translator.translate("language", self.current_language))
         for key, button_tuple in self.buttons.items():
             button = button_tuple[0]
             button.setText(self.translator.translate(key, self.current_language))
-
 
 
     def create_background_and_buttons(self):
@@ -93,15 +104,13 @@ class MainWindow(QMainWindow):
         self.view.setTransformationAnchor(QGraphicsView.NoAnchor)
         self.setCentralWidget(self.view)
 
-        self.pixmap_item = QGraphicsPixmapItem(QPixmap("background.jpg"))  # Remplacez "background.jpg" par votre image
-        self.scene.addItem(self.pixmap_item)
+        self.scene.setBackgroundBrush(QBrush(QColor("#F5F5F5")))
 
         self.create_button("Bouton 1", 0.1, 0.1, 0.1, 0.05, self.button_clicked)
         self.create_button("Bouton 2", 0.2, 0.2, 0.1, 0.05, self.button_clicked)
 
     def create_button(self, text, x_ratio, y_ratio, width_ratio, height_ratio, function):
-        button = QPushButton(text, self)
-        # button.setStyleSheet("background-color: transparent;")
+        button = QPushButton(self.translator.translate(text, self.current_language), self)
         button.clicked.connect(function)
         self.buttons[text] = (button, x_ratio, y_ratio, width_ratio, height_ratio)
 
@@ -118,7 +127,7 @@ class MainWindow(QMainWindow):
         super().resizeEvent(event)
         self.view.resize(self.size())
         self.scene.setSceneRect(0, 0, self.view.width(), self.view.height())
-        self.pixmap_item.setPixmap(QPixmap("background.jpg").scaled(self.view.size()))  # Remplacez "background.jpg" par votre image
+        self.view.setBackgroundBrush(QBrush(QColor(0xf5f5f5)))
         menu_bar_height = self.menuBar().height()
         for button, x_ratio, y_ratio, width_ratio, height_ratio in self.buttons.values():
             button.move(int(x_ratio * self.width()), int(y_ratio * self.height()) + menu_bar_height)

@@ -3,5 +3,10 @@
     "en": "English",
     "fr": "French",
     "Bouton 1": "Button 1",
-    "Bouton 2": "Button 2"
+    "Bouton 2": "Button 2",
+    "none_available": "None available",
+    "serial_port_error": "Failed to open port {port}. The program will continue without reading the serial port.",
+    "warning": "Warning",
+    "no_com_port": "No COM port available.",
+    "serial_port_disconnected": "The used COM port has been unplugged."
 }
