@@ -6,11 +6,11 @@ from custom_widget import CustomWidget
 
 class FourWay(CustomWidget):
     def __init__(self, translator, pos , key , number= "" , parent=None):
-        ratio = [0.2, 0.2]
+        ratio = [0.1, 0.15]
         self.FourWay_number = number
         super().__init__(translator, pos, ratio, parent=None)
         self.create_labels(key)
-        # self.create_buttons()
+        self.create_buttons()
         
 
     def create_labels(self,key):
@@ -23,4 +23,5 @@ class FourWay(CustomWidget):
 
 
     def create_buttons(self):
-        self.create_button("aaa", function)
+        self.create_button("aaa")
+

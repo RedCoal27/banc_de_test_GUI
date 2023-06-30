@@ -28,19 +28,29 @@ class MainWindow(QMainWindow):
 
 
     def init_ui(self):
+        """
+        Initializes the user interface by creating the timer, menus, background, and buttons.
+        """
         self.create_timer()
         self.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
-        self.setMinimumSize(600, 400)
+        self.setMinimumSize(1000, 600)
+        self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
         self.setWindowIcon(QIcon("images/xfab.jpg"))
 
     def create_timer(self):
+        """
+        Creates a timer that reads from the serial port every second.
+        """
         self.timer = QTimer()
         self.timer.timeout.connect(self.read_from_serial)
         self.timer.start(1000)  # Lire toutes les secondes
 
     def create_menus(self):
+        """
+        Creates the COM and language menus.
+        """
         self.com_menu = QMenu("COM", self)
         self.com_menu.aboutToShow.connect(self.update_com_menu)
         self.menuBar().addMenu(self.com_menu)
@@ -50,12 +60,25 @@ class MainWindow(QMainWindow):
 
 
     def create_menu(self, menu_name, actions):
+        """
+        Creates a menu with the given name and actions.
+
+        Args:
+            menu_name (str): The name of the menu.
+            actions (list): A list of QAction objects to add to the menu.
+
+        Returns:
+            QMenu: The created menu.
+        """
         menu = QMenu(menu_name, self)
         for action in actions:
             menu.addAction(action)
         return menu
     
     def update_com_menu(self):
+        """
+        Updates the COM menu with available ports.
+        """
         self.com_menu.clear()
         action_group = QActionGroup(self)
         action_group.setExclusive(True)
@@ -73,10 +96,16 @@ class MainWindow(QMainWindow):
             self.com_menu.addAction(self.translator.translate("none_available"))
 
     def create_language_menu(self):
+        """
+        Creates the language menu.
+
+        Returns:
+            QMenu: The created language menu.
+        """
         language_menu = QMenu(self.translator.translate("language"), self)
         action_group = QActionGroup(self)
         action_group.setExclusive(True)
-        for language in ["en", "fr"]:
+        for language in self.translator.translations:
             action = QAction(self.translator.translate(language), self)
             action.setCheckable(True)
             action.triggered.connect(lambda checked, lang=language: self.change_language(lang))
@@ -87,8 +116,15 @@ class MainWindow(QMainWindow):
         return language_menu
 
     def change_language(self, lang):
+        """
+        Changes the language of the GUI.
+
+        Args:
+            lang (str): The language to change to.
+        """
         self.translator.current_language = lang
         self.language_menu.setTitle(self.translator.translate("language"))
+        
         for key, button_tuple in self.buttons.items():
             button = button_tuple[0]
             button.setText(self.translator.translate(key))
@@ -98,12 +134,16 @@ class MainWindow(QMainWindow):
                 item.change_language(lang)
 
     def create_background_and_buttons(self):
+        """
+        Creates the background and custom widgets.
+        """
         self.scene = QGraphicsScene()
         self.view = QGraphicsView(self.scene, self)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.view.setTransformationAnchor(QGraphicsView.NoAnchor)
         self.setCentralWidget(self.view)
+        #décalage de la scene par rapport à la fenêtre
 
         self.create_custom_widgets()
         self.scene.setBackgroundBrush(QBrush(QColor("#F5F5F5")))
@@ -111,6 +151,9 @@ class MainWindow(QMainWindow):
 
 
     def create_custom_widgets(self):
+        """
+        Creates the custom widgets.
+        """
         self.custom_widgets = []
         self.custom_widgets.append(FourWay(self.translator, [0.1,0.1],"SV"))
         self.custom_widgets.append(FourWay(self.translator, [0.1,0.3],"WL","1"))
@@ -124,13 +167,22 @@ class MainWindow(QMainWindow):
 
 
     def read_from_serial(self):
+        """
+        Reads data from the serial port and prints it to the console.
+        """
         data = self.serial_reader.read()
         if data is not None:
             print(data)
 
     def resizeEvent(self, event):
+        """
+        Resizes the view and buttons when the window is resized.
+
+        Args:
+            event (QResizeEvent): The resize event.
+        """
         super().resizeEvent(event)
-        self.view.resize(self.size())
+        self.view.resize(self.width(), self.height()-self.menuBar().height() - 2) # -2 pour éviter le scroll bar
         self.scene.setSceneRect(0, 0, self.view.width(), self.view.height())
         self.view.setBackgroundBrush(QBrush(QColor(0xf5f5f5)))
         menu_bar_height = self.menuBar().height()

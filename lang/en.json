@@ -1,9 +1,7 @@
 {
     "language": "Language",
     "en": "English",
-    "fr": "French",
-    "Bouton 1": "Button 1",
-    "Bouton 2": "Button 2",
+    "fr": "Français",
     "none_available": "None available",
     "serial_port_error": "Failed to open port {port}. The program will continue without reading the serial port.",
     "warning": "Warning",
@@ -13,6 +11,6 @@
     "SL":"Slit Vale",
     "do_up":"Do Up",
     "do_down":"Do Down",
-    "do_open":"Do Open",
-    "do_close":"Do Close"
+    "di_up":"DI UP",
+    "di_down":"DI Down"
 }
