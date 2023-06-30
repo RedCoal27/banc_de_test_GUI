@@ -9,5 +9,11 @@
     "warning": "Avertissement",
     "no_com_port": "Aucun port COM disponible.",
     "serial_port_disconnected": "Le port COM utilisé a été débranché.",
-    "Hello": "Bonjour"
+    "Hello": "Bonjour",
+    "WL":"Wafer Lift {number}",
+    "SL":"Slit Vale",
+    "do_up":"DO Haut",
+    "do_down":"DO Bas",
+    "di_up":"DI Haut",
+    "di_down":"DI Bas"
 }

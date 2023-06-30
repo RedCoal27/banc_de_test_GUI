@@ -10,6 +10,7 @@ import json
 from translator import Translator
 from serial_reader import SerialReader
 from custom_widget import CustomWidget
+from four_way import FourWay
 
 
 class MainWindow(QMainWindow):
@@ -18,9 +19,7 @@ class MainWindow(QMainWindow):
 
         self.translator = Translator()
         self.translator.load_translations()
-        self.current_language = "en"
-
-        self.serial_reader = SerialReader(self.translator, self.current_language)
+        self.serial_reader = SerialReader(self.translator)
 
         self.buttons = {}
         self.language_menu = None
@@ -34,7 +33,7 @@ class MainWindow(QMainWindow):
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
         self.setMinimumSize(600, 400)
-        self.setWindowIcon(QIcon("xfab.jpg"))
+        self.setWindowIcon(QIcon("images/xfab.jpg"))
 
     def create_timer(self):
         self.timer = QTimer()
@@ -71,29 +70,28 @@ class MainWindow(QMainWindow):
                 if self.serial_reader.ser is not None and self.serial_reader.ser.port == port:
                     action.setChecked(True)
         else:
-            self.com_menu.addAction(self.translator.translate("none_available", self.current_language))
+            self.com_menu.addAction(self.translator.translate("none_available"))
 
     def create_language_menu(self):
-        language_menu = QMenu(self.translator.translate("language", self.current_language), self)
+        language_menu = QMenu(self.translator.translate("language"), self)
         action_group = QActionGroup(self)
         action_group.setExclusive(True)
         for language in ["en", "fr"]:
-            action = QAction(self.translator.translate(language, self.current_language), self)
+            action = QAction(self.translator.translate(language), self)
             action.setCheckable(True)
             action.triggered.connect(lambda checked, lang=language: self.change_language(lang))
             action_group.addAction(action)
             language_menu.addAction(action)
-            if language == self.current_language:
+            if language == self.translator.current_language:
                 action.setChecked(True)
         return language_menu
 
     def change_language(self, lang):
-        self.current_language = lang
-        self.serial_reader.current_language = lang
-        self.language_menu.setTitle(self.translator.translate("language", self.current_language))
+        self.translator.current_language = lang
+        self.language_menu.setTitle(self.translator.translate("language"))
         for key, button_tuple in self.buttons.items():
             button = button_tuple[0]
-            button.setText(self.translator.translate(key, self.current_language))
+            button.setText(self.translator.translate(key))
 
         for item in self.scene.items():
             if isinstance(item, CustomWidget):
@@ -111,18 +109,18 @@ class MainWindow(QMainWindow):
         self.scene.setBackgroundBrush(QBrush(QColor("#F5F5F5")))
 
 
-    def create_custom_widget(self, x_ratio, y_ratio, width_ratio, height_ratio, text, button_text):
-        ratio = [x_ratio, y_ratio, width_ratio, height_ratio]
-        custom_widget = CustomWidget(self.translator, self.current_language, text, button_text, ratio)
-        #set pos and size
-        custom_widget.set_pos_size(self.width(), self.height())
-        self.scene.addItem(custom_widget)
-
-
 
     def create_custom_widgets(self):
-        self.create_custom_widget(0.1, 0.1, 0.1, 0.1, "test1", "test1")
-        self.create_custom_widget(0.3, 0.3, 0.1, 0.1, "test2", "test2")
+        self.custom_widgets = []
+        self.custom_widgets.append(FourWay(self.translator, [0.1,0.1],"SV"))
+        self.custom_widgets.append(FourWay(self.translator, [0.1,0.3],"WL","1"))
+        self.custom_widgets.append(FourWay(self.translator, [0.1,0.5],"WL","2"))
+        self.custom_widgets.append(FourWay(self.translator, [0.5,0.1],"WL","3"))
+
+
+        for custom_widget in self.custom_widgets:
+            self.scene.addItem(custom_widget)
+
 
 
     def read_from_serial(self):

@@ -8,5 +8,11 @@
     "serial_port_error": "Failed to open port {port}. The program will continue without reading the serial port.",
     "warning": "Warning",
     "no_com_port": "No COM port available.",
-    "serial_port_disconnected": "The used COM port has been unplugged."
+    "serial_port_disconnected": "The used COM port has been unplugged.",
+    "WL":"Wafer Lift {number}",
+    "SL":"Slit Vale",
+    "do_up":"Do Up",
+    "do_down":"Do Down",
+    "do_open":"Do Open",
+    "do_close":"Do Close"
 }
