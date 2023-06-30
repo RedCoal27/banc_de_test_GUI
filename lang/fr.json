@@ -8,5 +8,6 @@
     "serial_port_error": "Impossible d'ouvrir le port {port}. Le programme continuera sans lire le port série.",
     "warning": "Avertissement",
     "no_com_port": "Aucun port COM disponible.",
-    "serial_port_disconnected": "Le port COM utilisé a été débranché."
+    "serial_port_disconnected": "Le port COM utilisé a été débranché.",
+    "Hello": "Bonjour"
 }

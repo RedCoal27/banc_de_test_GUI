@@ -9,7 +9,7 @@ import json
 
 from translator import Translator
 from serial_reader import SerialReader
-
+from custom_widget import CustomWidget
 
 
 class MainWindow(QMainWindow):
@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
             if language == self.current_language:
                 action.setChecked(True)
         return language_menu
-    
+
     def change_language(self, lang):
         self.current_language = lang
         self.serial_reader.current_language = lang
@@ -95,6 +95,9 @@ class MainWindow(QMainWindow):
             button = button_tuple[0]
             button.setText(self.translator.translate(key, self.current_language))
 
+        for item in self.scene.items():
+            if isinstance(item, CustomWidget):
+                item.change_language(lang)
 
     def create_background_and_buttons(self):
         self.scene = QGraphicsScene()
@@ -104,19 +107,23 @@ class MainWindow(QMainWindow):
         self.view.setTransformationAnchor(QGraphicsView.NoAnchor)
         self.setCentralWidget(self.view)
 
+        self.create_custom_widgets()
         self.scene.setBackgroundBrush(QBrush(QColor("#F5F5F5")))
 
-        self.create_button("Bouton 1", 0.1, 0.1, 0.1, 0.05, self.button_clicked)
-        self.create_button("Bouton 2", 0.2, 0.2, 0.1, 0.05, self.button_clicked)
 
-    def create_button(self, text, x_ratio, y_ratio, width_ratio, height_ratio, function):
-        button = QPushButton(self.translator.translate(text, self.current_language), self)
-        button.clicked.connect(function)
-        self.buttons[text] = (button, x_ratio, y_ratio, width_ratio, height_ratio)
+    def create_custom_widget(self, x_ratio, y_ratio, width_ratio, height_ratio, text, button_text):
+        ratio = [x_ratio, y_ratio, width_ratio, height_ratio]
+        custom_widget = CustomWidget(self.translator, self.current_language, text, button_text, ratio)
+        #set pos and size
+        custom_widget.set_pos_size(self.width(), self.height())
+        self.scene.addItem(custom_widget)
 
-    def button_clicked(self):
-        sender = self.sender()
-        sender.setText("Cliqué")
+
+
+    def create_custom_widgets(self):
+        self.create_custom_widget(0.1, 0.1, 0.1, 0.1, "test1", "test1")
+        self.create_custom_widget(0.3, 0.3, 0.1, 0.1, "test2", "test2")
+
 
     def read_from_serial(self):
         data = self.serial_reader.read()
@@ -132,6 +139,13 @@ class MainWindow(QMainWindow):
         for button, x_ratio, y_ratio, width_ratio, height_ratio in self.buttons.values():
             button.move(int(x_ratio * self.width()), int(y_ratio * self.height()) + menu_bar_height)
             button.resize(int(width_ratio * self.width()), int(height_ratio * self.height()))
+
+        # Resize custom widgets to be 10% of the scene size
+        for item in self.scene.items():
+            if isinstance(item, CustomWidget):
+                item.set_pos_size(self.scene.width(), self.scene.height())
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
