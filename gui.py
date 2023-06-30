@@ -1,16 +1,26 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QAction, QMessageBox
 from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette
 from PyQt5.QtCore import Qt, QTimer
 import serial
+from serial.tools.list_ports import comports
 
 class SerialReader:
-    def __init__(self, port):
-        try:
-            self.ser = serial.Serial(port)
-        except serial.SerialException:
-            print(f"Impossible d'ouvrir le port {port}. Le programme continuera sans lire le port série.")
-            self.ser = None
+    def __init__(self):
+        self.ser = None
+        self.set_com_port(self.get_available_com_ports()[0] if self.get_available_com_ports() else None)
+
+    def get_available_com_ports(self):
+        return [port.device for port in comports()]
+
+    def set_com_port(self, port):
+        if port is not None:
+            try:
+                self.ser = serial.Serial(port)
+            except serial.SerialException:
+                print(f"Impossible d'ouvrir le port {port}. Le programme continuera sans lire le port série.")
+        else:
+            QMessageBox.warning(None, "Avertissement", "Aucun port COM disponible.")
 
     def read(self):
         if self.ser is not None and self.ser.in_waiting:
@@ -21,7 +31,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.serial_reader = SerialReader('COM3')  # Remplacez 'COM3' par le port série que vous utilisez
+        self.serial_reader = SerialReader()
 
         self.buttons = {}
 
@@ -32,6 +42,7 @@ class MainWindow(QMainWindow):
         self.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Interface PyQt5")
+        self.setMinimumSize(800, 600)
 
     def create_timer(self):
         self.timer = QTimer()
@@ -41,12 +52,24 @@ class MainWindow(QMainWindow):
     def create_menus(self):
         self.menuBar().addMenu(self.create_menu("Foo", ["Option 1", "Option 2"]))
         self.menuBar().addMenu(self.create_menu("Bar", ["Option 1", "Option 2"]))
+        self.create_com_menu()
 
     def create_menu(self, menu_name, actions):
         menu = QMenu(menu_name, self)
         for action in actions:
             menu.addAction(action)
         return menu
+
+    def create_com_menu(self):
+        com_menu = QMenu("COM", self)
+        ports = self.serial_reader.get_available_com_ports()
+        if ports:
+            for port in ports:
+                action = QAction(port, self)
+                action.triggered.connect(lambda checked, port=port: self.serial_reader.set_com_port(port))
+        else:
+            com_menu.addAction("Aucun disponible")
+        self.menuBar().addMenu(com_menu)
 
     def create_background_and_buttons(self):
         self.scene = QGraphicsScene()
@@ -59,14 +82,14 @@ class MainWindow(QMainWindow):
         self.pixmap_item = QGraphicsPixmapItem(QPixmap("background.jpg"))  # Remplacez "background.jpg" par votre image
         self.scene.addItem(self.pixmap_item)
 
-        self.create_button("Bouton 1", 0.1, 0.1, self.button_clicked)
-        self.create_button("Bouton 2", 0.2, 0.2, self.button_clicked)
+        self.create_button("Bouton 1", 0, 0, 0.1, 0.05, self.button_clicked)
+        self.create_button("Bouton 2", 0.2, 0.2, 0.1, 0.05, self.button_clicked)
 
-    def create_button(self, text, x_ratio, y_ratio, function):
+    def create_button(self, text, x_ratio, y_ratio, width_ratio, height_ratio, function):
         button = QPushButton(text, self)
-        button.setStyleSheet("background-color: transparent;")
+        # button.setStyleSheet("background-color: transparent;")
         button.clicked.connect(function)
-        self.buttons[text] = (button, x_ratio, y_ratio)
+        self.buttons[text] = (button, x_ratio, y_ratio, width_ratio, height_ratio)
 
     def button_clicked(self):
         sender = self.sender()
@@ -82,8 +105,9 @@ class MainWindow(QMainWindow):
         self.view.resize(self.size())
         self.scene.setSceneRect(0, 0, self.view.width(), self.view.height())
         self.pixmap_item.setPixmap(QPixmap("background.jpg").scaled(self.view.size()))  # Remplacez "background.jpg" par votre image
-        for button, x_ratio, y_ratio in self.buttons.values():
-            button.move(int(x_ratio * self.width()), int(y_ratio * self.height()))
+        for button, x_ratio, y_ratio, width_ratio, height_ratio in self.buttons.values():
+            button.move(int(x_ratio * self.width()), int((y_ratio * self.height()) - self.menuBar().height()))
+            button.resize(int(width_ratio * self.width()), int(height_ratio * self.height()))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
