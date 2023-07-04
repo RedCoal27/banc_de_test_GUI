@@ -30,7 +30,7 @@ class SerialReader:
                 if self.ser.in_waiting:
                     return self.ser.readline()
             except SerialException:
-                QMessageBox.warning(None, self.translator.translate("Warning"), self.translator.translate("serial_port_disconnected"))
+                QMessageBox.warning(None, self.translator.translate("Warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
         return None
 

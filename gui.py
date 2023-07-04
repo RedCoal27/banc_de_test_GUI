@@ -35,9 +35,10 @@ class MainWindow(QMainWindow):
         self.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
-        self.setMinimumSize(1000, 600)
+        self.setMinimumSize(800, 500)
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
         self.setWindowIcon(QIcon("images/xfab.jpg"))
+        self.resize(1000, 600)
 
     def create_timer(self):
         """
@@ -131,7 +132,7 @@ class MainWindow(QMainWindow):
 
         for item in self.scene.items():
             if isinstance(item, CustomWidget):
-                item.change_language(lang)
+                item.change_language()
 
     def create_background_and_buttons(self):
         """
@@ -150,11 +151,13 @@ class MainWindow(QMainWindow):
 
 
 
+
     def create_custom_widgets(self):
         """
         Creates the custom widgets.
         """
         self.custom_widgets = []
+        # self.custom_widgets.append(CustomWidget(self.translator, [0.1,0.1],"SV"))
         self.custom_widgets.append(FourWay(self.translator, [0.1,0.1],"SV"))
         self.custom_widgets.append(FourWay(self.translator, [0.1,0.3],"WL","1"))
         self.custom_widgets.append(FourWay(self.translator, [0.1,0.5],"WL","2"))

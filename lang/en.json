@@ -6,11 +6,11 @@
     "serial_port_error": "Failed to open port {port}. The program will continue without reading the serial port.",
     "warning": "Warning",
     "no_com_port": "No COM port available.",
-    "serial_port_disconnected": "The used COM port has been unplugged.",
+    "serial_port_disconnected": "The used port {port} has been unplugged.",
     "WL":"Wafer Lift {number}",
     "SL":"Slit Vale",
-    "do_up":"Do Up",
-    "do_down":"Do Down",
-    "di_up":"DI UP",
-    "di_down":"DI Down"
+    "do_up":"DO Up: {state}",
+    "do_down":"DO Down: {state}",
+    "di_up":"DI UP: {state}",
+    "di_down":"DI Down: {state}"
 }

@@ -6,12 +6,12 @@
     "serial_port_error": "Impossible d'ouvrir le port {port}. Le programme continuera sans lire le port série.",
     "warning": "Avertissement",
     "no_com_port": "Aucun port COM disponible.",
-    "serial_port_disconnected": "Le port COM utilisé a été débranché.",
+    "serial_port_disconnected": "Le port série {port} a été déconnecté.",
     "Hello": "Bonjour",
     "WL":"Wafer Lift {number}",
     "SL":"Slit Vale",
-    "do_up":"DO Haut",
-    "do_down":"DO Bas",
-    "di_up":"DI Haut",
-    "di_down":"DI Bas"
+    "do_up":"DO Haut: {state}",
+    "do_down":"DO Bas:  {state}",
+    "di_up":"DI Haut: {state}",
+    "di_down":"DI Bas: {state}"
 }
