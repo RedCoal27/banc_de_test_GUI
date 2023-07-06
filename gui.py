@@ -1,17 +1,18 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QAction, QMessageBox, QActionGroup
-from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette, QColor, QIcon
+from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette, QColor, QIcon,QGuiApplication
 from PyQt5.QtCore import Qt, QTimer
 import serial
 from serial.tools.list_ports import comports
 from serial.serialutil import SerialException
 import json
+import os
 
 from translator import Translator
 from serial_reader import SerialReader
 from custom_widget import CustomWidget
 from four_way import FourWay
-
+from chamber import Chamber
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -25,6 +26,10 @@ class MainWindow(QMainWindow):
         self.language_menu = None
 
         self.init_ui()
+        QTimer.singleShot(0, self.resize_widgets)
+
+
+
 
 
     def init_ui(self):
@@ -35,10 +40,11 @@ class MainWindow(QMainWindow):
         self.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
-        self.setMinimumSize(800, 500)
+        self.setMinimumSize(900, 600)
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
         self.setWindowIcon(QIcon("images/xfab.jpg"))
-        self.resize(1000, 600)
+        self.resize(800, 600)
+
 
     def create_timer(self):
         """
@@ -158,10 +164,11 @@ class MainWindow(QMainWindow):
         """
         self.custom_widgets = []
         # self.custom_widgets.append(CustomWidget(self.translator, [0.1,0.1],"SV"))
-        self.custom_widgets.append(FourWay(self.translator, [0.1,0.1],"SV"))
-        self.custom_widgets.append(FourWay(self.translator, [0.1,0.3],"WL","1"))
-        self.custom_widgets.append(FourWay(self.translator, [0.1,0.5],"WL","2"))
-        self.custom_widgets.append(FourWay(self.translator, [0.5,0.1],"WL","3"))
+        self.custom_widgets.append(Chamber(self.translator, [0.3,0.4]))
+        self.custom_widgets.append(FourWay(self.translator, [0.3,0.25],"WL","2"))
+        self.custom_widgets.append(FourWay(self.translator, [0.45,0.25],"WL","3"))
+        self.custom_widgets.append(FourWay(self.translator, [0.6,0.25],"SV"))
+        self.custom_widgets.append(FourWay(self.translator, [0.6,0.6],"WL","1"))
 
 
         for custom_widget in self.custom_widgets:
@@ -177,6 +184,38 @@ class MainWindow(QMainWindow):
         if data is not None:
             print(data)
 
+    def resize_widgets(self):
+        """
+        Resizes the view and buttons.
+
+        This function is separated from resizeEvent so that it can be called on initialization.
+        """
+        screen_number = QApplication.desktop().screenNumber(self)
+        screen = QGuiApplication.screens()[screen_number]
+        dpi = screen.logicalDotsPerInch()
+        scale_factor = dpi / 96.0 
+        print("scale_factor",scale_factor)
+        # Get current dimensions
+        width = self.width()
+        height = self.height()
+
+        # Resize the view and scene
+        self.view.resize(width, height - self.menuBar().height() - 2)  # -2 to account for scroll bar
+        self.scene.setSceneRect(0, 0, width, height)
+
+        # Update background brush
+        self.view.setBackgroundBrush(QBrush(QColor(0xf5f5f5)))
+
+        # Resize and reposition buttons
+        for button, x_ratio, y_ratio, width_ratio, height_ratio in self.buttons.values():
+            button.move(x_ratio * width, y_ratio + self.menuBar().height())
+            button.resize(width_ratio * width, height_ratio * height)
+
+        # Resize custom widgets to be 10% of the scene size
+        for item in self.scene.items():
+            if isinstance(item, CustomWidget):
+                item.set_pos_size(width, height,scale_factor)
+
     def resizeEvent(self, event):
         """
         Resizes the view and buttons when the window is resized.
@@ -185,18 +224,10 @@ class MainWindow(QMainWindow):
             event (QResizeEvent): The resize event.
         """
         super().resizeEvent(event)
-        self.view.resize(self.width(), self.height()-self.menuBar().height() - 2) # -2 pour éviter le scroll bar
-        self.scene.setSceneRect(0, 0, self.view.width(), self.view.height())
-        self.view.setBackgroundBrush(QBrush(QColor(0xf5f5f5)))
-        menu_bar_height = self.menuBar().height()
-        for button, x_ratio, y_ratio, width_ratio, height_ratio in self.buttons.values():
-            button.move(int(x_ratio * self.width()), int(y_ratio * self.height()) + menu_bar_height)
-            button.resize(int(width_ratio * self.width()), int(height_ratio * self.height()))
+        self.resize_widgets()  # Call the new function here
 
-        # Resize custom widgets to be 10% of the scene size
-        for item in self.scene.items():
-            if isinstance(item, CustomWidget):
-                item.set_pos_size(self.scene.width(), self.scene.height())
+
+
 
 
 

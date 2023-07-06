@@ -9,9 +9,10 @@
     "serial_port_disconnected": "Le port série {port} a été déconnecté.",
     "Hello": "Bonjour",
     "WL":"Wafer Lift {number}",
-    "SL":"Slit Vale",
+    "SV":"Slit Vale",
     "do_up":"DO Haut: {state}",
     "do_down":"DO Bas:  {state}",
     "di_up":"DI Haut: {state}",
-    "di_down":"DI Bas: {state}"
+    "di_down":"DI Bas: {state}",
+    "chamber":"Chambre"
 }

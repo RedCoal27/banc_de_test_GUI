@@ -56,6 +56,7 @@ class CustomWidget(QGraphicsWidget):
 
 
         font = label.font()  # New code
+        font.setPointSizeF(8)  # New code
         label.setFont(font)  # New code
 
         self.layout.addItem(label_proxy)
@@ -81,7 +82,7 @@ class CustomWidget(QGraphicsWidget):
         button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # New code
 
         font = button.font()  # New code
-        font.setPointSizeF(button.height()*self.ratio[1]*5)  # New code
+        font.setPointSizeF(8)  # New code
         button.setFont(font)  # New code
 
         button.setContentsMargins(1, 1, 1, 1)
@@ -116,7 +117,7 @@ class CustomWidget(QGraphicsWidget):
         for button, _ , key in self.buttons:
             button.setText(self.translator.translate(key,**kwargs))
 
-    def set_pos_size(self,width, height):
+    def set_pos_size(self,width, height,scale_factor):
         """
         Sets the position and size of the widget.
 
@@ -124,16 +125,18 @@ class CustomWidget(QGraphicsWidget):
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
         """
+
+        # for label in self.labels:
+        #     font = label[0].font()
+        #     font.setPointSizeF(10)
+        #     label[0].setFont(font)
+
+        # for button in self.buttons:  # New code
+        #     font = button[0].font()  # New code
+        #     font.setPointSizeF(10)  # New code
+        #     button[0].setFont(font)  # New code
+        #     #change button size
+
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()
         self.setPos(width*self.position[0], height*self.position[1])
-
-        for label in self.labels:
-            font = label[0].font()
-            font.setPointSizeF(height*self.ratio[1]/10)
-            label[0].setFont(font)
-
-        for button in self.buttons:  # New code
-            font = button[0].font()  # New code
-            font.setPointSizeF(height*self.ratio[1]/10)  # New code
-            button[0].setFont(font)  # New code

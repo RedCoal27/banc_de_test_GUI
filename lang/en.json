@@ -8,9 +8,10 @@
     "no_com_port": "No COM port available.",
     "serial_port_disconnected": "The used port {port} has been unplugged.",
     "WL":"Wafer Lift {number}",
-    "SL":"Slit Vale",
+    "SV":"Slit Vale",
     "do_up":"DO Up: {state}",
     "do_down":"DO Down: {state}",
     "di_up":"DI UP: {state}",
-    "di_down":"DI Down: {state}"
+    "di_down":"DI Down: {state}",
+    "chamber":"Chamber"
 }
