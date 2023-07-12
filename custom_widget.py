@@ -126,16 +126,16 @@ class CustomWidget(QGraphicsWidget):
             height (int): The height of the parent widget.
         """
 
-        # for label in self.labels:
-        #     font = label[0].font()
-        #     font.setPointSizeF(10)
-        #     label[0].setFont(font)
+        for label in self.labels:
+            font = label[0].font()
+            font.setPointSizeF(8/scale_factor)  # New code
+            label[0].setFont(font)
 
-        # for button in self.buttons:  # New code
-        #     font = button[0].font()  # New code
-        #     font.setPointSizeF(10)  # New code
-        #     button[0].setFont(font)  # New code
-        #     #change button size
+        for button in self.buttons:  # New code
+            font = button[0].font()  # New code
+            font.setPointSizeF(8/scale_factor)  # New code
+            button[0].setFont(font)  # New code
+            #change button size
 
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()

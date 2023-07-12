@@ -16,7 +16,7 @@ class SerialReader:
             if self.ser is not None and self.ser.port == port:
                 return
             try:
-                self.ser = Serial(port)
+                self.ser = Serial(port=port, baudrate=9600, timeout=10)
             except SerialException:
                 print(self.translator.translate("serial_port_error", port=port))
         else:
@@ -35,10 +35,8 @@ class SerialReader:
     def wait_and_read_data(self, num_values=1):
         if self.ser is not None:
             try:
-                data = []
-                while len(data) < num_values:
-                    if self.ser.in_waiting:
-                        data.append(self.ser.readline())
+                data = self.ser.read(num_values)
+                self.ser.reset_input_buffer()
                 return data
             except SerialException:
                 QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))

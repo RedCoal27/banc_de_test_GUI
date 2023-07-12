@@ -14,5 +14,6 @@
     "do_down":"DO Bas:  {state}",
     "di_up":"DI Haut: {state}",
     "di_down":"DI Bas: {state}",
-    "chamber":"Chambre"
+    "chamber":"Chambre",
+    "cycle":"Cycle"
 }

@@ -21,7 +21,10 @@ class FourWay(CustomWidget):
         self.create_label("di_down", state = "true")
 
 
-
     def create_buttons(self):
-        self.create_button("aaa")
+        self.create_button("cycle")
+
+    def update_DI(self, state):
+        self.labels[3].setText(self.translator.translate("di_up", state = str(state[0])))
+        self.labels[4].setText(self.translator.translate("di_down", state = str(state[1])))
 

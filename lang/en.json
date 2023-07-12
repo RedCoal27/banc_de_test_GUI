@@ -13,5 +13,6 @@
     "do_down":"DO Down: {state}",
     "di_up":"DI UP: {state}",
     "di_down":"DI Down: {state}",
-    "chamber":"Chamber"
+    "chamber":"Chamber",
+    "cycle":"Cycle"
 }
