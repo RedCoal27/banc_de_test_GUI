@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 
 
 class CustomWidget(QGraphicsWidget):
-    def __init__(self, translator, pos, ratio, color, parent=None):
+    def __init__(self, translator, pos, ratio, color, parent=None, police_size=8):
         """
         A custom widget that can contain labels and buttons.
 
@@ -20,6 +20,7 @@ class CustomWidget(QGraphicsWidget):
         self.labels = []
         self.buttons = []
         self.color = color
+        self.police_size = police_size
 
         self.layout = QGraphicsLinearLayout(Qt.Vertical)
         self.setLayout(self.layout)
@@ -56,11 +57,34 @@ class CustomWidget(QGraphicsWidget):
 
 
         font = label.font()  # New code
-        font.setPointSizeF(8)  # New code
+        font.setPointSizeF(self.police_size)  # New code
         label.setFont(font)  # New code
 
         self.layout.addItem(label_proxy)
         self.labels.append((label, label_proxy, key, kwargs))
+
+
+    def update_label(self, key, state):
+        """
+        Updates a label with the given key.
+
+        Args:
+            key (str): The translation key for the label.
+            state (str): The new state ("true" or "false").
+        """
+        # Loop over all labels
+        for label, label_proxy, label_key, kwargs in self.labels:
+            # If the key matches
+            if label_key == key:
+                # Update the state in kwargs
+                kwargs['state'] = state
+                # Translate the new text and update the label
+                label.setText(self.translator.translate(label_key, **kwargs))
+                # Refresh the proxy widget
+                label_proxy.setWidget(label)
+                # We found the label, so we can break the loop
+                break
+
 
 
     def create_button(self, key, function=None):
@@ -82,14 +106,13 @@ class CustomWidget(QGraphicsWidget):
         button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # New code
 
         font = button.font()  # New code
-        font.setPointSizeF(8)  # New code
+        font.setPointSizeF(self.police_size)  # New code
         button.setFont(font)  # New code
 
         button.setContentsMargins(1, 1, 1, 1)
         button.setStyleSheet("QPushButton { padding-top: 2px; }")
         self.layout.addItem(button_proxy)
         self.buttons.append((button, button_proxy, key))  # Append the key for later language changes
-
 
 
     def paint(self, painter, option, widget):
@@ -128,12 +151,12 @@ class CustomWidget(QGraphicsWidget):
 
         for label in self.labels:
             font = label[0].font()
-            font.setPointSizeF(8/scale_factor)  # New code
+            font.setPointSizeF(self.police_size/scale_factor)  # New code
             label[0].setFont(font)
 
         for button in self.buttons:  # New code
             font = button[0].font()  # New code
-            font.setPointSizeF(8/scale_factor)  # New code
+            font.setPointSizeF(self.police_size/scale_factor)  # New code
             button[0].setFont(font)  # New code
             #change button size
 

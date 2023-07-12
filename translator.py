@@ -19,6 +19,8 @@ class Translator:
             sys.exit(1)
 
     def translate(self, key, **kwargs):
+        for k, v in kwargs.items():
+            kwargs[k] = self.translate(v)
         try:
             translation = self.translations[self.current_language][key]
             return translation.format(**kwargs)

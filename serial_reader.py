@@ -2,6 +2,8 @@ from serial import Serial, SerialException
 from serial.tools.list_ports import comports
 from PyQt5.QtWidgets import QMessageBox
 
+import time
+
 class SerialReader:
     def __init__(self, translator):
         self.ser = None
@@ -16,7 +18,7 @@ class SerialReader:
             if self.ser is not None and self.ser.port == port:
                 return
             try:
-                self.ser = Serial(port=port, baudrate=9600, timeout=10)
+                self.ser = Serial(port=port, baudrate=9600, timeout=0.2)
             except SerialException:
                 print(self.translator.translate("serial_port_error", port=port))
         else:
@@ -33,6 +35,15 @@ class SerialReader:
                 self.ser = None
 
     def wait_and_read_data(self, num_values=1):
+        """
+        Waits for data to be available on the serial port and reads it.
+
+        Args:
+            num_values (int): The number of bytes to read from the serial port.
+
+        Returns:
+            bytes: The data read from the serial port, or None if there was an error.
+        """
         if self.ser is not None:
             try:
                 data = self.ser.read(num_values)
