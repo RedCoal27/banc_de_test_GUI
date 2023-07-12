@@ -1,5 +1,3 @@
-
-
 from serial import Serial, SerialException
 from serial.tools.list_ports import comports
 from PyQt5.QtWidgets import QMessageBox
@@ -24,13 +22,25 @@ class SerialReader:
         else:
             QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("no_com_port"))
 
-    def read(self):
+
+    def send_data(self, type, action):
         if self.ser is not None:
             try:
-                if self.ser.in_waiting:
-                    return self.ser.readline()
+                self.ser.write(bytes([type]))
+                self.ser.write(bytes([action]))
             except SerialException:
-                QMessageBox.warning(None, self.translator.translate("Warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
+                QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
+                self.ser = None
+
+    def wait_and_read_data(self, num_values=1):
+        if self.ser is not None:
+            try:
+                data = []
+                while len(data) < num_values:
+                    if self.ser.in_waiting:
+                        data.append(self.ser.readline())
+                return data
+            except SerialException:
+                QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
         return None
-

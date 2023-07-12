@@ -180,9 +180,8 @@ class MainWindow(QMainWindow):
         """
         Reads data from the serial port and prints it to the console.
         """
-        data = self.serial_reader.read()
-        if data is not None:
-            print(data)
+        self.serial_reader.send_data(1,1)
+        print(self.serial_reader.wait_and_read_data(4))
 
     def resize_widgets(self):
         """
