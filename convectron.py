@@ -4,10 +4,10 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 
 from custom_widget import CustomWidget
 
-class Baratron(CustomWidget):
+class Convectron(CustomWidget):
     def __init__(self, translator, pos , key , parent=None):
-        ratio = [0.14, 0.1]
-        super().__init__(translator, pos, ratio, "#C5E0B4", parent)
+        ratio = [0.14, 0.08]
+        super().__init__(translator, pos, ratio, "#E2F0D9", parent)
         self.create_labels(key)
         
 
@@ -18,10 +18,9 @@ class Baratron(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key,alignment=Qt.AlignTop | Qt.AlignHCenter)
-        self.create_label("pressure", value = "0")
-        self.create_label("offset", value = "0")
-        self.create_label("size", value = "0")
+        self.create_label(key,alignment=Qt.AlignTop)
+        self.create_label("(convectron)")
+        self.create_label("pressure", value = "RS485")
 
 
     # def update_DI(self, up, down):

@@ -25,5 +25,19 @@
     "offset":"Offset: {value}",
     "size":"Size: {value}",
     "setpoint":"Setpoint: {value}",
-    "actual":"Actual: {value}"
+    "actual":"Actual: {value}",
+    "baratron1": "Baratron SizeTorr",
+    "baratron2": "Baratron Size T",
+    "chamber_pressure":"Chamber Pressure",
+    "turbo_pump_rga":"Turbo Pump RGA",
+    "turbo_pump_ch":"Turbo Pump CH",
+    "cmd":"Command: {state}",
+    "status":"Status: {state}",
+    "accelerate":"Accelerate: {state}",
+
+
+    "nupro_final":"Nupro \nFinal",
+    "nupro_mfc1":"Nupro \nMFC1",
+    "nupro_mfc2":"Nupro \nMFC2",
+    "nupro_vent":"Nupro \nVent"
 }

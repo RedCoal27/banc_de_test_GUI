@@ -16,7 +16,7 @@ class FourWay(CustomWidget):
         - number: a string representing the number of the widget (optional)
         - parent: a parent widget (optional)
         """
-        ratio = [0.1, 0.18]
+        ratio = [0.101, 0.18]
         self.FourWay_number = number
         super().__init__(translator, pos, ratio, "#FBE5D6", parent)
         self.create_labels(key)
@@ -54,4 +54,4 @@ class FourWay(CustomWidget):
         """
         self.update_label('di_up', state = "false" if up else "true")
         self.update_label('di_down', state = "false" if down else "true")
-        self.update_label('position', state = "unknown" if up*2 == down else "up" if up else "down")
+        self.update_label('position', state = "unknown" if up*2 == down else "up" if not up else "down")

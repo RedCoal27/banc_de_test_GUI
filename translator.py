@@ -17,6 +17,8 @@ class Translator:
         except FileNotFoundError as e:
             print(f"Erreur lors du chargement des fichiers de traduction : {e}")
             sys.exit(1)
+        print("Fichiers de traduction chargés avec succès.")
+        print(self.translations)
 
     def translate(self, key, **kwargs):
         for k, v in kwargs.items():
@@ -24,5 +26,7 @@ class Translator:
         try:
             translation = self.translations[self.current_language][key]
             return translation.format(**kwargs)
-        except KeyError:
+        except KeyError as e:
+            # print(f"Erreur lors de la traduction de la clé {key} : clé introuvable.")
+            # print(e)
             return key

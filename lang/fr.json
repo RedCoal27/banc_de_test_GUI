@@ -25,5 +25,16 @@
     "offset":"Offset: {value}",
     "size":"Taille: {value}",
     "setpoint":"Setpoint: {value}",
-    "actual":"Actuel: {value}"
+    "actual":"Actuel: {value}",
+    "chamber_pressure":"Pression chambre",
+    "turbo_pump_rga":"Pompe turbo RGA",
+    "turbo_pump_ch":"Pompe turbo CH",
+    "cmd":"Commande: {state}",
+    "status":"Statut: {state}",
+    "accelerate":"Accélération: {state}",
+
+    "nupro_final":"Nupro \nFinale",
+    "nupro_mfc1":"Nupro \nMFC1",
+    "nupro_mfc2":"Nupro \nMFC2",
+    "nupro_vent":"Nupro \nVent"
 }

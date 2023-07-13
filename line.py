@@ -17,14 +17,19 @@ class Line(QGraphicsLineItem):
             ratio (tuple): A tuple containing the x and y ratios of the line's length relative to the parent widget's width and height.
             parent (QGraphicsItem, optional): The parent item. Defaults to None.
         """
-        self.pos = (x1, y1)
-        self.pos2 = (x2, y2)
+        self.position = (x1, y1)
+        self.position2 = (x2, y2)
         super(Line, self).__init__(parent)
-        self.setLine(x1, y1, x2, y2)
         self.color = color
         self.setPen(QPen(QColor(self.color), 2))
 
-    def set_pos_size(self, width, height, scale_factor):
+    def set_line(self,scene, x1, y1, x2, y2):
+        self.position = (x1, y1)
+        self.position2 = (x2, y2)
+        self.setLine(self.position[0]*scene.width(), self.position[1]*scene.height(), self.position2[0]*scene.width(), self.position2[1]*scene.height() )
+        print(self.position[0]*scene.width(), self.position[1]*scene.height(), self.position2[0]*scene.width(), self.position2[1]*scene.height() )
+
+    def set_pos_size(self, width, height, scale_factor=None):
         """
         Sets the position and size of the line.
 
@@ -32,5 +37,5 @@ class Line(QGraphicsLineItem):
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
         """
-        self.setLine(self.pos[0] * width, self.pos[1] * height, self.pos2[0] * width, self.pos2[1] * height )
-        self.setPen(QPen(QColor(self.color), 2 * scale_factor))
+        self.setLine(self.position[0] * width, self.position[1] * height, self.position2[0] * width, self.position2[1] * height )
+        self.setPen(QPen(QColor(self.color), 2 ))

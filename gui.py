@@ -16,6 +16,10 @@ from chamber import Chamber
 from baratron import Baratron
 from mfc import MFC
 from line import Line
+from gate import Gate
+from circle import Circle
+from convectron import Convectron
+from pump import Pump
 
 
 
@@ -150,10 +154,20 @@ class MainWindow(QMainWindow):
         """
         Draws a line on the scene.
         """
-        self.scene.addItem(Line(0.72, 0.27, 0.95, 0.27, "#4472C4")) # Numpro MFC1
-        self.scene.addItem(Line(0.72, 0.27, 0.72, 0.41, "#4472C4")) # Numpro MFC1
+        self.scene.addItem(Line(0.71, 0.27, 0.94, 0.27, "#4472C4")) # Numpro MFC1
+        self.scene.addItem(Line(0.71, 0.27, 0.71, 0.41, "#4472C4")) # Numpro MFC1
         
-        self.scene.addItem(Line(0.6, 0.41, 0.95, 0.41, "#4472C4")) # Numpro Final/ Numpro MFC2
+        self.scene.addItem(Line(0.64, 0.41, 0.94, 0.41, "#4472C4")) # Numpro Final/ Numpro MFC2
+
+        self.scene.addItem(Line(0.94, 0.22, 0.94, 0.41, "#4472C4")) # Numpro MFC2
+        self.scene.addItem(Line(0.94, 0.22, 0.99, 0.22, "#4472C4")) # Numpro MFC2
+
+
+        self.scene.addItem(Line(0.61, 0.15, 0.61, 0.3, "#4472C4")) # Numpro Vent
+        self.scene.addItem(Line(0.61, 0.15, 0.99, 0.15, "#4472C4")) # Numpro Vent
+
+
+        self.scene.addItem(Line(0.06, 0.3, 0.06, 0.6, "#4472C4")) # Turbo Pump RGA
 
 
 
@@ -181,18 +195,30 @@ class MainWindow(QMainWindow):
         """
         self.custom_widgets = {}
         # self.custom_widgets["SV"] = CustomWidget(self.translator, [0.1,0.1],"SV")
-        self.custom_widgets["Chamber"] = Chamber(self.translator, [0.25,0.3])
-        self.custom_widgets["WL2"] = FourWay(self.translator, [0.25,0.12],"WL","2")
-        self.custom_widgets["WL3"] = FourWay(self.translator, [0.4,0.12],"WL","3")
-        self.custom_widgets["SV"] = FourWay(self.translator, [0.55,0.12],"SV")
-        self.custom_widgets["WL1"] = FourWay(self.translator, [0.55,0.5],"WL","1")
-        self.custom_widgets["baratron1"] = Baratron(self.translator, [0.7,0.5],"baratron1")
-        self.custom_widgets["baratron2"] = Baratron(self.translator, [0.7,0.63],"baratron2")
-        self.custom_widgets["MFC1"] = MFC(self.translator, [0.8,0.21],"MFC1")
-        self.custom_widgets["MFC2"] = MFC(self.translator, [0.8,0.35],"MFC2")
+        self.custom_widgets["Chamber"] = Chamber(self.translator, [0.24,0.3])
+        self.custom_widgets["WL2"] = FourWay(self.translator, [0.24,0.12],"WL","2")
+        self.custom_widgets["WL3"] = FourWay(self.translator, [0.365,0.12],"WL","3")
+        self.custom_widgets["SV"] = FourWay(self.translator, [0.49,0.12],"SV")
+        self.custom_widgets["WL1"] = FourWay(self.translator, [0.51,0.5],"WL","1")
+        self.custom_widgets["baratron1"] = Baratron(self.translator, [0.69,0.5],"baratron1")
+        self.custom_widgets["baratron2"] = Baratron(self.translator, [0.69,0.63],"baratron2")
+        self.custom_widgets["MFC1"] = MFC(self.translator, [0.79,0.21],"MFC1")
+        self.custom_widgets["MFC2"] = MFC(self.translator, [0.79,0.35],"MFC2")
+
+        self.custom_widgets["chamber_pressure"] = Convectron(self.translator, [0.69,0.76],"chamber_pressure")
+
+        self.custom_widgets["turbo_pump_rga"] = Pump(self.translator, [0.01,0.6],"turbo_pump_rga")
+        self.custom_widgets["turbo_pump_ch"] = Pump(self.translator, [0.13,0.6],"turbo_pump_ch")
+
 
         for key, custom_widget in self.custom_widgets.items():
             self.scene.addItem(custom_widget)
+
+
+        self.custom_widgets["nupro_final"] = Gate(self.translator,self.scene , [0.675,0.41], [0,-0.06],"nupro_final", sens='vertical')
+        self.custom_widgets["nupro_MFC1"] = Gate(self.translator,self.scene , [0.745,0.27], [0,-0.06],"nupro_mfc1", sens='vertical')
+        self.custom_widgets["nupro_MFC2"] = Gate(self.translator,self.scene , [0.745,0.41], [0,-0.06],"nupro_mfc2", sens='vertical')
+        self.custom_widgets["nupro_vent"] = Gate(self.translator,self.scene , [0.675,0.15], [0,-0.06],"nupro_vent", sens='vertical')
 
 
 
@@ -239,7 +265,7 @@ class MainWindow(QMainWindow):
 
         # Resize custom widgets
         for item in self.scene.items():
-            if isinstance(item, CustomWidget) or isinstance(item, Line):
+            if isinstance(item, CustomWidget) or isinstance(item, Line) or isinstance(item, Circle):
                 item.set_pos_size(width, height, scale_factor)
 
 
