@@ -167,8 +167,13 @@ class MainWindow(QMainWindow):
         self.scene.addItem(Line(0.61, 0.15, 0.99, 0.15, "#4472C4")) # Numpro Vent
 
 
-        self.scene.addItem(Line(0.06, 0.3, 0.06, 0.6, "#4472C4")) # Turbo Pump RGA
+        self.scene.addItem(Line(0.07, 0.45, 0.07, 0.85, "#4472C4")) # Turbo Pump RGA
+        self.scene.addItem(Line(0.07, 0.45, 0.24, 0.45, "#4472C4")) # Turbo Pump RGA
 
+        self.scene.addItem(Line(0.18, 0.48, 0.18, 0.85, "#4472C4")) # Turbo Pump CH
+        self.scene.addItem(Line(0.18, 0.48, 0.24, 0.48, "#4472C4")) # Turbo Pump CH
+
+        self.scene.addItem(Line(0.07, 0.85, 0.35, 0.85, "#4472C4")) # Turbo Pump CH/ Turbo Pump RGA
 
 
     def create_background_and_buttons(self):
@@ -194,8 +199,9 @@ class MainWindow(QMainWindow):
         Creates the custom widgets.
         """
         self.custom_widgets = {}
-        # self.custom_widgets["SV"] = CustomWidget(self.translator, [0.1,0.1],"SV")
+ 
         self.custom_widgets["Chamber"] = Chamber(self.translator, [0.24,0.3])
+
         self.custom_widgets["WL2"] = FourWay(self.translator, [0.24,0.12],"WL","2")
         self.custom_widgets["WL3"] = FourWay(self.translator, [0.365,0.12],"WL","3")
         self.custom_widgets["SV"] = FourWay(self.translator, [0.49,0.12],"SV")
@@ -207,7 +213,7 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["chamber_pressure"] = Convectron(self.translator, [0.69,0.76],"chamber_pressure")
 
-        self.custom_widgets["turbo_pump_rga"] = Pump(self.translator, [0.01,0.6],"turbo_pump_rga")
+        self.custom_widgets["turbo_pump_rga"] = Pump(self.translator, [0.02,0.6],"turbo_pump_rga")
         self.custom_widgets["turbo_pump_ch"] = Pump(self.translator, [0.13,0.6],"turbo_pump_ch")
 
 
@@ -220,6 +226,11 @@ class MainWindow(QMainWindow):
         self.custom_widgets["nupro_MFC2"] = Gate(self.translator,self.scene , [0.745,0.41], [0,-0.06],"nupro_mfc2", sens='vertical')
         self.custom_widgets["nupro_vent"] = Gate(self.translator,self.scene , [0.675,0.15], [0,-0.06],"nupro_vent", sens='vertical')
 
+        self.custom_widgets["turbo_pump_rga_gate"] = Gate(self.translator,self.scene , [0.07,0.5], [-0.04,-0.01],"turbo_pump_rga_gate", sens='horizontal')
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate(self.translator,self.scene , [0.07,0.75], [-0.04,-0.01],"turbo_pump_rga_gate_p", sens='horizontal')
+
+        self.custom_widgets["turbo_pump_ch_gate"] = Gate(self.translator,self.scene , [0.18,0.55], [-0.04,-0.01],"turbo_pump_ch_gate", sens='horizontal')
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate(self.translator,self.scene , [0.18,0.75], [-0.04,-0.01],"turbo_pump_ch_gate_p", sens='horizontal')
 
 
     def read_from_serial(self):

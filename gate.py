@@ -41,7 +41,7 @@ class Gate():
         
         #add text label
         self.text = CustomWidget(translator, (pos[0]+relative_pos[0]-self.ratio[0]/2,pos[1]+relative_pos[1]-self.ratio[0]/2), self.ratio, "#FFFFFF", parent)
-        self.text.create_label(name, alignment = Qt.AlignCenter)
+        self.text.create_label(name, color="#8FAADC", alignment = Qt.AlignCenter)
         scene.addItem(self.text)
 
         #add circle next to text
@@ -66,8 +66,6 @@ class Gate():
         else:
             test_value = not self.state
 
-
-
         if test_value == False: 
             #draw vertical line
             self.line.set_line(self.scene,self.circle.center[0], self.circle.center[1]-self.circle.radius*1.2, self.circle.center[0], self.circle.center[1]+self.circle.radius*1.2)
@@ -75,4 +73,4 @@ class Gate():
             self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
         self.state = not self.state
 
-        print("self.state",self.state)
+        # print("self.state",self.state)

@@ -34,7 +34,7 @@ class CustomWidget(QGraphicsWidget):
 
 
 
-    def create_label(self, key, **kwargs):
+    def create_label(self, key, color="black", **kwargs):
         """
         Creates a label with the given key and adds it to the widget.
 
@@ -52,12 +52,13 @@ class CustomWidget(QGraphicsWidget):
         label_proxy = QGraphicsProxyWidget(self)
         label_proxy.setWidget(label)
 
-        label.setStyleSheet("background-color: transparent;")
+        label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # New code
 
 
         font = label.font()  # New code
         font.setPointSizeF(self.police_size)  # New code
+        #set color text to white
         label.setFont(font)  # New code
 
         self.layout.addItem(label_proxy)

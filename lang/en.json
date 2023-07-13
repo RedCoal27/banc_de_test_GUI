@@ -39,5 +39,9 @@
     "nupro_final":"Nupro \nFinal",
     "nupro_mfc1":"Nupro \nMFC1",
     "nupro_mfc2":"Nupro \nMFC2",
-    "nupro_vent":"Nupro \nVent"
+    "nupro_vent":"Nupro \nVent",
+    "turbo_pump_rga_gate":"Iso \nRGA",
+    "turbo_pump_rga_gate_p":"Iso \nRGA P",
+    "turbo_pump_ch_gate":"Gate \nTurbo",
+    "turbo_pump_ch_gate_p":"Iso \nTurbo"
 }

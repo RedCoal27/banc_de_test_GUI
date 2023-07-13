@@ -21,13 +21,12 @@ class Line(QGraphicsLineItem):
         self.position2 = (x2, y2)
         super(Line, self).__init__(parent)
         self.color = color
-        self.setPen(QPen(QColor(self.color), 2))
+        self.setPen(QPen(QColor(self.color), 3))
 
     def set_line(self,scene, x1, y1, x2, y2):
         self.position = (x1, y1)
         self.position2 = (x2, y2)
         self.setLine(self.position[0]*scene.width(), self.position[1]*scene.height(), self.position2[0]*scene.width(), self.position2[1]*scene.height() )
-        print(self.position[0]*scene.width(), self.position[1]*scene.height(), self.position2[0]*scene.width(), self.position2[1]*scene.height() )
 
     def set_pos_size(self, width, height, scale_factor=None):
         """
@@ -38,4 +37,4 @@ class Line(QGraphicsLineItem):
             height (int): The height of the parent widget.
         """
         self.setLine(self.position[0] * width, self.position[1] * height, self.position2[0] * width, self.position2[1] * height )
-        self.setPen(QPen(QColor(self.color), 2 ))
+        self.setPen(QPen(QColor(self.color), 3))

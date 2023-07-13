@@ -18,7 +18,6 @@ class Translator:
             print(f"Erreur lors du chargement des fichiers de traduction : {e}")
             sys.exit(1)
         print("Fichiers de traduction chargés avec succès.")
-        print(self.translations)
 
     def translate(self, key, **kwargs):
         for k, v in kwargs.items():
