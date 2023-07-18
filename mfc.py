@@ -24,15 +24,3 @@ class MFC(CustomWidget):
         self.create_label("offset", value = "0")
         self.create_label("size", value = "0")
 
-
-    # def update_DI(self, up, down):
-    #     """
-    #     Updates the DI labels of the FourWay widget.
-
-    #     Args:
-    #     - up: a boolean representing the state of the up DI
-    #     - down: a boolean representing the state of the down DI
-    #     """
-    #     self.update_label('di_up', state = "false" if up else "true")
-    #     self.update_label('di_down', state = "false" if down else "true")
-    #     self.update_label('position', state = "unknown" if up*2 == down else "up" if up else "down")
