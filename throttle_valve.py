@@ -42,15 +42,3 @@ class ThrottleValve(CustomWidget):
         Creates buttons for the ThrottleValve widget.
         """
         self.create_button("cycle")
-
-    # def update_DI(self, up, down):
-    #     """
-    #     Updates the DI labels of the ThrottleValve widget.
-
-    #     Args:
-    #     - up: a boolean representing the state of the up DI
-    #     - down: a boolean representing the state of the down DI
-    #     """
-    #     self.update_label('di_up', state = "false" if up else "true")
-    #     self.update_label('di_down', state = "false" if down else "true")
-    #     self.update_label('position', state = "unknown" if up*2 == down else "up" if not up else "down")
