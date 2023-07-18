@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
         self.init_ui()
         QTimer.singleShot(0, self.resize_widgets)
 
+
     def init_ui(self):
         """
         Initializes the user interface by creating the timer, menus, background, and buttons.
@@ -53,7 +54,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Benchmark GUI")
         self.setMinimumSize(900, 600)
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
-        self.setWindowIcon(QIcon("images/xfab.jpg"))
+
+        base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
         self.resize(800, 600)
 
 
@@ -238,18 +241,18 @@ class MainWindow(QMainWindow):
             self.scene.addItem(custom_widget)
 
 
-        self.custom_widgets["nupro_final"] = Gate(self.translator,self.scene , [0.675,0.41], [0,-0.05],"nupro_final", sens='vertical')
-        self.custom_widgets["nupro_MFC1"] = Gate(self.translator,self.scene , [0.745,0.27], [0,-0.05],"nupro_mfc1", sens='vertical')
-        self.custom_widgets["nupro_MFC2"] = Gate(self.translator,self.scene , [0.745,0.41], [0,-0.05],"nupro_mfc2", sens='vertical')
-        self.custom_widgets["nupro_vent"] = Gate(self.translator,self.scene , [0.675,0.15], [0,-0.05],"nupro_vent", sens='vertical')
+        self.custom_widgets["nupro_final"] = Gate([0.675,0.41], [0,-0.05],"nupro_final", 3, sens='vertical',parent=self)
+        self.custom_widgets["nupro_MFC1"] = Gate([0.745,0.27], [0,-0.05],"nupro_mfc1", 1, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC2"] = Gate([0.745,0.41], [0,-0.05],"nupro_mfc2", 2, sens='vertical', parent=self)
+        self.custom_widgets["nupro_vent"] = Gate([0.675,0.15], [0,-0.05],"nupro_vent", 4, sens='vertical', parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate"] = Gate(self.translator,self.scene , [0.07,0.5], [-0.04,0.0],"turbo_pump_rga_gate", sens='horizontal')
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate(self.translator,self.scene , [0.07,0.75], [-0.04,0.0],"turbo_pump_rga_gate_p", sens='horizontal')
+        self.custom_widgets["turbo_pump_rga_gate"] = Gate([0.07,0.5], [-0.04,0.0],"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate([0.07,0.75], [-0.04,0.0],"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
 
-        self.custom_widgets["turbo_pump_ch_gate"] = Gate(self.translator,self.scene , [0.18,0.55], [-0.04,0.0],"turbo_pump_ch_gate", sens='horizontal')
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate(self.translator,self.scene , [0.18,0.75], [-0.04,0.0],"turbo_pump_ch_gate_p", sens='horizontal')
+        self.custom_widgets["turbo_pump_ch_gate"] = Gate([0.18,0.55], [-0.04,0.0],"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate([0.18,0.75], [-0.04,0.0],"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
 
-        self.custom_widgets["iso_chamber"] = Gate(self.translator,self.scene , [0.295,0.79], [-0.04,-0.005],"iso_chamber", sens='horizontal')
+        self.custom_widgets["iso_chamber"] = Gate([0.295,0.79],[-0.04,-0.005],"iso_chamber", 25, sens='horizontal', parent=self)
 
 
     def read_from_serial(self):

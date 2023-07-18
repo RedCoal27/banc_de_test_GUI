@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy
 from PyQt5.QtGui import QPainter, QPainterPath, QColor, QFontMetrics
 from PyQt5.QtCore import Qt, QRectF, QMargins
+from graph_window import GraphWindow
 
 
 class CustomWidget(QGraphicsWidget):
@@ -164,3 +165,7 @@ class CustomWidget(QGraphicsWidget):
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()
         self.setPos(width*self.position[0], height*self.position[1])
+
+    def open_windows(self):
+        self.window = GraphWindow(self.translator)
+        self.window.show()

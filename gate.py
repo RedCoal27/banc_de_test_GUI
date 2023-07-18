@@ -7,7 +7,7 @@ from circle import Circle
 from line import Line
 
 class Gate():
-    def __init__(self, translator, scene, pos, relative_pos, name, sens='horizontal' , parent=None):
+    def __init__(self, pos, relative_pos, name, cmd, sens='horizontal' , parent=None):
         """
         A class representing a gate in a graphical interface.
 
@@ -33,19 +33,20 @@ class Gate():
         self.ratio = [0.05, 0.035]
         self.pos = pos
         self.relative_pos = relative_pos
-        self.scene = scene
+        self.scene = parent.scene
         self.sens = sens
         self.name = name
         self.state = True
+        self.cmd = cmd
+        self.serial_reader = parent.serial_reader
 
-        
         #add text label
-        self.text = CustomWidget(translator, (pos[0]+relative_pos[0]-self.ratio[0]/2,pos[1]+relative_pos[1]-self.ratio[0]/2), self.ratio, "#FFFFFF", parent)
+        self.text = CustomWidget(parent.translator, (pos[0]+relative_pos[0]-self.ratio[0]/2,pos[1]+relative_pos[1]-self.ratio[0]/2), self.ratio, "#FFFFFF")
         self.text.create_label(name, color="#8FAADC", alignment = Qt.AlignCenter)
-        scene.addItem(self.text)
+        self.scene.addItem(self.text)
 
         #add circle next to text
-        self.circle = Circle(pos[0] , pos[1], 0.015, "#4472C4", self.on_click, parent)
+        self.circle = Circle(pos[0] , pos[1], 0.015, "#4472C4", self.on_click)
         self.scene.addItem(self.circle)
         
 
@@ -61,16 +62,20 @@ class Gate():
 
         Toggles the state of the gate and updates the line connecting the circle to the gate accordingly.
         """
-        if self.sens == 'horizontal':
-            test_value = self.state
-        else:
-            test_value = not self.state
+        if self.serial_reader.ser is not None:
+            if self.sens == 'horizontal':
+                test_value = self.state
+            else:
+                test_value = not self.state
 
-        if test_value == False: 
-            #draw vertical line
-            self.line.set_line(self.scene,self.circle.center[0], self.circle.center[1]-self.circle.radius*1.2, self.circle.center[0], self.circle.center[1]+self.circle.radius*1.2)
-        else:
-            self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
-        self.state = not self.state
+            if test_value == False: 
+                #draw vertical line
+                self.line.set_line(self.scene,self.circle.center[0], self.circle.center[1]-self.circle.radius*1.2, self.circle.center[0], self.circle.center[1]+self.circle.radius*1.2)
+            else:
+                self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
+            self.state = not self.state
+
+            self.serial_reader.write_data(self.cmd, not self.state)
+            
 
         # print("self.state",self.state)

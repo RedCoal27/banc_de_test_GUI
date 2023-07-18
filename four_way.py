@@ -42,7 +42,7 @@ class FourWay(CustomWidget):
         """
         Creates buttons for the FourWay widget.
         """
-        self.create_button("cycle")
+        self.create_button("cycle", self.open_windows)
 
     def update_DI(self, up, down):
         """

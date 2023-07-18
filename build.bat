@@ -1,0 +1,1 @@
+pyinstaller --onefile --add-data "images\*;images" --add-data "lang\*;lang" .\gui.py

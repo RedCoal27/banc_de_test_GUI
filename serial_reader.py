@@ -25,11 +25,11 @@ class SerialReader:
             QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("no_com_port"))
 
 
-    def send_data(self, type, action):
+    def send_data(self, type, data):
         if self.ser is not None:
             try:
                 self.ser.write(bytes([type]))
-                self.ser.write(bytes([action]))
+                self.ser.write(bytes([data]))
             except SerialException:
                 QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
@@ -53,3 +53,6 @@ class SerialReader:
                 QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
         return None
+
+    def write_data(self, action, state):
+        self.send_data(0, action*2 + state)
