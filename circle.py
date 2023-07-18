@@ -13,6 +13,7 @@ class Circle(QGraphicsEllipseItem):
             y (float): The y coordinate of the center of the circle.
             radius (float): The radius of the circle.
             color (str): The color of the circle in hexadecimal format (e.g. "#FFFFFF").
+            function (function, optional): The function to be called when the circle is clicked. Defaults to None.
             parent (QGraphicsItem, optional): The parent item. Defaults to None.
         """
         self.center = (x, y)
@@ -33,18 +34,27 @@ class Circle(QGraphicsEllipseItem):
         Args:
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
+            scale_factor (float): The scale factor to be applied to the circle's pen width.
         """
-        # self.setPos(QPointF(self.center[0] * width, self.center[1] * height))
         self.setRect(self.center[0] * width - self.radius * width, self.center[1] * height - self.radius * height*1.2, self.radius * 2 * width, self.radius * 2 * height*1.2)
         self.setPen(QPen(QColor(self.color), 2 * scale_factor))
         self.setBrush(QBrush(Qt.white))
 
     def hoverEnterEvent(self, event):
+        """
+        Changes the cursor to a pointing hand when the mouse enters the circle.
+        """
         self.setCursor(Qt.PointingHandCursor)
 
     def hoverLeaveEvent(self, event):
+        """
+        Changes the cursor back to an arrow when the mouse leaves the circle.
+        """
         self.setCursor(Qt.ArrowCursor)
 
     def mousePressEvent(self, event):
+        """
+        Calls the function associated with the circle when it is clicked.
+        """
         if self.function is not None:
             self.function()

@@ -30,7 +30,7 @@ class Gate():
         - state: a boolean representing the state of the gate (open or closed)
         - line: a Line object representing the line connecting the circle to the gate (horizontal or vertical)
         """
-        self.ratio = [0.04, 0.04]
+        self.ratio = [0.05, 0.035]
         self.pos = pos
         self.relative_pos = relative_pos
         self.scene = scene

@@ -9,7 +9,7 @@ class CustomWidget(QGraphicsWidget):
         A custom widget that can contain labels and buttons.
 
         Args:
-            translator (QTranslator): A translator object used to translate text.
+            translator: a translator object used for internationalization
             pos (tuple): A tuple containing the x and y position of the widget as a ratio of the parent widget's width and height.
             ratio (tuple): A tuple containing the x and y ratios of the widget's width and height relative to the parent widget's width and height.
             color (str): The background color of the widget in hexadecimal format (e.g. "#FFFFFF").
@@ -26,7 +26,7 @@ class CustomWidget(QGraphicsWidget):
         self.setLayout(self.layout)
 
         self.layout.setSpacing(0)
-        self.layout.setContentsMargins(3, 3, 3, 3)  # Add this line to remove margins
+        self.layout.setContentsMargins(2, 4, 2, 4)  # Add this line to remove margins
 
         #ratio = x_ratio, y_ratio, width_ratio, height_ratio
         self.position = pos
@@ -126,7 +126,7 @@ class CustomWidget(QGraphicsWidget):
             widget: Unused.
         """
         path = QPainterPath()
-        path.addRoundedRect(self.rect(), 3, 3)
+        path.addRoundedRect(self.rect(), 6, 6)
         painter.fillPath(path, QColor(self.color))
 
     def change_language(self):

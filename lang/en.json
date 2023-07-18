@@ -8,14 +8,21 @@
     "no_com_port": "No COM port available.",
     "serial_port_disconnected": "The used port {port} has been unplugged.",
     "WL":"Wafer Lift {number}",
+    "throttle_valve":"Throttle Valve",
+    "motor_lift":"Motorized Lift",
     "SV":"Slit Valve",
     "do_up":"DO Up: {state}",
     "do_down":"DO Down: {state}",
     "di_up":"DI UP: {state}",
     "di_down":"DI Down: {state}",
     "position":"Position: {state}",
+    "p_home":"Position Home: {state}",
+    "p_prcs":"Position Prcs: {state}",
+    "steps":"Steps: {state}",
     "false":"False",
     "true":"True",
+    "open":"Open",
+    "close":"Close",
     "unknown":"Unknown",
     "up":"Up",
     "down":"Down",
@@ -35,7 +42,6 @@
     "status":"Status: {state}",
     "accelerate":"Accelerate: {state}",
 
-
     "nupro_final":"Nupro \nFinal",
     "nupro_mfc1":"Nupro \nMFC1",
     "nupro_mfc2":"Nupro \nMFC2",
@@ -43,5 +49,6 @@
     "turbo_pump_rga_gate":"Iso \nRGA",
     "turbo_pump_rga_gate_p":"Iso \nRGA P",
     "turbo_pump_ch_gate":"Gate \nTurbo",
-    "turbo_pump_ch_gate_p":"Iso \nTurbo"
+    "turbo_pump_ch_gate_p":"Iso \nTurbo",
+    "iso_chamber":"Iso \nChamber"
 }
