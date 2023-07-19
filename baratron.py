@@ -6,7 +6,7 @@ from custom_widget import CustomWidget
 
 class Baratron(CustomWidget):
     def __init__(self, translator, pos , key , parent=None):
-        ratio = [0.14, 0.1]
+        ratio = (0.14, 0.1)
         super().__init__(translator, pos, ratio, "#C5E0B4", parent)
         self.create_labels(key)
         

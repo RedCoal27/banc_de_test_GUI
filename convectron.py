@@ -15,7 +15,7 @@ class Convectron(CustomWidget):
         - key: a string representing the key of the widget
         - parent: a parent widget (optional)
         """
-        ratio = [0.14, 0.08]
+        ratio = (0.14, 0.08)
         super().__init__(translator, pos, ratio, "#E2F0D9", parent)
         self.create_labels(key)
         

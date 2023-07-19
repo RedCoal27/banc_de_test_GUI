@@ -7,17 +7,17 @@ from circle import Circle
 from line import Line
 
 class Gate():
-    def __init__(self, pos, relative_pos, name, cmd, sens='horizontal' , parent=None):
+    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], name: str, cmd: str, sens: str, parent):
         """
         A class representing a gate in a graphical interface.
 
         Args:
-        - translator: a translator object used to translate text in the interface
-        - scene: a QGraphicsScene object representing the scene in which the gate will be displayed
         - pos: a tuple representing the position of the gate in the scene
         - relative_pos: a tuple representing the relative position for the label
+        - name: a string representing the name of the gate
+        - cmd: a string representing the command to be sent to the serial port
         - sens: a string representing the orientation of the gate ('horizontal' or 'vertical')
-        - parent: a QGraphicsWidget object representing the parent widget of the gate (optional)
+        - parent: the main window of the application
 
         Attributes:
         - ratio: a list representing the ratio of the gate's size to the size of its parent widget
@@ -30,7 +30,7 @@ class Gate():
         - state: a boolean representing the state of the gate (open or closed)
         - line: a Line object representing the line connecting the circle to the gate (horizontal or vertical)
         """
-        self.ratio = [0.05, 0.035]
+        self.ratio = (0.05, 0.035)
         self.pos = pos
         self.relative_pos = relative_pos
         self.scene = parent.scene

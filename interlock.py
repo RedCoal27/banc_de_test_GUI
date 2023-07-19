@@ -6,7 +6,7 @@ from custom_widget import CustomWidget
 
 class Interlock(CustomWidget):
     def __init__(self, translator, pos , key , parent=None):
-        ratio = [0.15, 0.15]
+        ratio = (0.15, 0.15)
         super().__init__(translator, pos, ratio, "#FFD966", parent)
         self.create_labels(key)
         

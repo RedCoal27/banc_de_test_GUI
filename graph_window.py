@@ -19,9 +19,12 @@ class GraphWindow(QMainWindow):
         self.edits = {}
         self.layouts = {}
 
-        # Initialize timer
+        # Initialize timers
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timer)
+        self.sensor_check_timer = QTimer()
+        self.sensor_check_timer.timeout.connect(self.check_sensor)
+
 
         # Create widgets and layouts
         self.create_top_widgets()
@@ -32,8 +35,8 @@ class GraphWindow(QMainWindow):
         self.create_main_layout()
 
         # Initialize data list for the graph
-        self.data = []
-        self.time = []
+        self.time_data = []
+        self.component_state = []
 
         self.setCentralWidget(self.widget)
 
@@ -163,35 +166,85 @@ class GraphWindow(QMainWindow):
             self.timer.stop()
             self.start_button.setText(self.translator.translate('start'))
         else:
-            self.timer.start(1000)  # adjust the interval as needed
-            self.start_button.setText(self.translator.translate('stop'))
             self.cycle_count = 0  # initialize cycle counter
             self.starting_time = QDateTime.currentMSecsSinceEpoch() # initialize starting time
+            self.time_data = []
+            self.component_state = []
+            self.start_cycle()
+            
+    def start_cycle(self):
+        # Start a cycle
+        self.activate_component()  # activate component
+        self.component_state.append(1)  # record that the component is up
+
+        # Record the start time of the cycle
+        start_time = (QDateTime.currentMSecsSinceEpoch() - self.starting_time) / 1000.0
+        self.time_data.append(start_time)
+
+        self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch() # initialize sensor check start time
+        self.sensor_check_timer.start(10)  # start checking the sensor every 10 ms
+        self.start_button.setText(self.translator.translate('stop'))
+        self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
+
 
     def on_timer(self):
-        # Add a random value to the data and update the plot
-        new_value = random.uniform(0, 100)
-        time = QDateTime.currentMSecsSinceEpoch() - self.starting_time
-        self.data.append(new_value)
-        self.time.append(time/1000)
-        self.ax.clear()
-        self.ax.plot(self.time, self.data)
-        self.canvas.draw()
+        # This method is called when the 15-second timer expires
+        self.timer.stop()  # stop the timer
+        self.sensor_check_timer.stop()  # stop checking the sensor
+        self.start_button.setText(self.translator.translate('start'))
+        self.edits['status'].setText('Error: Sensor not reached in 15 seconds')
 
-        # Update the status label with the new value
-        self.edits['status'].setText(str(new_value))
+    def check_sensor(self):
+        # This method is called every 10 ms to check the sensor
+        if self.is_sensor_reached():
+            self.sensor_check_timer.stop()  # stop checking the sensor
+            self.timer.stop()  # stop the 15-second timer
 
-        # Update min_val, max_val, and avg_val labels
-        self.labels['min_val'].setText(self.translator.translate('min_val') + ': ' + f"{min(self.data):.2f}")
-        self.labels['max_val'].setText(self.translator.translate('max_val') + ': ' + f"{max(self.data):.2f}")
-        self.labels['avg_val'].setText(self.translator.translate('avg_val') + ': ' + f"{sum(self.data) / len(self.data):.2f}")
+            # Set component state to down
+            self.component_state.append(0)  # record that the component is down
 
-        self.cycle_count += 1  # increment cycle counter
-        if self.cycle_count >= self.edits['cycle'].value():
-            self.timer.stop()  # stop the timer when the requested number of cycles is reached
-            self.start_button.setText(self.translator.translate('start'))
-            self.save_to_csv(self.data,self.time)  # save the data to CSV
+            # Record the time the sensor was reached
+            sensor_reached_time = (QDateTime.currentMSecsSinceEpoch() - self.starting_time) / 1000.0
+            self.time_data.append(sensor_reached_time)
 
+            self.cycle_count += 1  # increment cycle counter
+
+            if self.cycle_count >= self.edits['cycle'].value():
+                # If the requested number of cycles is reached, stop everything
+                self.start_button.setText(self.translator.translate('start'))
+                self.save_to_csv(self.time_data, self.component_state)  # save the data to CSV
+
+            else:
+                # If more cycles are needed, start another cycle
+                self.start_cycle()
+
+            # Update the graph
+            self.ax.clear()
+            self.ax.step(self.time_data, self.component_state)
+            self.canvas.draw()
+
+        else:
+            # If the sensor is not reached yet, update the status
+            self.edits['status'].setText('Waiting for sensor')
+
+
+
+    def activate_component(self):
+        # This is a placeholder for the function that activates a component
+        print('Component activated')
+        return True
+
+    def deactivate_component(self):
+        # This is a placeholder for the function that deactivates a component
+        print('Component deactivated')
+
+
+    def is_sensor_reached(self):
+        # This is a placeholder for the function that checks if a sensor is reached
+        # Here, it simulates a sensor that is randomly reached with a probability of 0.1
+        # print('Checking sensor')
+        sleep(0.01)
+        return random.random() > 0.9
 
     def update_csv_file(self):
         pn = self.edits['PN'].text()
@@ -205,7 +258,7 @@ class GraphWindow(QMainWindow):
             self.edits['CSV File'].clear()
             self.start_button.setEnabled(False)
 
-    def save_to_csv(self, data,time):
+    def save_to_csv(self, time_data, component_state):
         filename = self.edits['CSV File'].text()
         path = "data/" + filename
         
@@ -215,8 +268,8 @@ class GraphWindow(QMainWindow):
 
         with open(path, 'w', newline='') as file:
             writer = csv.writer(file, delimiter=';')
-            writer.writerow(['Time', 'Value'])
+            writer.writerow(['Time', 'Component State'])
         with open(path, 'a', newline='') as file:
             writer = csv.writer(file, delimiter=';')
-            for i in range(len(data)):
-                writer.writerow([time[i], data[i]])
+            for i in range(len(time_data)):
+                writer.writerow([time_data[i], component_state[i]])

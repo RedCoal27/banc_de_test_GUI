@@ -16,7 +16,7 @@ class FourWay(CustomWidget):
         - number: a string representing the number of the widget (optional)
         - parent: a parent widget (optional)
         """
-        ratio = [0.101, 0.18]
+        ratio = (0.101, 0.18)
         self.FourWay_number = number
         super().__init__(translator, pos, ratio, "#FBE5D6", parent)
         self.create_labels(key)

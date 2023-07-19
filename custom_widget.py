@@ -5,7 +5,7 @@ from graph_window import GraphWindow
 
 
 class CustomWidget(QGraphicsWidget):
-    def __init__(self, translator, pos, ratio, color, parent=None, police_size=8):
+    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, parent=None, police_size=8):
         """
         A custom widget that can contain labels and buttons.
 
@@ -140,7 +140,7 @@ class CustomWidget(QGraphicsWidget):
         for label, _ , key, kwargs in self.labels:
             label.setText(self.translator.translate(key,**kwargs))
         for button, _ , key in self.buttons:
-            button.setText(self.translator.translate(key,**kwargs))
+            button.setText(self.translator.translate(key))
 
     def set_pos_size(self,width, height,scale_factor):
         """
@@ -153,12 +153,12 @@ class CustomWidget(QGraphicsWidget):
 
         for label in self.labels:
             font = label[0].font()
-            font.setPointSizeF(self.police_size/scale_factor)  # New code
+            font.setPointSizeF(self.police_size)  # New code
             label[0].setFont(font)
 
         for button in self.buttons:  # New code
             font = button[0].font()  # New code
-            font.setPointSizeF(self.police_size/scale_factor)  # New code
+            font.setPointSizeF(self.police_size)  # New code
             button[0].setFont(font)  # New code
             #change button size
 

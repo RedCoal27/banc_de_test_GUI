@@ -6,7 +6,7 @@ from custom_widget import CustomWidget
 
 class MFC(CustomWidget):
     def __init__(self, translator, pos , key , parent=None):
-        ratio = [0.1, 0.12]
+        ratio = (0.1, 0.12)
         super().__init__(translator, pos, ratio, "#B4C7E7", parent)
         self.create_labels(key)
         

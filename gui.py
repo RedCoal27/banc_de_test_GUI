@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
         self.resize(800, 600)
 
+        
 
     def create_timer(self):
         """

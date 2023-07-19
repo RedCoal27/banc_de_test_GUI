@@ -1,1 +1,1 @@
-pyinstaller --onefile --add-data "images\*;images" --add-data "lang\*;lang" .\gui.py
+pyinstaller --onefile --add-data "images\*;images" --add-data "lang\*;lang" --icon=images/xfab.jpg -F --noconsole .\gui.py
