@@ -89,7 +89,8 @@ class CustomWidget(QGraphicsWidget):
 
 
 
-    def create_button(self, key, function=None):
+
+    def create_button(self, key, function=None, **kwargs):
         """
         Creates a button with the given key and adds it to the widget.
 
@@ -100,7 +101,7 @@ class CustomWidget(QGraphicsWidget):
         if function is None:
             function = lambda: None
 
-        button = QPushButton(self.translator.translate(key))
+        button = QPushButton(self.translator.translate(key, **kwargs))
         button.clicked.connect(function)
         button_proxy = QGraphicsProxyWidget(self)
         button_proxy.setWidget(button)
@@ -114,8 +115,29 @@ class CustomWidget(QGraphicsWidget):
         button.setContentsMargins(1, 1, 1, 1)
         button.setStyleSheet("QPushButton { padding-top: 2px; }")
         self.layout.addItem(button_proxy)
-        self.buttons.append((button, button_proxy, key))  # Append the key for later language changes
+        self.buttons.append((button, button_proxy, key, kwargs))  # Append the key for later language changes
 
+
+    def update_button(self, key, state):
+        """
+        Updates a button with the given key.
+
+        Args:
+            key (str): The translation key for the button.
+            state (str): The new state ("true" or "false").
+        """
+        # Loop over all buttons
+        for button, button_proxy, button_key, kwargs in self.buttons:
+            # If the key matches
+            if button_key == key:
+                # Update the state in kwargs
+                kwargs['state'] = state
+                # Translate the new text and update the button
+                button.setText(self.translator.translate(button_key, **kwargs))
+                # Refresh the proxy widget
+                button_proxy.setWidget(button)
+                # We found the button, so we can break the loop
+                break
 
     def paint(self, painter, option, widget):
         """
@@ -139,8 +161,8 @@ class CustomWidget(QGraphicsWidget):
         """
         for label, _ , key, kwargs in self.labels:
             label.setText(self.translator.translate(key,**kwargs))
-        for button, _ , key in self.buttons:
-            button.setText(self.translator.translate(key))
+        for button, _ , key, kwargs in self.buttons:
+            button.setText(self.translator.translate(key,**kwargs))
 
     def set_pos_size(self,width, height,scale_factor):
         """
@@ -150,6 +172,7 @@ class CustomWidget(QGraphicsWidget):
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
         """
+
 
         for label in self.labels:
             font = label[0].font()
@@ -161,11 +184,16 @@ class CustomWidget(QGraphicsWidget):
             font.setPointSizeF(self.police_size)  # New code
             button[0].setFont(font)  # New code
             #change button size
+            button[0].setFixedWidth(int(width*self.ratio[0]))
+
 
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()
         self.setPos(width*self.position[0], height*self.position[1])
 
+
+
+
     def open_windows(self):
-        self.window = GraphWindow(self.translator)
+        self.window = GraphWindow(self.translator, self.cmd)
         self.window.show()

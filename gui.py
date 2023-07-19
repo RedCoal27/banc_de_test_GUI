@@ -2,10 +2,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QAction, QMessageBox, QActionGroup
 from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette, QColor, QIcon,QGuiApplication, QPen
 from PyQt5.QtCore import Qt, QTimer
-import serial
 from serial.tools.list_ports import comports
 from serial.serialutil import SerialException
-import json
 import os
 
 from translator import Translator
@@ -24,8 +22,7 @@ from pump import Pump
 from motor_lift import MotorisedLift
 from throttle_valve import ThrottleValve
 
-
-
+from logger import logger
 
 
 
@@ -44,6 +41,7 @@ class MainWindow(QMainWindow):
         QTimer.singleShot(0, self.resize_widgets)
 
 
+
     def init_ui(self):
         """
         Initializes the user interface by creating the timer, menus, background, and buttons.
@@ -59,7 +57,6 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
         self.resize(800, 600)
 
-        
 
     def create_timer(self):
         """
@@ -80,6 +77,9 @@ class MainWindow(QMainWindow):
         self.language_menu = self.create_language_menu()
         self.menuBar().addMenu(self.language_menu)
 
+        self.font_size_menu = self.create_font_size_menu()
+        self.menuBar().addMenu(self.font_size_menu)
+
 
     def create_menu(self, menu_name, actions):
         """
@@ -97,6 +97,41 @@ class MainWindow(QMainWindow):
             menu.addAction(action)
         return menu
     
+
+    def create_font_size_menu(self):
+        """
+        Creates the font size menu.
+
+        Returns:
+            QMenu: The created font size menu.
+        """
+        font_size_menu = QMenu(self.translator.translate("Font size"), self)
+        action_group = QActionGroup(self)
+        action_group.setExclusive(True)
+        for size in [6,7,8,9,10,11,12,13,14]:
+            action = QAction(str(size), self)
+            action.setCheckable(True)
+            if size == 8:  # Check the default font size
+                action.setChecked(True)
+            action.triggered.connect(lambda checked, s=size: self.change_font_size(s))
+            action_group.addAction(action)
+            font_size_menu.addAction(action)
+        return font_size_menu
+
+    def change_font_size(self, size):
+        """
+        Changes the font size of the custom widgets.
+
+        Args:
+            size (int): The font size to change to.
+        """
+        # Resize custom widgets
+        for item in self.scene.items():
+            if isinstance(item, CustomWidget):
+                item.police_size = size
+        QTimer.singleShot(0, self.resize_widgets)
+
+
     def update_com_menu(self):
         """
         Updates the COM menu with available ports.
@@ -219,12 +254,12 @@ class MainWindow(QMainWindow):
         self.custom_widgets["interlock"] = Interlock(self.translator, [0.05,0.1],"interlock")
         self.custom_widgets["Chamber"] = Chamber(self.translator, [0.24,0.3])
 
-        self.custom_widgets["WL2"] = FourWay(self.translator, [0.24,0.12],"WL","2")
-        self.custom_widgets["WL3"] = FourWay(self.translator, [0.365,0.12],"WL","3")
-        self.custom_widgets["SV"] = FourWay(self.translator, [0.49,0.12],"SV")
+        self.custom_widgets["WL2"] = FourWay(self, [0.24,0.07],9 ,"WL","2")
+        self.custom_widgets["WL3"] = FourWay(self, [0.365,0.07],8 ,"WL","3")
+        self.custom_widgets["SV"] = FourWay(self, [0.49,0.07], 7,"SV")
         self.custom_widgets["throttle_valve"] = ThrottleValve(self.translator, [0.24,0.5],"throttle_valve" , "1")
         self.custom_widgets["motor_lift"] = MotorisedLift(self.translator, [0.37,0.5],"motor_lift")
-        self.custom_widgets["WL1"] = FourWay(self.translator, [0.51,0.5],"WL","1")
+        self.custom_widgets["WL1"] = FourWay(self, [0.51,0.5],10 ,"WL","1")
         self.custom_widgets["baratron1"] = Baratron(self.translator, [0.76,0.5],"baratron1")
         self.custom_widgets["baratron2"] = Baratron(self.translator, [0.76,0.63],"baratron2")
         self.custom_widgets["MFC1"] = MFC(self.translator, [0.79,0.21],"MFC1")
@@ -242,18 +277,18 @@ class MainWindow(QMainWindow):
             self.scene.addItem(custom_widget)
 
 
-        self.custom_widgets["nupro_final"] = Gate([0.675,0.41], [0,-0.05],"nupro_final", 3, sens='vertical',parent=self)
-        self.custom_widgets["nupro_MFC1"] = Gate([0.745,0.27], [0,-0.05],"nupro_mfc1", 1, sens='vertical', parent=self)
-        self.custom_widgets["nupro_MFC2"] = Gate([0.745,0.41], [0,-0.05],"nupro_mfc2", 2, sens='vertical', parent=self)
-        self.custom_widgets["nupro_vent"] = Gate([0.675,0.15], [0,-0.05],"nupro_vent", 4, sens='vertical', parent=self)
+        self.custom_widgets["nupro_final"] = Gate((0.675,0.41),(0,-0.05),"nupro_final", 3, sens='vertical',parent=self)
+        self.custom_widgets["nupro_MFC1"] = Gate((0.745,0.27), (0,-0.05),"nupro_mfc1", 1, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.41), (0,-0.05),"nupro_mfc2", 2, sens='vertical', parent=self)
+        self.custom_widgets["nupro_vent"] = Gate((0.675,0.15), (0,-0.05),"nupro_vent", 4, sens='vertical', parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate"] = Gate([0.07,0.5], [-0.04,0.0],"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate([0.07,0.75], [-0.04,0.0],"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.75), (-0.04,0.0),"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
 
-        self.custom_widgets["turbo_pump_ch_gate"] = Gate([0.18,0.55], [-0.04,0.0],"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate([0.18,0.75], [-0.04,0.0],"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate"] = Gate((0.18,0.55), (-0.04,0.0),"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.75), (-0.04,0.0),"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
 
-        self.custom_widgets["iso_chamber"] = Gate([0.295,0.79],[-0.04,-0.005],"iso_chamber", 25, sens='horizontal', parent=self)
+        self.custom_widgets["iso_chamber"] = Gate((0.295,0.79),(-0.04,-0.005),"iso_chamber", 25, sens='horizontal', parent=self)
 
 
     def read_from_serial(self):
@@ -263,7 +298,7 @@ class MainWindow(QMainWindow):
         self.serial_reader.send_data(1,0)   #read all DI
         data = self.serial_reader.wait_and_read_data(4)
         if data is not None and len(data) == 4:
-            print(data)
+            # print(data)
             self.custom_widgets["WL2"].update_DI(data[0] & 16, data[0] & 32)
             self.custom_widgets["WL3"].update_DI(data[0] & 4, data[0] & 8)
             self.custom_widgets["SV"].update_DI(data[0] & 1, data[0] & 2)

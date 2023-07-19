@@ -5,9 +5,12 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 from custom_widget import CustomWidget
 from circle import Circle
 from line import Line
+from logger import logger
+
+
 
 class Gate():
-    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], name: str, cmd: str, sens: str, parent):
+    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], name: str, cmd: int, sens: str, parent):
         """
         A class representing a gate in a graphical interface.
 
@@ -76,6 +79,7 @@ class Gate():
             self.state = not self.state
 
             self.serial_reader.write_data(self.cmd, not self.state)
-            
+
+            logger.debug(f"Gate {self.name} is set to {self.state}")
 
         # print("self.state",self.state)

@@ -27,6 +27,7 @@
     "up":"Haut",
     "down":"Bas",
     "chamber":"Chambre",
+    "change_state":"{state}",
     "cycle":"Cycle",
     "pressure":"Pression: {value}",
     "offset":"Offset: {value}",
@@ -50,5 +51,12 @@
     "turbo_pump_rga_gate_p":"Iso \nRGA P",
     "turbo_pump_ch_gate":"Gate \nTurbo",
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
-    "iso_chamber":"Iso \nChamber"
+    "iso_chamber":"Iso \nChamber",
+
+    "min_val_ascent":"Val. Min. Ascension: {value}",
+    "min_val_descent":"Val. Min. Descente: {value}",
+    "max_val_ascent":"Val. Max. Ascension: {value}",
+    "max_val_descent":"Val. Max. Descente: {value}",
+    "avg_val_ascent":"Val. Moy. Ascension: {value}",
+    "avg_val_descent":"Val. Moy. Descente: {value}"
 }
