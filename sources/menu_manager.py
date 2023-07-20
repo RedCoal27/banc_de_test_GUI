@@ -4,7 +4,7 @@ from PyQt5.QtCore import QTimer
 from serial.tools.list_ports import comports
 from internal.custom_widget import CustomWidget
 
-from internal.logger import logger
+from internal.logger import Logger
 
 
 class MenuManager:

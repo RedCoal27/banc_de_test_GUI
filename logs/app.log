@@ -292,3 +292,324 @@
 2023-07-20 11:31:44,986 - DEBUG - Gate turbo_pump_ch_gate is set to False
 2023-07-20 11:31:44,988 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
 2023-07-20 11:31:44,990 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:47:50,449 - INFO - Translations loaded.
+2023-07-20 11:47:50,887 - DEBUG - Gate WL is set to up
+2023-07-20 11:47:50,903 - DEBUG - Gate WL is set to up
+2023-07-20 11:47:50,918 - DEBUG - Gate SV is set to up
+2023-07-20 11:47:50,965 - DEBUG - Gate WL is set to up
+2023-07-20 11:47:51,112 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:47:51,112 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:47:51,112 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:47:51,118 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:48:28,373 - INFO - Translations loaded.
+2023-07-20 11:48:28,763 - DEBUG - Gate WL is set to up
+2023-07-20 11:48:28,776 - DEBUG - Gate WL is set to up
+2023-07-20 11:48:28,790 - DEBUG - Gate SV is set to up
+2023-07-20 11:48:28,828 - DEBUG - Gate WL is set to up
+2023-07-20 11:48:28,899 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:48:28,901 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:48:28,902 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:48:28,905 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:48:28,908 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:48:28,911 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:48:28,912 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:48:28,914 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:48:28,917 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:48:43,981 - ERROR - Error while loading translations: [Errno 2] No such file or directory: 'c:\\Users\\amaillet\\Desktop\\Interface\\sources\\lang\\de.json'
+2023-07-20 11:49:13,851 - INFO - Translations loaded.
+2023-07-20 11:49:14,232 - DEBUG - Gate WL is set to up
+2023-07-20 11:49:14,248 - DEBUG - Gate WL is set to up
+2023-07-20 11:49:14,263 - DEBUG - Gate SV is set to up
+2023-07-20 11:49:14,294 - DEBUG - Gate WL is set to up
+2023-07-20 11:49:14,348 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:49:14,348 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:49:14,348 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:49:14,348 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:49:14,363 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:49:14,363 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:49:14,363 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:49:14,363 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:49:14,363 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:51:18,861 - INFO - Translations loaded.
+2023-07-20 11:51:19,305 - DEBUG - Gate WL is set to up
+2023-07-20 11:51:19,317 - DEBUG - Gate WL is set to up
+2023-07-20 11:51:19,333 - DEBUG - Gate SV is set to up
+2023-07-20 11:51:19,371 - DEBUG - Gate WL is set to up
+2023-07-20 11:51:19,441 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:51:19,443 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:51:19,445 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:51:19,446 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:51:19,449 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:51:19,451 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:51:19,455 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:51:19,457 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:51:19,459 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:51:35,971 - WARNING - Error while sending data to serial port COM5.
+2023-07-20 11:52:10,738 - INFO - Translations loaded.
+2023-07-20 11:52:11,098 - DEBUG - Gate WL is set to up
+2023-07-20 11:52:11,114 - DEBUG - Gate WL is set to up
+2023-07-20 11:52:11,129 - DEBUG - Gate SV is set to up
+2023-07-20 11:52:11,164 - DEBUG - Gate WL is set to up
+2023-07-20 11:52:11,211 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:52:11,227 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:52:11,229 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:52:11,230 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:52:11,231 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:52:11,231 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:52:11,231 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:52:11,231 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:52:11,231 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:52:14,796 - WARNING - Error while sending data to serial port COM5.
+2023-07-20 11:52:26,800 - WARNING - Error while sending data to serial port COM5.
+2023-07-20 11:52:31,831 - INFO - Translations loaded.
+2023-07-20 11:52:31,838 - WARNING - No COM port selected.
+2023-07-20 11:56:26,804 - INFO - Translations loaded.
+2023-07-20 11:56:27,193 - DEBUG - Gate WL is set to up
+2023-07-20 11:56:27,207 - DEBUG - Gate WL is set to up
+2023-07-20 11:56:27,225 - DEBUG - Gate SV is set to up
+2023-07-20 11:56:27,267 - DEBUG - Gate WL is set to up
+2023-07-20 11:56:27,430 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:56:27,433 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:56:27,436 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:56:27,438 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:56:27,439 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:56:27,442 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:56:27,444 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:56:27,448 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:56:27,450 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:56:38,107 - INFO - Starting the cycles with 20 cycles
+2023-07-20 11:58:23,989 - INFO - Translations loaded.
+2023-07-20 11:58:24,373 - DEBUG - Gate WL is set to up
+2023-07-20 11:58:24,388 - DEBUG - Gate WL is set to up
+2023-07-20 11:58:24,404 - DEBUG - Gate SV is set to up
+2023-07-20 11:58:24,435 - DEBUG - Gate WL is set to up
+2023-07-20 11:58:24,490 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:58:24,490 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:58:24,490 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:58:24,490 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:58:24,506 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:58:24,506 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:58:24,506 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:58:24,506 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:58:24,506 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:58:29,644 - INFO - Starting the cycles with 20 cycles name zdzd-zdzdzd-2023-07-20.csv
+2023-07-20 11:59:07,437 - INFO - Translations loaded.
+2023-07-20 11:59:07,806 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:07,822 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:07,838 - DEBUG - Gate SV is set to up
+2023-07-20 11:59:07,869 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:07,938 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:59:07,938 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:59:07,954 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:59:32,876 - INFO - Translations loaded.
+2023-07-20 11:59:33,246 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:33,259 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:33,271 - DEBUG - Gate SV is set to up
+2023-07-20 11:59:33,308 - DEBUG - Gate WL is set to up
+2023-07-20 11:59:33,366 - DEBUG - Gate nupro_final is set to False
+2023-07-20 11:59:33,368 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 11:59:33,369 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 11:59:33,370 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 11:59:33,375 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 11:59:33,377 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 11:59:33,378 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 11:59:33,381 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 11:59:33,382 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 11:59:43,761 - INFO - Starting the cycles with 5 cycles, filename: efef-fefefe-2023-07-20.csv
+2023-07-20 12:00:38,412 - INFO - Translations loaded.
+2023-07-20 12:00:38,782 - DEBUG - Gate WL is set to up
+2023-07-20 12:00:38,798 - DEBUG - Gate WL is set to up
+2023-07-20 12:00:38,814 - DEBUG - Gate SV is set to up
+2023-07-20 12:00:38,845 - DEBUG - Gate WL is set to up
+2023-07-20 12:00:38,907 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:00:38,909 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:00:38,911 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:00:38,913 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:00:38,916 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:00:38,917 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:00:38,919 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:00:38,923 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:00:38,925 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:00:42,930 - INFO - Starting the cycles with 20 cycles, filename: rggr-grgrgrg-2023-07-20.csv
+2023-07-20 12:02:51,126 - INFO - Translations loaded.
+2023-07-20 12:02:51,497 - DEBUG - Gate WL is set to up
+2023-07-20 12:02:51,497 - DEBUG - Gate WL is set to up
+2023-07-20 12:02:51,513 - DEBUG - Gate SV is set to up
+2023-07-20 12:02:51,561 - DEBUG - Gate WL is set to up
+2023-07-20 12:02:51,624 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:02:51,626 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:02:51,627 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:02:51,630 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:02:51,633 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:02:51,636 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:02:51,638 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:02:51,640 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:02:51,642 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:02:55,419 - INFO - Starting the cycles with 20 cycles, filename: asasa-sasasa-2023-07-20.csv
+2023-07-20 12:03:03,893 - INFO - Stopping the cycles
+2023-07-20 12:03:05,244 - INFO - Starting the cycles with 20 cycles, filename: asasa-sasasa-2023-07-20.csv
+2023-07-20 12:03:08,952 - INFO - Stopping the cycles
+2023-07-20 12:03:13,408 - INFO - Starting the cycles with 4 cycles, filename: asasa-sasasa-2023-07-20.csv
+2023-07-20 12:04:08,470 - INFO - Translations loaded.
+2023-07-20 12:04:08,868 - DEBUG - Gate WL is set to up
+2023-07-20 12:04:08,881 - DEBUG - Gate WL is set to up
+2023-07-20 12:04:08,895 - DEBUG - Gate SV is set to up
+2023-07-20 12:04:08,931 - DEBUG - Gate WL is set to up
+2023-07-20 12:04:08,993 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:04:08,995 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:04:08,997 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:04:08,999 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:04:09,001 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:04:09,003 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:04:09,005 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:04:09,007 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:04:09,010 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:04:10,609 - DEBUG - Gate WL is set to down
+2023-07-20 12:04:11,593 - DEBUG - Gate WL is set to up
+2023-07-20 12:04:15,883 - INFO - Starting the cycles with 20 cycles, filename: efefe-efefef-2023-07-20.csv
+2023-07-20 12:05:19,390 - INFO - Translations loaded.
+2023-07-20 12:05:19,763 - DEBUG - Gate WL is set to up
+2023-07-20 12:05:19,777 - DEBUG - Gate WL is set to up
+2023-07-20 12:05:19,791 - DEBUG - Gate SV is set to up
+2023-07-20 12:05:19,828 - DEBUG - Gate WL is set to up
+2023-07-20 12:05:19,891 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:05:19,893 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:05:19,895 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:05:19,898 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:05:19,901 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:05:19,902 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:05:19,905 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:05:19,907 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:05:19,908 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:05:24,140 - INFO - Starting the cycles with 20 cycles, filename: zdz-zdzz-2023-07-20.csv
+2023-07-20 12:05:28,167 - INFO - Stopping the cycles
+2023-07-20 12:05:32,119 - INFO - Starting the cycles with 6 cycles, filename: zdz-zdzz-2023-07-20.csv
+2023-07-20 12:06:01,131 - INFO - Starting the cycles with 6 cycles, filename: zdz-zdzz-2023-07-20.csv
+2023-07-20 12:11:32,550 - INFO - Translations loaded.
+2023-07-20 12:11:32,927 - DEBUG - Gate WL is set to up
+2023-07-20 12:11:32,943 - DEBUG - Gate WL is set to up
+2023-07-20 12:11:32,959 - DEBUG - Gate SV is set to up
+2023-07-20 12:11:33,003 - DEBUG - Gate WL is set to up
+2023-07-20 12:11:33,066 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:11:33,068 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:11:33,071 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:11:33,073 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:11:33,075 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:11:33,077 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:11:33,079 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:11:33,081 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:11:33,083 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:16:24,802 - INFO - Translations loaded.
+2023-07-20 12:16:25,189 - DEBUG - Gate WL is set to up
+2023-07-20 12:16:25,204 - DEBUG - Gate WL is set to up
+2023-07-20 12:16:25,218 - DEBUG - Gate SV is set to up
+2023-07-20 12:16:25,256 - DEBUG - Gate WL is set to up
+2023-07-20 12:16:25,320 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:16:25,323 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:16:25,325 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:16:25,327 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:16:25,331 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:16:25,333 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:16:25,335 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:16:25,337 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:16:25,339 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 12:17:09,252 - DEBUG - Gate turbo_pump_ch_gate is set to True
+2023-07-20 12:17:09,548 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:17:10,050 - DEBUG - Gate turbo_pump_ch_gate is set to True
+2023-07-20 12:17:14,257 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:19:18,542 - INFO - Translations loaded.
+2023-07-20 12:19:18,955 - DEBUG - Gate WL is set to up
+2023-07-20 12:19:18,972 - DEBUG - Gate WL is set to up
+2023-07-20 12:19:18,989 - DEBUG - Gate SV is set to up
+2023-07-20 12:19:19,038 - DEBUG - Gate WL is set to up
+2023-07-20 12:19:19,116 - DEBUG - Gate nupro_final is set to False
+2023-07-20 12:19:19,119 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 12:19:19,122 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 12:19:19,124 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 12:19:19,128 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 12:19:19,132 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 12:19:19,134 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 12:19:19,136 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 12:19:19,138 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 13:32:58,910 - INFO - Translations loaded.
+2023-07-20 13:32:59,648 - DEBUG - Gate WL is set to up
+2023-07-20 13:32:59,663 - DEBUG - Gate WL is set to up
+2023-07-20 13:32:59,676 - DEBUG - Gate SV is set to up
+2023-07-20 13:32:59,705 - DEBUG - Gate WL is set to up
+2023-07-20 13:32:59,775 - DEBUG - Gate nupro_final is set to False
+2023-07-20 13:32:59,777 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 13:32:59,779 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 13:32:59,781 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 13:32:59,783 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 13:32:59,786 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 13:32:59,788 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 13:32:59,792 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 13:32:59,794 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 13:33:33,485 - INFO - Starting the cycles with 20 cycles, filename: RRRRRRRRRRRRRRRRRRRR-FFFFFFFFFFFFFFFFFFFFFFFFFF-2023-07-20.csv
+2023-07-20 13:33:39,688 - INFO - Stopping the cycles
+2023-07-20 13:33:57,932 - INFO - Translations loaded.
+2023-07-20 13:33:58,300 - DEBUG - Gate WL is set to up
+2023-07-20 13:33:58,316 - DEBUG - Gate WL is set to up
+2023-07-20 13:33:58,332 - DEBUG - Gate SV is set to up
+2023-07-20 13:33:58,364 - DEBUG - Gate WL is set to up
+2023-07-20 13:33:58,433 - DEBUG - Gate nupro_final is set to False
+2023-07-20 13:33:58,433 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 13:33:58,433 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 13:33:58,433 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 13:33:58,448 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 13:33:58,448 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 13:33:58,448 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 13:33:58,448 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 13:33:58,448 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 13:34:21,325 - INFO - Starting the cycles with 20 cycles, filename: G-GGG-2023-07-20.csv
+2023-07-20 13:34:25,833 - INFO - Stopping the cycles
+2023-07-20 13:34:27,245 - INFO - Starting the cycles with 20 cycles, filename: G-GGG-2023-07-20.csv
+2023-07-20 13:34:42,623 - INFO - Stopping the cycles
+2023-07-20 13:34:48,133 - INFO - Starting the cycles with 3 cycles, filename: G-GGG-2023-07-20.csv
+2023-07-20 13:35:39,086 - INFO - Translations loaded.
+2023-07-20 13:35:39,479 - DEBUG - Gate WL is set to up
+2023-07-20 13:35:39,496 - DEBUG - Gate WL is set to up
+2023-07-20 13:35:39,513 - DEBUG - Gate SV is set to up
+2023-07-20 13:35:39,554 - DEBUG - Gate WL is set to up
+2023-07-20 13:35:39,629 - DEBUG - Gate nupro_final is set to False
+2023-07-20 13:35:39,633 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 13:35:39,635 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 13:35:39,638 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 13:35:39,640 - DEBUG - Gate turbo_pump_rga_gate is set to False
+2023-07-20 13:35:39,642 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 13:35:39,645 - DEBUG - Gate turbo_pump_ch_gate is set to False
+2023-07-20 13:35:39,647 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 13:35:39,649 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 13:35:47,765 - INFO - Starting the cycles with 10 cycles, filename: efefefe-efef-2023-07-20.csv
+2023-07-20 13:35:51,248 - DEBUG - Gate nupro_final is set to True
+2023-07-20 13:35:51,618 - DEBUG - Gate nupro_final is set to False
+2023-07-20 13:36:20,660 - INFO - Cycles finished and saved to CSV file
+2023-07-20 13:36:55,452 - DEBUG - Gate WL is set to down
+2023-07-20 13:36:56,002 - DEBUG - Gate WL is set to up
+2023-07-20 13:36:56,316 - DEBUG - Gate WL is set to down
+2023-07-20 13:36:56,765 - DEBUG - Gate WL is set to up
+2023-07-20 13:36:59,724 - DEBUG - Gate iso_chamber is set to True
+2023-07-20 13:37:00,000 - DEBUG - Gate iso_chamber is set to False
+2023-07-20 13:37:00,966 - DEBUG - Gate turbo_pump_ch_gate_p is set to True
+2023-07-20 13:37:01,183 - DEBUG - Gate turbo_pump_ch_gate_p is set to False
+2023-07-20 13:37:02,006 - DEBUG - Gate turbo_pump_rga_gate_p is set to True
+2023-07-20 13:37:02,222 - DEBUG - Gate turbo_pump_rga_gate_p is set to False
+2023-07-20 13:37:48,351 - DEBUG - Gate nupro_vent is set to True
+2023-07-20 13:37:48,598 - DEBUG - Gate nupro_vent is set to False
+2023-07-20 13:37:49,052 - DEBUG - Gate nupro_mfc1 is set to True
+2023-07-20 13:37:49,300 - DEBUG - Gate nupro_mfc1 is set to False
+2023-07-20 13:37:49,919 - DEBUG - Gate nupro_mfc2 is set to True
+2023-07-20 13:37:50,089 - DEBUG - Gate nupro_mfc2 is set to False
+2023-07-20 13:37:50,839 - DEBUG - Gate nupro_final is set to True
+2023-07-20 13:37:51,008 - DEBUG - Gate nupro_final is set to False

@@ -2,6 +2,8 @@ from serial import Serial, SerialException
 from serial.tools.list_ports import comports
 from PyQt5.QtWidgets import QMessageBox
 
+from internal.logger import Logger
+
 import time
 
 class SerialReader:
@@ -20,9 +22,11 @@ class SerialReader:
             try:
                 self.ser = Serial(port=port, baudrate=9600, timeout=0.2)
             except SerialException:
-                print(self.translator.translate("serial_port_error", port=port))
+                Logger.error(f"Error while connecting to serial port {port}.")
         else:
+            Logger.warning("No COM port selected.")
             QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("no_com_port"))
+
 
 
     def send_data(self, type, data):
@@ -31,6 +35,7 @@ class SerialReader:
                 self.ser.write(bytes([type]))
                 self.ser.write(bytes([data]))
             except SerialException:
+                Logger.warning(f"Error while sending data to serial port {self.ser.port}.")
                 QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
 
@@ -50,6 +55,7 @@ class SerialReader:
                 self.ser.reset_input_buffer()
                 return data
             except SerialException:
+                Logger.warning(f"Error while reading data from serial port {self.ser.port}.")
                 QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
         return None

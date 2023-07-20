@@ -21,7 +21,7 @@ class CustomTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 
 class log():
     def __init__(self):
-        self.logger = self.create_logger()
+        self.Logger = self.create_logger()
 
 
     def create_logger(self):
@@ -38,23 +38,25 @@ class log():
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
 
-        # Créer le logger et ajouter le gestionnaire
-        self.logger = logging.getLogger(__name__)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.DEBUG)
+        # Créer le Logger et ajouter le gestionnaire
+        self.Logger = logging.getLogger(__name__)
+        self.Logger.addHandler(handler)
+        self.Logger.setLevel(logging.DEBUG)
 
-        return self.logger
+        return self.Logger
 
     def debug(self, message):
-        self.logger.debug(message)
+        self.Logger.debug(message)
 
     def info(self, message):
-        self.logger.info(message)
+        self.Logger.info(message)
+        print(message)
 
     def warning(self, message):
-        self.logger.warning(message)
+        self.Logger.warning(message)
 
     def error(self, message):
-        self.logger.error(message)
+        self.Logger.error(message)
+        print(message)
 
-logger = log()
+Logger = log()

@@ -8,6 +8,8 @@ import os
 import random
 from time import sleep
 
+from internal.logger import Logger
+
 class GraphWindow(QMainWindow):
     def __init__(self, translator,key, cmd, number=""):
         super().__init__()
@@ -180,21 +182,33 @@ class GraphWindow(QMainWindow):
 
         self.layouts['main'].addLayout(self.layouts['pn_sn'])
 
+
+    def change_widget_state(self,state):
+        self.edits['PN'].setEnabled(state)
+        self.edits['SN'].setEnabled(state)
+        self.edits['cycle'].setEnabled(state)
+        self.edits['max'].setEnabled(state)
+        self.edits['min'].setEnabled(state)
+
     def on_start_button(self):
         if self.timer.isActive():
+            Logger.info("Stopping the cycles")
             self.timer.stop()
             self.sensor_check_timer.stop()  # stop checking the sensor
             self.start_button.setText(self.translator.translate('start'))
             self.deactivate_component()  # deactivate component
             self.component_state.append(0)  # record that the component is down
             self.edits['status'].setText('stopped')  # update status to show that the cycles are stopped
+            self.change_widget_state(True)
         else:
+            Logger.info(f"Starting the cycles with {self.edits['cycle'].value()} cycles, filename: {self.edits['CSV File'].text()}")
             self.cycle_count = 1  # initialize cycle counter
             self.starting_time = QDateTime.currentMSecsSinceEpoch()  # initialize starting time
             self.time_data = []
             self.component_state = []
             self.cycle_durations = []
             self.start_cycle()
+            self.change_widget_state(False)
                 
     def start_cycle(self):
         # Start a cycle
@@ -247,6 +261,10 @@ class GraphWindow(QMainWindow):
                 # If the requested number of cycles is reached, stop everything
                 self.start_button.setText(self.translator.translate('start'))
                 self.save_to_csv(self.cycle_durations)
+                self.deactivate_component()  # deactivate component
+                self.change_widget_state(True)
+                self.edits['status'].setText('finished')  # update status to show that the cycles are finished
+                Logger.info("Cycles finished and saved to CSV file")
             else:
                 # If more cycles are needed, start another cycle
                 self.sensor_check_timer.start(10)  # start checking the sensor every 10 ms
@@ -326,3 +344,11 @@ class GraphWindow(QMainWindow):
             descent_times = cycle_durations[1::2]
             for i in range(len(ascent_times)):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
+
+
+    def closeEvent(self, event):
+        if self.timer.isActive():
+            self.timer.stop()
+        if self.sensor_check_timer.isActive():
+            self.sensor_check_timer.stop()
+        event.accept()

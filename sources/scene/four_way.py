@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 
 from internal.custom_widget import CustomWidget
 
-from internal.logger import logger
+from internal.logger import Logger
 
 from graph_window import GraphWindow
 
@@ -81,7 +81,7 @@ class FourWay(CustomWidget):
             self.update_label('do_down', state = "true" if self.state else "false")
             self.update_button('change_state', state = "up" if self.state else "down")
 
-            logger.debug(f"Gate {self.key} is set to {'up' if self.state else 'down'}")
+            Logger.debug(f"Gate {self.key} is set to {'up' if self.state else 'down'}")
 
 
     def open_windows(self):

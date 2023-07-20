@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 from internal.custom_widget import CustomWidget
 from scene.circle import Circle
 from scene.line import Line
-from internal.logger import logger
+from internal.logger import Logger
 
 
 
@@ -80,6 +80,6 @@ class Gate():
 
             self.serial_reader.write_data(self.cmd, not self.state)
 
-            logger.debug(f"Gate {self.name} is set to {self.state}")
+            Logger.debug(f"Gate {self.name} is set to {self.state}")
 
         # print("self.state",self.state)
