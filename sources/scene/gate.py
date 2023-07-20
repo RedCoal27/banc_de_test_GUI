@@ -2,10 +2,10 @@ from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWi
 from PyQt5.QtGui import QPainter, QPainterPath, QColor
 from PyQt5.QtCore import Qt, QRectF, QMargins
 
-from custom_widget import CustomWidget
-from interface.circle import Circle
-from line import Line
-from logger import logger
+from internal.custom_widget import CustomWidget
+from scene.circle import Circle
+from scene.line import Line
+from internal.logger import logger
 
 
 

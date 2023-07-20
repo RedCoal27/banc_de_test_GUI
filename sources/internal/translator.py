@@ -12,9 +12,10 @@ class Translator:
 
     def load_translations(self):
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        parent_path = os.path.dirname(base_path)
         try:
             for language in self.translations:
-                lang_path = os.path.join(base_path, 'lang', f"{language}.json")
+                lang_path = os.path.join(parent_path, 'lang', f"{language}.json")
                 with open(lang_path, "r", encoding="utf-8") as f:
                     self.translations[language] = json.load(f)
         except FileNotFoundError as e:

@@ -2,9 +2,9 @@ from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWi
 from PyQt5.QtGui import QPainter, QPainterPath, QColor
 from PyQt5.QtCore import Qt, QRectF, QMargins
 
-from custom_widget import CustomWidget
+from internal.custom_widget import CustomWidget
 
-from logger import logger
+from internal.logger import logger
 
 from graph_window import GraphWindow
 

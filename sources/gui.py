@@ -5,24 +5,24 @@ from PyQt5.QtCore import Qt, QTimer
 from serial.tools.list_ports import comports
 import os
 
-from translator import Translator
-from serial_reader import SerialReader
-from custom_widget import CustomWidget
-from interface.interlock import Interlock
-from interface.chamber import Chamber
-from interface.four_way import FourWay
-from interface.baratron import Baratron
-from interface.mfc import MFC
-from line import Line
-from interface.gate import Gate
-from interface.circle import Circle
-from interface.convectron import Convectron
-from interface.pump import Pump
-from interface.motor_lift import MotorisedLift
-from interface.throttle_valve import ThrottleValve
+from internal.translator import Translator
+from internal.serial_reader import SerialReader
+from internal.custom_widget import CustomWidget
+from scene.interlock import Interlock
+from scene.chamber import Chamber
+from scene.four_way import FourWay
+from scene.baratron import Baratron
+from scene.mfc import MFC
+from scene.line import Line
+from scene.gate import Gate
+from scene.circle import Circle
+from scene.convectron import Convectron
+from scene.pump import Pump
+from scene.motor_lift import MotorisedLift
+from scene.throttle_valve import ThrottleValve
 from menu_manager import MenuManager
 
-from logger import logger
+from internal.logger import logger
 
 
 

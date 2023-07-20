@@ -2,12 +2,12 @@ from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWi
 from PyQt5.QtGui import QPainter, QPainterPath, QColor
 from PyQt5.QtCore import Qt, QRectF, QMargins
 
-from custom_widget import CustomWidget
+from internal.custom_widget import CustomWidget
 
-class MotorisedLift(CustomWidget):
+class ThrottleValve(CustomWidget):
     def __init__(self, translator, pos , key , number= "" , parent=None):
         """
-        Constructor for the MotorisedLift class.
+        Initializes a ThrottleValve object.
 
         Args:
         - translator: a translator object used for internationalization
@@ -16,7 +16,7 @@ class MotorisedLift(CustomWidget):
         - number: a string representing the number of the widget (optional)
         - parent: a parent widget (optional)
         """
-        ratio = (0.101, 0.18)
+        ratio = (0.11, 0.25)
         super().__init__(translator, pos, ratio, "#F8CBAD", parent)
         self.create_labels(key)
         self.create_buttons()
@@ -24,20 +24,21 @@ class MotorisedLift(CustomWidget):
 
     def create_labels(self,key):
         """
-        Creates labels for the MotorisedLift widget.
+        Creates labels for the ThrottleValve widget.
 
         Args:
         - key: a string representing the key of the widget
         """
         self.create_label(key, alignment=Qt.AlignTop | Qt.AlignHCenter)
-        self.create_label("p_home", state = "false")
-        self.create_label("p_prcs", state = "false")
+        self.create_label("open", state = "false")
+        self.create_label("close", state = "false")
         self.create_label("steps", state = "false")
-        self.create_label("cmd", state = "")
+        self.create_label("hysteresis", state = "")
+        self.create_label("cmd", state = "false")
 
 
     def create_buttons(self):
         """
-        Creates buttons for the MotorisedLift widget.
+        Creates buttons for the ThrottleValve widget.
         """
         self.create_button("cycle")

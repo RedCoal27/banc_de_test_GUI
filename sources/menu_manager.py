@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import QMenu, QAction, QActionGroup
 from PyQt5.QtCore import QTimer
 from serial.tools.list_ports import comports
-from custom_widget import CustomWidget
+from internal.custom_widget import CustomWidget
 
-from logger import logger
+from internal.logger import logger
 
 
 class MenuManager:
