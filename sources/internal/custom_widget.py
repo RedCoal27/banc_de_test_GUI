@@ -22,7 +22,7 @@ class CustomWidget(QGraphicsWidget):
         self.color = color
         self.police_size = police_size
 
-        self.layout = QGraphicsLinearLayout(Qt.Vertical)
+        self.layout = QGraphicsLinearLayout(Qt.Orientation.Vertical)
         self.setLayout(self.layout)
 
         self.layout.setSpacing(0)

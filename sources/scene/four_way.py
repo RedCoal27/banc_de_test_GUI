@@ -42,7 +42,7 @@ class FourWay(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(self.key, number = self.FourWay_number,alignment=Qt.AlignTop | Qt.AlignHCenter)
+        self.create_label(self.key, number = self.FourWay_number,alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("do_up", state = "false")
         self.create_label("do_down", state = "true")
         self.create_label("di_up", state = "false")

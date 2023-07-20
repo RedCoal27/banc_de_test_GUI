@@ -45,7 +45,7 @@ class Gate():
 
         #add text label
         self.text = CustomWidget(parent.translator, (pos[0]+relative_pos[0]-self.ratio[0]/2,pos[1]+relative_pos[1]-self.ratio[0]/2), self.ratio, "#FFFFFF")
-        self.text.create_label(name, color="#8FAADC", alignment = Qt.AlignCenter)
+        self.text.create_label(name, color="#8FAADC", alignment = Qt.AlignmentFlag.AlignCenter)
         self.scene.addItem(self.text)
 
         #add circle next to text

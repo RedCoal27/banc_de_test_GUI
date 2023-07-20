@@ -20,10 +20,10 @@ from scene.convectron import Convectron
 from scene.pump import Pump
 from scene.motor_lift import MotorisedLift
 from scene.throttle_valve import ThrottleValve
+from scene.label import Label
+
 from menu_manager import MenuManager
-
 from internal.constante import *
-
 from internal.logger import Logger
 
 
@@ -83,8 +83,8 @@ class MainWindow(QMainWindow):
         """
         self.scene = QGraphicsScene()
         self.view = QGraphicsView(self.scene, self)
-        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setTransformationAnchor(QGraphicsView.NoAnchor)
         self.setCentralWidget(self.view)
         #décalage de la scene par rapport à la fenêtre
@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.41), (0,-0.05),"nupro_mfc2", Cmd.nupro_mfc2, sens='vertical', parent=self)
         self.custom_widgets["nupro_vent"] = Gate((0.675,0.15), (0,-0.05),"nupro_vent", Cmd.nupro_vent, sens='vertical', parent=self)
 
-        self.custom_widgets["N2"] = Label
+        self.custom_widgets["N2"] = Label((0.95,0.17),(0.02, 0.02),"N2", parent=self)
 
         self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.77), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)

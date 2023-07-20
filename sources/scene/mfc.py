@@ -18,7 +18,7 @@ class MFC(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key,alignment=Qt.AlignTop | Qt.AlignHCenter)
+        self.create_label(key,alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("setpoint", value = "0")
         self.create_label("actual", value = "0")
         self.create_label("offset", value = "0")

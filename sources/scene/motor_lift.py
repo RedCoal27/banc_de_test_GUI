@@ -29,7 +29,7 @@ class MotorisedLift(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key, alignment=Qt.AlignTop | Qt.AlignHCenter)
+        self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("p_home", state = "false")
         self.create_label("p_prcs", state = "false")
         self.create_label("steps", state = "false")

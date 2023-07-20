@@ -19,7 +19,7 @@ class Pump(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key, alignment=Qt.AlignTop | Qt.AlignHCenter)
+        self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("cmd", state = "false")
         self.create_label("status", state = "false")
         self.create_label("accelerate", state = "false")

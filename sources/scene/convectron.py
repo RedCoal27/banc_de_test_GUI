@@ -27,6 +27,6 @@ class Convectron(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key,alignment=Qt.AlignTop)
+        self.create_label(key,alignment=Qt.AlignmentFlag.AlignTop)
         self.create_label("(convectron)")
         self.create_label("pressure", value = "RS485")

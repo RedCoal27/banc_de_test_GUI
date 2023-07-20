@@ -22,7 +22,7 @@ class Circle(QGraphicsEllipseItem):
         self.setRect(x- radius, y - radius, radius * 2, radius * 2)
         self.color = color
         self.setPen(QPen(QColor(self.color), 2))
-        self.setBrush(QBrush(Qt.white))
+        self.setBrush(QBrush(Qt.GlobalColor.white))
         self.setAcceptHoverEvents(True)
         self.function = function
 
@@ -38,19 +38,19 @@ class Circle(QGraphicsEllipseItem):
         """
         self.setRect(self.center[0] * width - self.radius * width, self.center[1] * height - self.radius * height*1.2, self.radius * 2 * width, self.radius * 2 * height*1.2)
         self.setPen(QPen(QColor(self.color), 2 * scale_factor))
-        self.setBrush(QBrush(Qt.white))
+        self.setBrush(QBrush(Qt.GlobalColor.white))
 
     def hoverEnterEvent(self, event):
         """
         Changes the cursor to a pointing hand when the mouse enters the circle.
         """
-        self.setCursor(Qt.PointingHandCursor)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     def hoverLeaveEvent(self, event):
         """
         Changes the cursor back to an arrow when the mouse leaves the circle.
         """
-        self.setCursor(Qt.ArrowCursor)
+        self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def mousePressEvent(self, event):
         """

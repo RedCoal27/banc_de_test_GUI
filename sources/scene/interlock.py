@@ -18,7 +18,7 @@ class Interlock(CustomWidget):
         Args:
         - key: a string representing the key of the widget
         """
-        self.create_label(key, alignment=Qt.AlignTop | Qt.AlignHCenter)
+        self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("")
         self.create_label("Rouphing pump OFF")
         self.create_label("Pump Pressure >100mT")
