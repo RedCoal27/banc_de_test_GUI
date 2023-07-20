@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPainter, QPainterPath, QColor
 from PyQt5.QtCore import Qt, QRectF, QMargins
 
 from custom_widget import CustomWidget
-from circle import Circle
+from interface.circle import Circle
 from line import Line
 from logger import logger
 
