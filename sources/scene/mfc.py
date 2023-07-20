@@ -24,3 +24,8 @@ class MFC(CustomWidget):
         self.create_label("offset", value = "0")
         self.create_label("size", value = "0")
 
+    def update_AI(self, value):
+        """
+        Updates the value of the label.
+        """
+        self.update_label("actual", value = value)

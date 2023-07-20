@@ -29,7 +29,7 @@
     "chamber":"Chambre",
     "change_state":"{state}",
     "cycle":"Cycle",
-    "pressure":"Pression: {value}",
+    "pressure":"Pression: {value} V",
     "offset":"Offset: {value}",
     "size":"Taille: {value}",
     "setpoint":"Setpoint: {value}",

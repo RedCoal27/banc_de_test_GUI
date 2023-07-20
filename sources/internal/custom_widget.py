@@ -65,22 +65,22 @@ class CustomWidget(QGraphicsWidget):
         self.labels.append((label, label_proxy, key, kwargs))
 
 
-    def update_label(self, key, state):
+    def update_label(self, key, **kwargs):
         """
         Updates a label with the given key.
 
         Args:
             key (str): The translation key for the label.
-            state (str): The new state ("true" or "false").
         """
         # Loop over all labels
-        for label, label_proxy, label_key, kwargs in self.labels:
+        for label, label_proxy, label_key, label_kwargs in self.labels:
             # If the key matches
             if label_key == key:
                 # Update the state in kwargs
-                kwargs['state'] = state
+                for arg_name in kwargs:
+                    label_kwargs[arg_name] = kwargs[arg_name]
                 # Translate the new text and update the label
-                label.setText(self.translator.translate(label_key, **kwargs))
+                label.setText(self.translator.translate(label_key, **label_kwargs))
                 # Refresh the proxy widget
                 label_proxy.setWidget(label)
                 # We found the label, so we can break the loop
