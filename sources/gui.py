@@ -22,7 +22,9 @@ from scene.motor_lift import MotorisedLift
 from scene.throttle_valve import ThrottleValve
 from menu_manager import MenuManager
 
-from internal.logger import logger
+from internal.constante import *
+
+from internal.logger import Logger
 
 
 
@@ -159,16 +161,18 @@ class MainWindow(QMainWindow):
             self.scene.addItem(custom_widget)
 
 
-        self.custom_widgets["nupro_final"] = Gate((0.675,0.41),(0,-0.05),"nupro_final", 3, sens='vertical',parent=self)
-        self.custom_widgets["nupro_MFC1"] = Gate((0.745,0.27), (0,-0.05),"nupro_mfc1", 1, sens='vertical', parent=self)
-        self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.41), (0,-0.05),"nupro_mfc2", 2, sens='vertical', parent=self)
-        self.custom_widgets["nupro_vent"] = Gate((0.675,0.15), (0,-0.05),"nupro_vent", 4, sens='vertical', parent=self)
+        self.custom_widgets["nupro_final"] = Gate((0.675,0.41),(0,-0.05),"nupro_final", Cmd.nupro_final, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC1"] = Gate((0.745,0.27), (0,-0.05),"nupro_mfc1", Cmd.nupro_mfc1, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.41), (0,-0.05),"nupro_mfc2", Cmd.nupro_mfc2, sens='vertical', parent=self)
+        self.custom_widgets["nupro_vent"] = Gate((0.675,0.15), (0,-0.05),"nupro_vent", Cmd.nupro_vent, sens='vertical', parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.77), (-0.04,0.0),"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
+        self.custom_widgets["N2"] = Label
 
-        self.custom_widgets["turbo_pump_ch_gate_ch"] = Gate((0.18,0.52), (-0.04,0.0),"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.77), (-0.04,0.0),"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.77), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)
+
+        self.custom_widgets["turbo_pump_ch_gate_ch"] = Gate((0.18,0.52), (-0.04,0.0),"turbo_pump_ch_gate", Cmd.turbo_pump_ch_gate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.77), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self)
 
         self.custom_widgets["iso_chamber"] = Gate((0.295,0.79),(-0.04,-0.005),"iso_chamber", 25, sens='horizontal', parent=self)
 
