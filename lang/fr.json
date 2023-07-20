@@ -53,10 +53,10 @@
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
-    "min_val_ascent":"Val. Min. Ascension: {value}",
-    "min_val_descent":"Val. Min. Descente: {value}",
-    "max_val_ascent":"Val. Max. Ascension: {value}",
-    "max_val_descent":"Val. Max. Descente: {value}",
-    "avg_val_ascent":"Val. Moy. Ascension: {value}",
-    "avg_val_descent":"Val. Moy. Descente: {value}"
+    "min_val_ascent":"Val. Min. Ascension: {value}s",
+    "min_val_descent":"Val. Min. Descente: {value}s",
+    "max_val_ascent":"Val. Max. Ascension: {value}s",
+    "max_val_descent":"Val. Max. Descente: {value}s",
+    "avg_val_ascent":"Val. Moy. Ascension: {value}s",
+    "avg_val_descent":"Val. Moy. Descente: {value}s"
 }

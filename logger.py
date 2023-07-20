@@ -1,6 +1,22 @@
 import os
 import logging
 import logging.handlers
+import time
+
+
+class CustomTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
+    def __init__(self, dir, when= 's', backupCount=0, encoding=None, delay=False, utc=False, atTime=None):
+        filename = os.path.join(dir, 'app.log')
+        super().__init__(filename, when=when, backupCount=backupCount, encoding=encoding, delay=delay, utc=utc, atTime=atTime)
+        self.namer = self.custom_namer
+        self.prefix = "%Y-%m-%d-%M"
+
+    def custom_namer(self, default_name):
+        t = self.rolloverAt - self.interval
+        # Obtenir la date courante formatée comme une chaîne de caractères
+        date_str = time.strftime(self.prefix, time.localtime(t))
+        # Remplacer "app.log" avec "date_str_app.log"
+        return default_name.replace("app.log", f"{date_str}_app.log")
 
 
 class log():
@@ -14,12 +30,12 @@ class log():
             os.makedirs('logs')
 
         # Créer le gestionnaire de rotation des fichiers de log
-        log_filename = os.path.join('logs', 'app.log')
-        handler = logging.handlers.TimedRotatingFileHandler(log_filename, when='midnight', backupCount=30)
-        handler.suffix = "%Y-%m-%d"
+        handler = CustomTimedRotatingFileHandler('logs', when= 'midnight', backupCount=30)
+        handler.suffix = ""
+
 
         # Configurer le format du log
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
 
         # Créer le logger et ajouter le gestionnaire

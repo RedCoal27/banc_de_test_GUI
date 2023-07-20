@@ -1,9 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QPushButton, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QAction, QMessageBox, QActionGroup
-from PyQt5.QtGui import QPixmap, QPainter, QBrush, QPalette, QColor, QIcon,QGuiApplication, QPen
+from PyQt5.QtWidgets import QApplication, QMainWindow,QGraphicsView, QGraphicsScene
+from PyQt5.QtGui import QBrush, QColor, QIcon,QGuiApplication, QPen
 from PyQt5.QtCore import Qt, QTimer
 from serial.tools.list_ports import comports
-from serial.serialutil import SerialException
 import os
 
 from translator import Translator
@@ -21,6 +20,7 @@ from convectron import Convectron
 from pump import Pump
 from motor_lift import MotorisedLift
 from throttle_valve import ThrottleValve
+from menu_manager import MenuManager
 
 from logger import logger
 
@@ -35,7 +35,10 @@ class MainWindow(QMainWindow):
         self.serial_reader = SerialReader(self.translator)
 
         self.buttons = {}
-        self.language_menu = None
+
+        self.menu_manager = MenuManager(self)
+        self.menu_manager.create_menus()
+
 
         self.init_ui()
         QTimer.singleShot(0, self.resize_widgets)
@@ -47,10 +50,13 @@ class MainWindow(QMainWindow):
         Initializes the user interface by creating the timer, menus, background, and buttons.
         """
         self.create_timer()
-        self.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
-        self.setMinimumSize(900, 600)
+
+        #set the minimum size to 3/4 of the screen
+        screen_size = QGuiApplication.primaryScreen().availableSize()
+        self.setMinimumSize(int(screen_size.width()*3/4), int(screen_size.height()*3/4))
+
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -65,130 +71,6 @@ class MainWindow(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.read_from_serial)
         self.timer.start(1000)  # Lire toutes les secondes
-
-    def create_menus(self):
-        """
-        Creates the COM and language menus.
-        """
-        self.com_menu = QMenu("COM", self)
-        self.com_menu.aboutToShow.connect(self.update_com_menu)
-        self.menuBar().addMenu(self.com_menu)
-
-        self.language_menu = self.create_language_menu()
-        self.menuBar().addMenu(self.language_menu)
-
-        self.font_size_menu = self.create_font_size_menu()
-        self.menuBar().addMenu(self.font_size_menu)
-
-
-    def create_menu(self, menu_name, actions):
-        """
-        Creates a menu with the given name and actions.
-
-        Args:
-            menu_name (str): The name of the menu.
-            actions (list): A list of QAction objects to add to the menu.
-
-        Returns:
-            QMenu: The created menu.
-        """
-        menu = QMenu(menu_name, self)
-        for action in actions:
-            menu.addAction(action)
-        return menu
-    
-
-    def create_font_size_menu(self):
-        """
-        Creates the font size menu.
-
-        Returns:
-            QMenu: The created font size menu.
-        """
-        font_size_menu = QMenu(self.translator.translate("Font size"), self)
-        action_group = QActionGroup(self)
-        action_group.setExclusive(True)
-        for size in [6,7,8,9,10,11,12,13,14]:
-            action = QAction(str(size), self)
-            action.setCheckable(True)
-            if size == 8:  # Check the default font size
-                action.setChecked(True)
-            action.triggered.connect(lambda checked, s=size: self.change_font_size(s))
-            action_group.addAction(action)
-            font_size_menu.addAction(action)
-        return font_size_menu
-
-    def change_font_size(self, size):
-        """
-        Changes the font size of the custom widgets.
-
-        Args:
-            size (int): The font size to change to.
-        """
-        # Resize custom widgets
-        for item in self.scene.items():
-            if isinstance(item, CustomWidget):
-                item.police_size = size
-        QTimer.singleShot(0, self.resize_widgets)
-
-
-    def update_com_menu(self):
-        """
-        Updates the COM menu with available ports.
-        """
-        self.com_menu.clear()
-        action_group = QActionGroup(self)
-        action_group.setExclusive(True)
-        ports = self.serial_reader.get_available_com_ports()
-        if ports:
-            for port in ports:
-                action = QAction(port, self)
-                action.setCheckable(True)
-                action.triggered.connect(lambda checked, port=port: self.serial_reader.set_com_port(port))
-                action_group.addAction(action)
-                self.com_menu.addAction(action)
-                if self.serial_reader.ser is not None and self.serial_reader.ser.port == port:
-                    action.setChecked(True)
-        else:
-            self.com_menu.addAction(self.translator.translate("none_available"))
-
-    def create_language_menu(self):
-        """
-        Creates the language menu.
-
-        Returns:
-            QMenu: The created language menu.
-        """
-        language_menu = QMenu(self.translator.translate("language"), self)
-        action_group = QActionGroup(self)
-        action_group.setExclusive(True)
-        for language in self.translator.translations:
-            action = QAction(self.translator.translate(language), self)
-            action.setCheckable(True)
-            action.triggered.connect(lambda checked, lang=language: self.change_language(lang))
-            action_group.addAction(action)
-            language_menu.addAction(action)
-            if language == self.translator.current_language:
-                action.setChecked(True)
-        return language_menu
-
-    def change_language(self, lang):
-        """
-        Changes the language of the GUI.
-
-        Args:
-            lang (str): The language to change to.
-        """
-        self.translator.current_language = lang
-        self.language_menu.setTitle(self.translator.translate("language"))
-        
-        for key, button_tuple in self.buttons.items():
-            button = button_tuple[0]
-            button.setText(self.translator.translate(key))
-
-        for item in self.scene.items():
-            if isinstance(item, CustomWidget):
-                item.change_language()
 
 
 
@@ -269,8 +151,8 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["pump_pressure"] = Convectron(self.translator, [0.35,0.79],"pump_pressure")
 
-        self.custom_widgets["turbo_pump_rga"] = Pump(self.translator, [0.02,0.6],"turbo_pump_rga")
-        self.custom_widgets["turbo_pump_ch"] = Pump(self.translator, [0.13,0.6],"turbo_pump_ch")
+        self.custom_widgets["turbo_pump_rga"] = Pump(self.translator, [0.02,0.57],"turbo_pump_rga")
+        self.custom_widgets["turbo_pump_ch"] = Pump(self.translator, [0.13,0.57],"turbo_pump_ch")
 
 
         for key, custom_widget in self.custom_widgets.items():
@@ -282,11 +164,11 @@ class MainWindow(QMainWindow):
         self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.41), (0,-0.05),"nupro_mfc2", 2, sens='vertical', parent=self)
         self.custom_widgets["nupro_vent"] = Gate((0.675,0.15), (0,-0.05),"nupro_vent", 4, sens='vertical', parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.75), (-0.04,0.0),"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.5), (-0.04,0.0),"turbo_pump_rga_gate",16 , sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.77), (-0.04,0.0),"turbo_pump_rga_gate_p", 17, sens='horizontal', parent=self)
 
-        self.custom_widgets["turbo_pump_ch_gate"] = Gate((0.18,0.55), (-0.04,0.0),"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.75), (-0.04,0.0),"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_ch"] = Gate((0.18,0.52), (-0.04,0.0),"turbo_pump_ch_gate", 14, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.77), (-0.04,0.0),"turbo_pump_ch_gate_p", 15, sens='horizontal', parent=self)
 
         self.custom_widgets["iso_chamber"] = Gate((0.295,0.79),(-0.04,-0.005),"iso_chamber", 25, sens='horizontal', parent=self)
 

@@ -9,11 +9,13 @@ import random
 from time import sleep
 
 class GraphWindow(QMainWindow):
-    def __init__(self, translator, cmd):
+    def __init__(self, translator,key, cmd, number=""):
         super().__init__()
 
         self.translator = translator
+        self.key = key
         self.cmd = cmd
+        self.number = number
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -45,6 +47,9 @@ class GraphWindow(QMainWindow):
 
         self.setMinimumSize(750, 500)
         self.setMaximumSize(1000, 700)
+
+        #name of the window
+        self.setWindowTitle(self.translator.translate(self.key, number=number))
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
@@ -107,13 +112,13 @@ class GraphWindow(QMainWindow):
         # Create min_val, max_val, and avg_val labels for both graphs
         for label in ['min_val_ascent', 'max_val_ascent', 'avg_val_ascent']:
             self.labels[label] = QLabel(self.translator.translate(label, value = 0), self)
-            self.labels[label].setFixedWidth(150)  # set a fixed width for the label
+            self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
         for label in ['min_val_descent', 'max_val_descent', 'avg_val_descent']:
             self.labels[label] = QLabel(self.translator.translate(label, value = 0), self)
-            self.labels[label].setFixedWidth(150)  # set a fixed width for the label
+            self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
         self.layouts['values'].addStretch(1)  # add stretch after the labels
         
@@ -178,15 +183,19 @@ class GraphWindow(QMainWindow):
     def on_start_button(self):
         if self.timer.isActive():
             self.timer.stop()
+            self.sensor_check_timer.stop()  # stop checking the sensor
             self.start_button.setText(self.translator.translate('start'))
+            self.deactivate_component()  # deactivate component
+            self.component_state.append(0)  # record that the component is down
+            self.edits['status'].setText('stopped')  # update status to show that the cycles are stopped
         else:
             self.cycle_count = 1  # initialize cycle counter
-            self.starting_time = QDateTime.currentMSecsSinceEpoch() # initialize starting time
+            self.starting_time = QDateTime.currentMSecsSinceEpoch()  # initialize starting time
             self.time_data = []
             self.component_state = []
             self.cycle_durations = []
             self.start_cycle()
-            
+                
     def start_cycle(self):
         # Start a cycle
         self.activate_component()  # activate component
@@ -284,11 +293,11 @@ class GraphWindow(QMainWindow):
     def is_sensor_reached(self):
         # This is a placeholder for the function that checks if a sensor is reached
         # Here, it simulates a sensor that is randomly reached with a probability of 0.1
-        sleep(0.1)
+        sleep(0.01)
         if self.component_state[-1] == 1:  # if the component is up
-            return random.random() > 0.9  # simulate the upper sensor
+            return random.random() > 0.99  # simulate the upper sensor
         else:  # if the component is down
-            return random.random() > 0.9  # simulate the lower sensor
+            return random.random() > 0.99  # simulate the lower sensor
 
     def update_csv_file(self):
         pn = self.edits['PN'].text()

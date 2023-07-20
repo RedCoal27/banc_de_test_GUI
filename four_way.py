@@ -6,6 +6,9 @@ from custom_widget import CustomWidget
 
 from logger import logger
 
+from graph_window import GraphWindow
+
+
 class FourWay(CustomWidget):
     def __init__(self, parent, pos , cmd, key ,number= ""):
         """
@@ -79,3 +82,8 @@ class FourWay(CustomWidget):
             self.update_button('change_state', state = "up" if self.state else "down")
 
             logger.debug(f"Gate {self.key} is set to {'up' if self.state else 'down'}")
+
+
+    def open_windows(self):
+        self.window = GraphWindow(self.translator, self.key, self.cmd, self.FourWay_number)
+        self.window.show()
