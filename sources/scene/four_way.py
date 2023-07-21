@@ -10,7 +10,7 @@ from graph_window import GraphWindow
 
 
 class FourWay(CustomWidget):
-    def __init__(self, parent, pos , cmd, key ,number= ""):
+    def __init__(self, pos , cmd, key ,parent,number= ""):
         """
         Initializes a FourWay object.
 
@@ -22,11 +22,11 @@ class FourWay(CustomWidget):
         - parent: a parent widget (optional)
         """
         ratio = (0.101, 0.23)
-        super().__init__(parent.translator, pos, ratio, "#FBE5D6", None)
+        super().__init__(parent.translator, pos, ratio, "#FBE5D6")
 
         self.serial_reader = parent.serial_reader
         self.FourWay_number = number
-        self.state = False
+        self.state = True
         self.key = key
         self.cmd = cmd
 
@@ -54,7 +54,7 @@ class FourWay(CustomWidget):
         """
         Creates buttons for the FourWay widget.
         """
-        self.create_button("change_state", self.update_DO, state = "up")
+        self.create_button("change_state", self.click_DO, state = "up")
         self.create_button("cycle", self.open_windows)
 
     def update_DI(self, up, down):
@@ -69,13 +69,15 @@ class FourWay(CustomWidget):
         self.update_label('di_down', state = "false" if down else "true")
         self.update_label('position', state = "unknown" if up*2 == down else "up" if not up else "down")
 
-    def update_DO(self):
+    def update_DO(self, new_state = None):
         """
         Updates the DO labels of the FourWay widget.
         """
         if self.serial_reader.ser is not None:
-            self.state = not self.state
-
+            if new_state is not None:
+                self.state = new_state
+            else:
+                self.state = not self.state
             self.serial_reader.write_data(self.cmd, not self.state)
             self.update_label('do_up', state = "false" if self.state else "true")
             self.update_label('do_down', state = "true" if self.state else "false")
@@ -83,6 +85,8 @@ class FourWay(CustomWidget):
 
             Logger.debug(f"Gate {self.key} is set to {'up' if self.state else 'down'}")
 
+    def click_DO(self):
+        self.update_DO()
 
     def open_windows(self):
         self.window = GraphWindow(self.translator, self.key, self.cmd, self.FourWay_number)

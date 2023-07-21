@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 from internal.custom_widget import CustomWidget
 
 class MotorisedLift(CustomWidget):
-    def __init__(self, translator, pos , key , number= "" , parent=None):
+    def __init__(self, pos , key , parent):
         """
         Constructor for the MotorisedLift class.
 
@@ -17,7 +17,7 @@ class MotorisedLift(CustomWidget):
         - parent: a parent widget (optional)
         """
         ratio = (0.101, 0.18)
-        super().__init__(translator, pos, ratio, "#F8CBAD", parent)
+        super().__init__(parent.translator, pos, ratio, "#F8CBAD")
         self.create_labels(key)
         self.create_buttons()
         

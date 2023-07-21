@@ -4,11 +4,11 @@ from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
 class MFC(CustomWidget):
-    def __init__(self, translator, pos , key , parent=None):
+    def __init__(self, pos , key , parent):
         ratio = (0.1, 0.12)
         self.offset = 0
         self.key = key
-        super().__init__(translator, pos, ratio, "#B4C7E7", parent)
+        super().__init__(parent.translator, pos, ratio, "#B4C7E7")
         self.create_labels(key)
         
 
@@ -38,7 +38,6 @@ class MFC(CustomWidget):
         Updates the value of the label.
         """
         Logger.debug(f"{self.key} setpoint changed to {spin_box.value()}")
-        print(spin_box.value())
 
     def update_offset(self, spin_box):
         """

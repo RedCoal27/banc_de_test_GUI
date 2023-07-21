@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 from internal.custom_widget import CustomWidget
 
 class Convectron(CustomWidget):
-    def __init__(self, translator, pos , key , parent=None):
+    def __init__(self, pos , key , parent):
         """
         Initializes a Convectron widget.
 
@@ -16,7 +16,7 @@ class Convectron(CustomWidget):
         - parent: a parent widget (optional)
         """
         ratio = (0.14, 0.08)
-        super().__init__(translator, pos, ratio, "#E2F0D9", parent)
+        super().__init__(parent.translator, pos, ratio, "#E2F0D9")
         self.create_labels(key)
         
 

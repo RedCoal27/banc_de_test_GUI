@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPainterPath, QColor, QIntValidator
 from PyQt5.QtCore import Qt, QSize
 
 class CustomWidget(QGraphicsWidget):
-    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, parent=None, police_size=8):
+    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, police_size=8):
         """
         A custom widget that can contain labels and buttons.
 
@@ -14,7 +14,7 @@ class CustomWidget(QGraphicsWidget):
             color (str): The background color of the widget in hexadecimal format (e.g. "#FFFFFF").
             parent (QGraphicsWidget, optional): The parent widget. Defaults to None.
         """
-        super(CustomWidget, self).__init__(parent)
+        super(CustomWidget, self).__init__(None)
         self.translator = translator
         self.labels = []
         self.buttons = []
@@ -191,11 +191,11 @@ class CustomWidget(QGraphicsWidget):
             key (str): The translation key for the button.
             function (function, optional): The function to be called when the button is clicked. Defaults to None.
         """
-        if function is None:
-            function = lambda: None
+
 
         button = QPushButton(self.translator.translate(key, **kwargs))
-        button.clicked.connect(function)
+        if function is not None:
+            button.clicked.connect(function)
         button_proxy = QGraphicsProxyWidget(self)
         button_proxy.setWidget(button)
 

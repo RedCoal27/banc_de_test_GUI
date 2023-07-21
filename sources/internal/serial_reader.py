@@ -87,6 +87,12 @@ class SerialReaderThread(QThread):
                 self.custom_widgets["SV"].update_DI(data[0] & 1, data[0] & 2)
                 self.custom_widgets["WL1"].update_DI(data[0] & 64, data[0] & 128)
 
+
+                self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
+                self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
+
+
+
             self.serial_reader.send_data(6,4)
             data = self.serial_reader.wait_and_read_data(until='\n'.encode())
             if data is not None and len(data) > 0:

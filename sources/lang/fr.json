@@ -26,6 +26,8 @@
     "unknown":"Inconnu",
     "up":"Haut",
     "down":"Bas",
+    "on":"On",
+    "off":"Off",
 
     "chamber":"Chambre",
     "change_state":"{state}",

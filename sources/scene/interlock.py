@@ -5,9 +5,9 @@ from PyQt5.QtCore import Qt, QRectF, QMargins
 from internal.custom_widget import CustomWidget
 
 class Interlock(CustomWidget):
-    def __init__(self, translator, pos , key , parent=None):
+    def __init__(self, pos , key , parent):
         ratio = (0.15, 0.15)
-        super().__init__(translator, pos, ratio, "#FFD966", parent)
+        super().__init__(parent.translator, pos, ratio, "#FFD966")
         self.create_labels(key)
         
 

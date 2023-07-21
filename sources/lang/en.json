@@ -26,6 +26,8 @@
     "unknown":"Unknown",
     "up":"Up",
     "down":"Down",
+    "on":"On",
+    "off":"Off",
     
     "chamber":"Chamber",
     "cycle":"Cycle",
