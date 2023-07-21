@@ -55,7 +55,7 @@ class CustomWidget(QGraphicsWidget):
 
         label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        label.setContentsMargins(1, 1, 1, 1)  # Set margins for the units QLabel
+        label.setContentsMargins(1, 1, 1, 1)  # Set margins for the unit QLabel
 
         font = label.font()
         font.setPointSizeF(self.police_size)
@@ -88,14 +88,14 @@ class CustomWidget(QGraphicsWidget):
                 # We found the label, so we can break the loop
                 break
 
-    def create_label_with_spin_box(self, key, initial_value=0, min_value = 0,max_value=1000 , color="black", units="", function=None, **kwargs):
+    def create_label_with_spin_box(self, key, initial_value=0, min_value = 0,max_value=1000 , color="black", unit="", function=None, **kwargs):
         """
         Creates a QLabel and a QSpinBox, and adds them to the widget in a QHBoxLayout.
 
         Args:
             key (str): The translation key for the label.
             initial_value (int, optional): The initial value of the QSpinBox. Defaults to 0.
-            units (str, optional): The units to display after the QSpinBox. Defaults to "".
+            unit (str, optional): The unit to display after the QSpinBox. Defaults to "".
             function (function, optional): The function to be called when the QSpinBox is edited and confirmed. Defaults to None.
             **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
         """
@@ -107,7 +107,7 @@ class CustomWidget(QGraphicsWidget):
         label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
         label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        label.setContentsMargins(1, 1, 0, 1)  # Set margins for the units QLabel
+        label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
 
         font = label.font()
         font.setPointSizeF(self.police_size)
@@ -132,14 +132,14 @@ class CustomWidget(QGraphicsWidget):
                 function(spin_box)
             spin_box.editingFinished.connect(on_editing_finished)
 
-        unit_label = QLabel(units)
+        unit_label = QLabel(unit)
         unit_label.setStyleSheet("background-color: transparent;color: black;")  # Adjust color as needed
         unit_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         font = unit_label.font()
         font.setPointSizeF(self.police_size)
         unit_label.setFont(font)
-        unit_label.setContentsMargins(1, 1, 0, 1)  # Set margins for the units QLabel
+        unit_label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
 
 
         hbox = QHBoxLayout()
@@ -160,7 +160,7 @@ class CustomWidget(QGraphicsWidget):
 
         self.labels.append((label, widget_proxy, key, kwargs))  # Append the key for later language changes
         self.spin_boxes.append((spin_box, key, max_value, kwargs))  # Append the initial value and kwargs for later language changes
-        self.unit_labels.append((unit_label, units, kwargs))  # Append the units and kwargs for later language changes
+        self.unit_labels.append((unit_label, unit, kwargs))  # Append the unit and kwargs for later language changes
 
 
     def update_spin_box(self, key, max_value):
@@ -257,10 +257,8 @@ class CustomWidget(QGraphicsWidget):
             label.setText(self.translator.translate(key,**kwargs))
         for button, _ , key, kwargs in self.buttons:
             button.setText(self.translator.translate(key,**kwargs))
-        for spin_box, initial_value, kwargs in self.spin_boxes:
-            spin_box.setValue(self.translator.translate(initial_value,**kwargs))  # Update the value of the QSpinBox
-        for unit_label, units, kwargs in self.unit_labels:
-            unit_label.setText(self.translator.translate(units,**kwargs))  # Update the text of the unit QLabel
+        for unit_label, unit, kwargs in self.unit_labels:
+            unit_label.setText(self.translator.translate(unit,**kwargs))  # Update the text of the unit QLabel
 
 
 

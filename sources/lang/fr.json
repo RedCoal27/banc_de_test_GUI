@@ -26,13 +26,13 @@
     "unknown":"Inconnu",
     "up":"Haut",
     "down":"Bas",
-    
+
     "chamber":"Chambre",
     "change_state":"{state}",
     "cycle":"Cycle",
     "pressure":"Pression: {value} V",
-    "offset":"Offset: {value}",
-    "size":"Taille: {value}",
+    "offset":"Offset",
+    "size":"Taille: {value} {unit}",
     "setpoint":"Setpoint",
     "actual":"Actuel: {value}",
     "baratron1": "Baratron SizeTorr",
