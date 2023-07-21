@@ -84,9 +84,6 @@ class MenuManager:
         # self.language_menu.setTitle(self.translator.translate("language"))
         self.config_menu.setTitle(self.translator.translate("Config"))
         
-        for key, button_tuple in self.parent.buttons.items():
-            button = button_tuple[0]
-            button.setText(self.translator.translate(key))
 
         for item in self.parent.scene.items():
             if isinstance(item, CustomWidget):

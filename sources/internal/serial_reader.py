@@ -95,5 +95,4 @@ class SerialReaderThread(QThread):
                 self.custom_widgets["MFC2"].update_AI(data[1])
                 self.custom_widgets["baratron1"].update_AI(data[2])
                 self.custom_widgets["baratron2"].update_AI(data[3])
-            print(data)
             self.msleep(1000) # Sleep for 1 second
