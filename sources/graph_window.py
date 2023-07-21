@@ -11,13 +11,12 @@ from time import sleep
 from internal.logger import Logger
 
 class GraphWindow(QMainWindow):
-    def __init__(self, translator,key, cmd, number=""):
+    def __init__(self, parent):
         super().__init__()
 
-        self.translator = translator
-        self.key = key
-        self.cmd = cmd
-        self.number = number
+        self.parent = parent
+        self.parent.key = parent.key
+        self.parent.cmd = parent.cmd
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -51,7 +50,7 @@ class GraphWindow(QMainWindow):
         self.setMaximumSize(1000, 700)
 
         #name of the window
-        self.setWindowTitle(self.translator.translate(self.key, number=number))
+        self.setWindowTitle(self.parent.translator.translate(self.parent.key, number=self.parent.FourWay_number))
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
@@ -59,12 +58,12 @@ class GraphWindow(QMainWindow):
 
 
     def create_top_widgets(self):
-        self.labels['cycle'] = QLabel(self.translator.translate('cycles'), self)
+        self.labels['cycle'] = QLabel(self.parent.translator.translate('cycles'), self)
         self.edits['cycle'] = QSpinBox(self)
         self.edits['cycle'].setRange(0, 100)
         self.edits['cycle'].setValue(20)
 
-        self.labels['status'] = QLabel(self.translator.translate('status'), self)
+        self.labels['status'] = QLabel(self.parent.translator.translate('status'), self)
         self.edits['status'] = QLineEdit(self)
         self.edits['status'].setReadOnly(True)
         self.edits['status'].setFixedWidth(50)  # set a smaller default width
@@ -75,13 +74,13 @@ class GraphWindow(QMainWindow):
             self.layouts['top'].addWidget(self.edits[widget])
 
     def create_start_button(self):
-        self.start_button = QPushButton(self.translator.translate('start'), self)
+        self.start_button = QPushButton(self.parent.translator.translate('start'), self)
         self.start_button.clicked.connect(self.on_start_button)
         self.start_button.setEnabled(False)  # initially disabled until a CSV file name is defined
 
     def create_max_min_widgets(self):
         for label in ['max', 'min']:
-            self.labels[label] = QLabel(self.translator.translate(label), self)
+            self.labels[label] = QLabel(self.parent.translator.translate(label), self)
             self.edits[label] = QSpinBox(self)
             self.edits[label].setRange(0, 100)
             self.layouts[label] = QHBoxLayout()
@@ -97,9 +96,9 @@ class GraphWindow(QMainWindow):
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax1 = self.figure.add_subplot(211)  # the first subplot for the ascent times
-        self.ax1.set_title(self.translator.translate('ascent_time'))
+        self.ax1.set_title(self.parent.translator.translate('ascent_time'))
         self.ax2 = self.figure.add_subplot(212)  # the second subplot for the descent times
-        self.ax2.set_title(self.translator.translate('descent_time'))
+        self.ax2.set_title(self.parent.translator.translate('descent_time'))
         self.figure.subplots_adjust(hspace=0.5)  # adjust vertical spacing between subplots
         self.toolbar = NavigationToolbar2QT(self.canvas, self)
 
@@ -113,13 +112,13 @@ class GraphWindow(QMainWindow):
 
         # Create min_val, max_val, and avg_val labels for both graphs
         for label in ['min_val_ascent', 'max_val_ascent', 'avg_val_ascent']:
-            self.labels[label] = QLabel(self.translator.translate(label, value = 0), self)
+            self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
             self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
         for label in ['min_val_descent', 'max_val_descent', 'avg_val_descent']:
-            self.labels[label] = QLabel(self.translator.translate(label, value = 0), self)
+            self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
             self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
         self.layouts['values'].addStretch(1)  # add stretch after the labels
@@ -134,7 +133,7 @@ class GraphWindow(QMainWindow):
 
     def create_pn_sn_widgets(self):
         for label in ['PN', 'SN']:
-            self.labels[label] = QLabel(self.translator.translate(label), self)
+            self.labels[label] = QLabel(self.parent.translator.translate(label), self)
             self.edits[label] = QLineEdit(self)
             self.edits[label].setMaximumWidth(400)  # set a maximum width
             self.edits[label].textChanged.connect(self.update_csv_file)
@@ -143,7 +142,7 @@ class GraphWindow(QMainWindow):
             self.layouts[label].addWidget(self.edits[label])
             self.layouts[label].addStretch()
 
-        self.labels['CSV File'] = QLabel(self.translator.translate('CSV File'), self)
+        self.labels['CSV File'] = QLabel(self.parent.translator.translate('CSV File'), self)
         self.edits['CSV File'] = QLineEdit(self)
         self.edits['CSV File'].setReadOnly(True)
         self.edits['CSV File'].setMaximumWidth(400)  # set a maximum width
@@ -195,7 +194,7 @@ class GraphWindow(QMainWindow):
             Logger.info("Stopping the cycles")
             self.timer.stop()
             self.sensor_check_timer.stop()  # stop checking the sensor
-            self.start_button.setText(self.translator.translate('start'))
+            self.start_button.setText(self.parent.translator.translate('start'))
             self.deactivate_component()  # deactivate component
             self.component_state.append(0)  # record that the component is down
             self.edits['status'].setText('stopped')  # update status to show that the cycles are stopped
@@ -221,7 +220,7 @@ class GraphWindow(QMainWindow):
 
         self.sensor_check_start_time = start_time # initialize sensor check start time
         self.sensor_check_timer.start(10)  # start checking the sensor every 10 ms
-        self.start_button.setText(self.translator.translate('stop'))
+        self.start_button.setText(self.parent.translator.translate('stop'))
         self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
 
 
@@ -229,7 +228,7 @@ class GraphWindow(QMainWindow):
         # This method is called when the 15-second timer expires
         self.timer.stop()  # stop the timer
         self.sensor_check_timer.stop()  # stop checking the sensor
-        self.start_button.setText(self.translator.translate('start'))
+        self.start_button.setText(self.parent.translator.translate('start'))
         self.edits['status'].setText('error')  # update status to show that the sensor was not reached
 
     def check_sensor(self):
@@ -259,7 +258,7 @@ class GraphWindow(QMainWindow):
 
             if self.cycle_count > self.edits['cycle'].value():
                 # If the requested number of cycles is reached, stop everything
-                self.start_button.setText(self.translator.translate('start'))
+                self.start_button.setText(self.parent.translator.translate('start'))
                 self.save_to_csv(self.cycle_durations)
                 self.deactivate_component()  # deactivate component
                 self.change_widget_state(True)
@@ -273,8 +272,8 @@ class GraphWindow(QMainWindow):
             # Update the graphs
             self.ax1.clear()
             self.ax2.clear()
-            self.ax1.set_title(self.translator.translate('ascent_time'))  # reset title after clearing
-            self.ax2.set_title(self.translator.translate('descent_time'))  # reset title after clearing
+            self.ax1.set_title(self.parent.translator.translate('ascent_time'))  # reset title after clearing
+            self.ax2.set_title(self.parent.translator.translate('descent_time'))  # reset title after clearing
             self.ax1.step([i for i in range(len(self.cycle_durations[::2])+1)], [0]+[duration for duration in self.cycle_durations[::2]])  # plot ascent times in seconds
             self.ax1.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
             self.ax1.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
@@ -283,13 +282,13 @@ class GraphWindow(QMainWindow):
             self.ax2.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
 
             if self.cycle_durations[::2]:  # check if the list of ascent durations is not empty
-                self.labels['min_val_ascent'].setText(self.translator.translate('min_val_ascent', value=f'{min(self.cycle_durations[::2]):.2f}'))
-                self.labels['max_val_ascent'].setText(self.translator.translate('max_val_ascent', value=f'{max(self.cycle_durations[::2]):.2f}'))
-                self.labels['avg_val_ascent'].setText(self.translator.translate('avg_val_ascent', value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
+                self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val_ascent', value=f'{min(self.cycle_durations[::2]):.2f}'))
+                self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val_ascent', value=f'{max(self.cycle_durations[::2]):.2f}'))
+                self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val_ascent', value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
             if self.cycle_durations[1::2]:  # check if the list of descent durations is not empty
-                self.labels['min_val_descent'].setText(self.translator.translate('min_val_descent', value=f'{min(self.cycle_durations[1::2]):.2f}'))
-                self.labels['max_val_descent'].setText(self.translator.translate('max_val_descent', value=f'{max(self.cycle_durations[1::2]):.2f}'))
-                self.labels['avg_val_descent'].setText(self.translator.translate('avg_val_descent', value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
+                self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val_descent', value=f'{min(self.cycle_durations[1::2]):.2f}'))
+                self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val_descent', value=f'{max(self.cycle_durations[1::2]):.2f}'))
+                self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val_descent', value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
             
             self.canvas.draw()
 
@@ -300,12 +299,10 @@ class GraphWindow(QMainWindow):
 
 
     def activate_component(self):
-        # This is a placeholder for the function that activates a component
-        print('Component activated')
+        self.parent.update_DO(False)
 
     def deactivate_component(self):
-        # This is a placeholder for the function that deactivates a component
-        print('Component deactivated')
+        self.parent.update_DO(True)
 
 
     def is_sensor_reached(self):

@@ -55,7 +55,7 @@ class CustomWidget(QGraphicsWidget):
 
         label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        label.setContentsMargins(1, 1, 1, 1)  # Set margins for the unit QLabel
+        label.setContentsMargins(1, 0, 1, 0)  # Set margins for the unit QLabel
 
         font = label.font()
         font.setPointSizeF(self.police_size)

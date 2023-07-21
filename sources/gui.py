@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["turbo_pump_rga"] = Pump([0.02,0.53], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = Pump([0.13,0.53], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
-        self.custom_widgets["roughing_pump"] = RoughingPump([0.245,0.82], "roughing_pump", parent=self)
+        self.custom_widgets["roughing_pump"] = RoughingPump([0.245,0.82], Cmd.RoughingPump, "roughing_pump", parent=self)
 
         for key, custom_widget in self.custom_widgets.items():
             self.scene.addItem(custom_widget)

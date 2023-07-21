@@ -26,7 +26,7 @@ class FourWay(CustomWidget):
 
         self.serial_reader = parent.serial_reader
         self.FourWay_number = number
-        self.state = True
+        self.state = False
         self.key = key
         self.cmd = cmd
 
@@ -78,16 +78,17 @@ class FourWay(CustomWidget):
                 self.state = new_state
             else:
                 self.state = not self.state
+
             self.serial_reader.write_data(self.cmd, not self.state)
             self.update_label('do_up', state = "false" if self.state else "true")
             self.update_label('do_down', state = "true" if self.state else "false")
-            self.update_button('change_state', state = "up" if self.state else "down")
+            self.update_button('change_state', state = "down" if self.state else "up")
 
-            Logger.debug(f"Gate {self.key} is set to {'up' if self.state else 'down'}")
+            Logger.debug(f"{self.key}{self.FourWay_number} is set to {'up' if self.state else 'down'}")
 
     def click_DO(self):
         self.update_DO()
 
     def open_windows(self):
-        self.window = GraphWindow(self.translator, self.key, self.cmd, self.FourWay_number)
+        self.window = GraphWindow(self)
         self.window.show()
