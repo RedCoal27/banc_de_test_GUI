@@ -15,8 +15,6 @@ class GraphWindow(QMainWindow):
         super().__init__()
 
         self.parent = parent
-        self.parent.key = parent.key
-        self.parent.cmd = parent.cmd
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -206,21 +204,30 @@ class GraphWindow(QMainWindow):
             self.time_data = []
             self.component_state = []
             self.cycle_durations = []
-            self.start_cycle()
+            self.start_button.setText(self.parent.translator.translate('stop'))
+            self.edits['status'].setText('home')
+            self.pre_start_cycle()
             self.change_widget_state(False)
                 
+
+
+    def pre_start_cycle(self):
+        self.activate_component()
+        if not self.is_sensor_reached():#wait that the component is down
+            QTimer.singleShot(100,self.pre_start_cycle)
+        else:
+            QTimer.singleShot(100,self.start_cycle)
+
     def start_cycle(self):
         # Start a cycle
-        self.activate_component()  # activate component
-        self.component_state.append(1)  # record that the component is up
-
+        self.deactivate_component()  # activate component
+        self.component_state.append(0)
         # Record the start time of the cycle
         start_time = QDateTime.currentMSecsSinceEpoch()/1000
         self.time_data.append(start_time)
 
         self.sensor_check_start_time = start_time # initialize sensor check start time
-        self.sensor_check_timer.start(10)  # start checking the sensor every 10 ms
-        self.start_button.setText(self.parent.translator.translate('stop'))
+        self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
         self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
 
 
@@ -232,7 +239,7 @@ class GraphWindow(QMainWindow):
         self.edits['status'].setText('error')  # update status to show that the sensor was not reached
 
     def check_sensor(self):
-        # This method is called every 10 ms to check the sensor
+        # This method is called every 25 ms to check the sensor
         if self.is_sensor_reached():
             self.sensor_check_timer.stop()  # stop checking the sensor
             self.timer.stop()  # stop the 15-second timer
@@ -249,7 +256,7 @@ class GraphWindow(QMainWindow):
             if self.component_state[-1] == 1:  # if the component is up
                 self.component_state.append(0)
                 self.deactivate_component()
-                self.sensor_check_timer.start(10)
+                self.sensor_check_timer.start(25)
 
             else:  # if the component is down
                 self.component_state.append(1)
@@ -266,7 +273,7 @@ class GraphWindow(QMainWindow):
                 Logger.info("Cycles finished and saved to CSV file")
             else:
                 # If more cycles are needed, start another cycle
-                self.sensor_check_timer.start(10)  # start checking the sensor every 10 ms
+                self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
                 self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
 
             # Update the graphs
@@ -298,21 +305,27 @@ class GraphWindow(QMainWindow):
 
 
 
-    def activate_component(self):
-        self.parent.update_DO(False)
-
-    def deactivate_component(self):
+    def activate_component(self): #set to up
         self.parent.update_DO(True)
+
+    def deactivate_component(self): #set to down
+        self.parent.update_DO(False)
 
 
     def is_sensor_reached(self):
-        # This is a placeholder for the function that checks if a sensor is reached
-        # Here, it simulates a sensor that is randomly reached with a probability of 0.1
-        sleep(0.01)
-        if self.component_state[-1] == 1:  # if the component is up
-            return random.random() > 0.99  # simulate the upper sensor
-        else:  # if the component is down
-            return random.random() > 0.99  # simulate the lower sensor
+        if self.parent.serial_reader.busy_read == False:
+
+            self.parent.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
+            self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
+            data = self.parent.serial_reader.wait_and_read_data(1)
+            self.parent.serial_reader.busy_read = False # free the serial reader
+            print(data)
+            if len(self.component_state) == 0 or self.component_state[-1] == 1:  # if the component is up
+                return not (data[0] & self.parent.cmd.Down)
+            else:  # if the component is down
+                return not (data[0] & self.parent.cmd.Up)
+        else:
+            return False
 
     def update_csv_file(self):
         pn = self.edits['PN'].text()

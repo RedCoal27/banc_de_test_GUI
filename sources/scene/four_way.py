@@ -79,7 +79,7 @@ class FourWay(CustomWidget):
             else:
                 self.state = not self.state
 
-            self.serial_reader.write_data(self.cmd, not self.state)
+            self.serial_reader.write_data(self.cmd.DO, not self.state)
             self.update_label('do_up', state = "false" if self.state else "true")
             self.update_label('do_down', state = "true" if self.state else "false")
             self.update_button('change_state', state = "down" if self.state else "up")

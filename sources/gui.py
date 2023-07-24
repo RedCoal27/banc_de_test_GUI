@@ -49,9 +49,11 @@ class MainWindow(QMainWindow):
 
         self.thread = SerialReaderThread(self.serial_reader, self.custom_widgets)  # type: ignore
         self.thread.start()
+        self.serial_reader.error_occurred.connect(self.show_error_message)
 
 
-
+    def show_error_message(self, title, message, port):
+        QMessageBox.warning(self, self.translator.translate(title), self.translator.translate(message, port=port))
 
     def init_ui(self):
         """
@@ -134,6 +136,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["interlock"] = Interlock([0.05,0.06], "interlock", self)
         self.custom_widgets["Chamber"] = Chamber([0.24,0.26], self)
 
+
         self.custom_widgets["WL2"] = FourWay([0.24,0.03], Cmd.WL2, "WL", number="2", parent=self)
         self.custom_widgets["WL3"] = FourWay([0.365,0.03], Cmd.WL3, "WL", number="3", parent=self)
         self.custom_widgets["SV"] = FourWay([0.49,0.03], Cmd.SV, "SV", parent=self)
@@ -142,13 +145,12 @@ class MainWindow(QMainWindow):
         self.custom_widgets["WL1"] = FourWay([0.51,0.46] , Cmd.WL1, "WL", number="1", parent=self)
         self.custom_widgets["baratron1"] = Baratron([0.76,0.46], "baratron1", parent=self)
         self.custom_widgets["baratron2"] = Baratron([0.76,0.59], "baratron2", parent=self)
-        self.custom_widgets["MFC1"] = MFC([0.79,0.17], "MFC1", self)
-        self.custom_widgets["MFC2"] = MFC([0.79,0.31], "MFC2", self)
+        self.custom_widgets["MFC1"] = MFC([0.79,0.17], Cmd.MFC1, "MFC1", self)
+        self.custom_widgets["MFC2"] = MFC([0.79,0.31], Cmd.MFC2, "MFC2", self)
 
         self.custom_widgets["chamber_pressure"] = Convectron([0.76,0.72], "chamber_pressure", parent=self)
 
         self.custom_widgets["pump_pressure"] = Convectron([0.38,0.75], "pump_pressure", parent=self)
-
 
         self.custom_widgets["turbo_pump_rga"] = Pump([0.02,0.53], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = Pump([0.13,0.53], Cmd.TurboCH, "turbo_pump_ch", parent=self)

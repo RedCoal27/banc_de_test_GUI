@@ -10,12 +10,12 @@ class RoughingPump(CustomWidget):
     def __init__(self, pos, cmd , key , parent):
         ratio = (0.1, 0.12)
         self.serial_reader = parent.serial_reader
-        self.state = True
+        self.state = False
         self.cmd = cmd
         self.key = key
         super().__init__(parent.translator, pos, ratio, "#4472C4")
         self.create_labels(key)
-        self.create_button("change_state", self.click_DO)
+        self.create_button("change_state", self.click_DO, state = "off")
         self.update_DO()
         
 
