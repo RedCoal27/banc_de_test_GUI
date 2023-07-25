@@ -1,0 +1,22 @@
+{
+    "MFC1": {
+        "size": 1000
+    },
+    "MFC2": {
+        "size": 1000
+    },
+    "chamber_pressure": {
+        "address": 0,
+        "setpoint_high": 3.75,
+        "setpoint_low": 0.02,
+        "gas_type": "N2",
+        "pressure_unit": "Torr"
+    },
+    "pump_pressure": {
+        "address": 0,
+        "setpoint_high": 11.75,
+        "setpoint_low": 0.02,
+        "gas_type": "N2",
+        "pressure_unit": "Torr"
+    }
+}

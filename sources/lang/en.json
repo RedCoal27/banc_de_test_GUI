@@ -39,7 +39,9 @@
     "actual":"Actual: {value}",
     "baratron1": "Baratron SizeTorr",
     "baratron2": "Baratron Size T",
-    "chamber_pressure":"Chamber Pressure",
+    "chamber_pressure":"Chamber Pressure convectron:",
+    "pump_pressure":"Pump Pressure convectron:",
+    "pirani_pressure": "Pirani Pressure: {value}",
     "turbo_pump_rga":"Turbo Pump RGA",
     "turbo_pump_ch":"Turbo Pump CH",
     "cmd":"Command: {state}",
@@ -63,5 +65,21 @@
     "max_val_ascent":"Max. Val. Ascent: {value}s",
     "max_val_descent":"Max. Val. Descent: {value}s",
     "avg_val_ascent":"Avg. Val. Ascent: {value}s",
-    "avg_val_descent":"Avg. Val. Descent: {value}s"
+    "avg_val_descent":"Avg. Val. Descent: {value}s",
+
+    "pirani_config": "Pirani Config",
+    "node_address": "Node Address: 0",
+    "set_node_address": "Set Node Address",
+    "setpoint_high": "Setpoint High: ",
+    "setpoint_low": "Setpoint Low: ",
+    "gas_type": "Gas Type: ",
+    "pressure_unit": "Pressure Unit: ",
+    "calibrate_gauge": "Calibrate Gauge at ATM Only",
+    "gauge_status_bits": "Gauge Status Bits: ",
+    "gauge_sn": "Gauge SN: ",
+    "confirm": "Confirm",
+    "only_one_pirani": "Only configure the Pirani with one connected at a time.",
+    "enter_new_address": "Enter new address:",
+    "new_address": "New address:",
+    "confirm_button_clicked": "Confirm button clicked"
 }

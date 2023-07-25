@@ -39,7 +39,9 @@
     "actual":"Actuel: {value}",
     "baratron1": "Baratron SizeTorr",
     "baratron2": "Baratron Size T",
-    "chamber_pressure":"Pression chambre",
+    "chamber_pressure":"Pression chambre convectron: ",
+    "pump_pressure":"Pression pompe convectron: ",
+    "pirani_pressure": "Pression Pirani: {value}",
     "turbo_pump_rga":"Pompe turbo RGA",
     "turbo_pump_ch":"Pompe turbo CH",
     "cmd":"Commande: {state}",
@@ -63,5 +65,21 @@
     "max_val_ascent":"Val. Max. Ascension: {value}s",
     "max_val_descent":"Val. Max. Descente: {value}s",
     "avg_val_ascent":"Val. Moy. Ascension: {value}s",
-    "avg_val_descent":"Val. Moy. Descente: {value}s"
+    "avg_val_descent":"Val. Moy. Descente: {value}s",
+
+    "pirani_config": "Configuration Pirani",
+    "node_address": "Adresse du nœud: 0",
+    "set_node_address": "Définir l'adresse du nœud",
+    "setpoint_high": "Point de consigne haut: ",
+    "setpoint_low": "Point de consigne bas: ",
+    "gas_type": "Type de gaz: ",
+    "pressure_unit": "Unité de pression: ",
+    "calibrate_gauge": "Étalonner le jauge à ATM seulement",
+    "gauge_status_bits": "Bits de statut du jauge: ",
+    "gauge_sn": "Numéro de série du jauge: ",
+    "confirm": "Confirmer",
+    "only_one_pirani": "Ne configurez la Pirani qu'avec une seule connectée à la fois.",
+    "enter_new_address": "Entrez la nouvelle adresse:",
+    "new_address": "Nouvelle adresse:",
+    "confirm_button_clicked": "Bouton de confirmation cliqué"
 }

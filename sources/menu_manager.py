@@ -45,7 +45,7 @@ class MenuManager:
     def change_font_size(self, size):
         for item in self.parent.scene.items():
             if isinstance(item, CustomWidget):
-                item.police_size = size
+                item.set_font_size(size)
         QTimer.singleShot(0, self.parent.resize_widgets)
 
     def update_com_menu(self):

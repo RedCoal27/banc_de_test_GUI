@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPainterPath, QColor, QIntValidator
 from PyQt5.QtCore import Qt, QSize
 
 class CustomWidget(QGraphicsWidget):
-    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, police_size=8):
+    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, font_size=8):
         """
         A custom widget that can contain labels and buttons.
 
@@ -21,7 +21,7 @@ class CustomWidget(QGraphicsWidget):
         self.spin_boxes = []
         self.unit_labels = []
         self.color = color
-        self.police_size = police_size
+        self.font_size = font_size
 
         self.layout = QGraphicsLinearLayout(Qt.Orientation.Vertical)  # type: ignore
         self.setLayout(self.layout)
@@ -58,7 +58,7 @@ class CustomWidget(QGraphicsWidget):
         label.setContentsMargins(1, 0, 1, 0)  # Set margins for the unit QLabel
 
         font = label.font()
-        font.setPointSizeF(self.police_size)
+        font.setPointSizeF(self.font_size)
         #set color text to white
         label.setFont(font)
     
@@ -110,7 +110,7 @@ class CustomWidget(QGraphicsWidget):
         label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
 
         font = label.font()
-        font.setPointSizeF(self.police_size)
+        font.setPointSizeF(self.font_size)
         label.setFont(font)
 
         spin_box = QSpinBox()
@@ -119,11 +119,11 @@ class CustomWidget(QGraphicsWidget):
         spin_box.setValue(initial_value)
         spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         spin_box.setFixedSize(QSize(30, 20))  # Set a fixed size
-        spin_box.setStyleSheet("QSpinBox { font-size: " + str(self.police_size) + "pt; }")
+        spin_box.setStyleSheet("QSpinBox { font-size: " + str(self.font_size) + "pt; }")
         spin_box.setContentsMargins(0, 0, 0, 0)  # Remove margins for the QSpinBox
 
         font = spin_box.font()
-        font.setPointSizeF(self.police_size)
+        font.setPointSizeF(self.font_size)
         spin_box.setFont(font)
 
         # If a function was provided, connect the QSpinBox's editingFinished signal to it
@@ -137,7 +137,7 @@ class CustomWidget(QGraphicsWidget):
         unit_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         font = unit_label.font()
-        font.setPointSizeF(self.police_size)
+        font.setPointSizeF(self.font_size)
         unit_label.setFont(font)
         unit_label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
 
@@ -202,7 +202,7 @@ class CustomWidget(QGraphicsWidget):
         button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         font = button.font()
-        font.setPointSizeF(self.police_size)
+        font.setPointSizeF(self.font_size)
         button.setFont(font)
 
         button.setContentsMargins(1, 1, 1, 1)
@@ -260,6 +260,8 @@ class CustomWidget(QGraphicsWidget):
         for unit_label, unit, kwargs in self.unit_labels:
             unit_label.setText(self.translator.translate(unit,**kwargs))  # Update the text of the unit QLabel
 
+    def set_font_size(self,size):
+        self.font_size = size
 
 
     def set_pos_size(self,width, height,scale_factor):
@@ -274,24 +276,24 @@ class CustomWidget(QGraphicsWidget):
 
         for label in self.labels:
             font = label[0].font()
-            font.setPointSizeF(self.police_size)
+            font.setPointSizeF(self.font_size)
             label[0].setFont(font)
 
         for button in self.buttons:
             font = button[0].font()
-            font.setPointSizeF(self.police_size)
+            font.setPointSizeF(self.font_size)
             button[0].setFont(font)
             #change button size
             button[0].setFixedWidth(int(width*self.ratio[0]))
 
         for spin_box in self.spin_boxes:
-            spin_box[0].setStyleSheet("QSpinBox { font-size: " + str(self.police_size-1) + "pt; }")
+            spin_box[0].setStyleSheet("QSpinBox { font-size: " + str(self.font_size-1) + "pt; }")
             spin_box[0].setFixedWidth(int(width*self.ratio[0]/3.5))  # Adjust the 4 as needed
-            spin_box[0].setFixedHeight(int(height*self.ratio[1]/6))  # Adjust the 4 as needed
+            spin_box[0].setFixedHeight(int(height*self.ratio[1]/5.5))  # Adjust the 4 as needed
 
         for unit_label in self.unit_labels:
             font = unit_label[0].font()
-            font.setPointSizeF(self.police_size)
+            font.setPointSizeF(self.font_size)
             unit_label[0].setFont(font)
 
 

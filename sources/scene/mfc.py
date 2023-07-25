@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
+from internal.config import Config
+
 class MFC(CustomWidget):
     def __init__(self, pos, cmd, key , parent):
         ratio = (0.1, 0.12)
@@ -25,14 +27,15 @@ class MFC(CustomWidget):
         self.create_label_with_spin_box("setpoint", initial_value=0, unit="sccm", function=self.update_AO)
         self.create_label("actual", value = "0")
         self.create_label_with_spin_box("offset", unit="sccm", initial_value=0, min_value = -100, max_value=100, function=self.update_offset)
-        self.create_label("size", value = "1000", unit="sccm")
+        self.create_label("size", value = self.parent.config[key]["size"], unit="sccm")
 
 
     def update_AI(self, value):
         """
         Updates the value of the label.
         """
-        value = float(value) - self.offset
+        value = (float(value)/5*1000)
+        value = int(round(value - self.offset))
         self.update_label("actual", value = value)
 
     def update_AO(self, spin_box):

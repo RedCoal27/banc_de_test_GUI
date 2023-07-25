@@ -30,7 +30,7 @@ class SerialReader(QObject):
             if self.ser is not None and self.ser.port == port:
                 return
             try:
-                self.ser = Serial(port=port, baudrate=115200, timeout=0.5)
+                self.ser = Serial(port=port, baudrate=115200, timeout=1)
             except SerialException:
                 Logger.error(f"Error while connecting to serial port {port}.")
         else:
@@ -94,6 +94,7 @@ class SerialReaderThread(QThread):
         self.custom_widgets = custom_widgets
 
     def run(self):
+        print("test")
         while True:
             if self.serial_reader.busy_read == False:
                 self.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
@@ -109,15 +110,21 @@ class SerialReaderThread(QThread):
                     self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
                     self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
                     self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
+
                 self.serial_reader.send_data(6,4)
                 data = self.serial_reader.wait_and_read_data(until='\n'.encode())
-                print(data)
-                if data is not None and len(data) == 4:
+                if data is not None and len(data) > 0:
+                    data = data.decode().strip().split(' ')
+
                     self.custom_widgets["MFC1"].update_AI(data[0])
                     self.custom_widgets["MFC2"].update_AI(data[1])
                     self.custom_widgets["baratron1"].update_AI(data[2])
                     self.custom_widgets["baratron2"].update_AI(data[3])
                 self.serial_reader.busy_read = False # free the serial reader
+
+                self.serial_reader.send_data(8,4)
+                data = self.serial_reader.wait_and_read_data(until='\n'.encode())
+                print(data)
                 self.msleep(1000) # Sleep for 1 second
             else:
                 # print("busy_read")
