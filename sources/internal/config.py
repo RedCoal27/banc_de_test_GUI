@@ -16,7 +16,7 @@ class Config:
         try:
             with open(self.path, "r", encoding="utf-8") as f:
                 self.value = json.load(f)
-            Logger.info(f"Loaded config file: {self.value}")
+            Logger.info(f"Configuration file loaded.")
 
         except FileNotFoundError:
             Logger.error(f"Could not find config file config.json")
@@ -34,7 +34,7 @@ class Config:
         with open(self.path, "w", encoding="utf-8") as f:
             json.dump(self.value, f, indent=4) 
         Logger.info(f"Saved config file: {self.value}")
-        
+
     def __getitem__(self, key):
         return self.value[key]
     
