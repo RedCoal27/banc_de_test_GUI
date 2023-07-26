@@ -6,16 +6,16 @@
         "size": 1000
     },
     "chamber_pressure": {
-        "address": 0,
-        "setpoint_high": 3.75,
-        "setpoint_low": 0.02,
-        "gas_type": "N2",
-        "pressure_unit": "Torr"
+        "address": 7,
+        "setpoint_high": 1000.0,
+        "setpoint_low": 0.0,
+        "gas_type": "Ar",
+        "pressure_unit": "mBar"
     },
     "pump_pressure": {
-        "address": 0,
-        "setpoint_high": 11.75,
-        "setpoint_low": 0.02,
+        "address": 6,
+        "setpoint_high": 750.06,
+        "setpoint_low": 0.0,
         "gas_type": "N2",
         "pressure_unit": "Torr"
     }

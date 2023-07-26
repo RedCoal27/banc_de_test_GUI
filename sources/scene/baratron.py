@@ -22,7 +22,7 @@ class Baratron(CustomWidget):
         - key: a string representing the key of the widget
         """
         self.create_label(key,alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        self.create_label("pressure", value = "0")
+        self.create_label("pressure", value = "0", unit= "mBar")
         self.create_label_with_spin_box("offset", unit="mbar", initial_value=0, min_value = -100, max_value=100, function=self.update_offset)
         self.create_label("size", value = "0", unit="mbar")
 

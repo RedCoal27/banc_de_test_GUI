@@ -29,6 +29,7 @@ class FourWay(CustomWidget):
         self.state = False
         self.key = key
         self.cmd = cmd
+        self.parent = parent
 
         self.create_labels()
         self.create_buttons()

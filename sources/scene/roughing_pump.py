@@ -8,7 +8,7 @@ from internal.logger import Logger
 
 class RoughingPump(CustomWidget):
     def __init__(self, pos, cmd , key , parent):
-        ratio = (0.1, 0.12)
+        ratio = (0.1, 0.14)
         self.serial_reader = parent.serial_reader
         self.state = False
         self.cmd = cmd

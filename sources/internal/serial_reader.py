@@ -5,6 +5,7 @@ from PyQt5.QtCore import QThread,pyqtSignal,QObject
 
 from internal.logger import Logger
 from internal.constant import *
+from internal.rs485 import RS485
 
 import struct
 import time
@@ -17,9 +18,8 @@ class SerialReader(QObject):
         self.ser = None
         self.translator = translator
         self.busy_write = False
-        self.busy_read = False
+        self.busy_read = False 
         self.set_com_port(self.get_available_com_ports()[0] if self.get_available_com_ports() else None)
-
 
 
     def get_available_com_ports(self):
@@ -30,7 +30,7 @@ class SerialReader(QObject):
             if self.ser is not None and self.ser.port == port:
                 return
             try:
-                self.ser = Serial(port=port, baudrate=115200, timeout=1)
+                self.ser = Serial(port=port, baudrate=115200, timeout=0.5)
             except SerialException:
                 Logger.error(f"Error while connecting to serial port {port}.")
         else:
@@ -41,7 +41,7 @@ class SerialReader(QObject):
         # Convertir le float en bytes en little-endian
         return struct.pack('<f', f)
     
-    def send_data(self, type, data):
+    def send_data(self, type, data, other_data=[]):
         if self.ser is not None:
             try:
                 self.ser.write(bytes([type]))
@@ -49,6 +49,8 @@ class SerialReader(QObject):
                     self.ser.write(self.float_to_bytes(data))
                 else:
                     self.ser.write(bytes([data]))
+                for d in other_data:
+                    self.ser.write(bytes(d, 'utf-8'))
             except SerialException:
                 Logger.warning(f"Error while sending data to serial port {self.ser.port}.")
                 self.error_occurred.emit("warning", "serial_port_disconnected", self.ser.port)
@@ -88,44 +90,56 @@ class SerialReader(QObject):
 
 
 class SerialReaderThread(QThread):
-    def __init__(self, serial_reader, custom_widgets):
+    def __init__(self, gui):
         super().__init__()
-        self.serial_reader = serial_reader
-        self.custom_widgets = custom_widgets
+        self.parent = gui
+        self.serial_reader = gui.serial_reader
+        self.RS485 = gui.RS485
+        self.custom_widgets = gui.custom_widgets
+
 
     def run(self):
-        print("test")
         while True:
-            if self.serial_reader.busy_read == False:
-                self.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
-                self.serial_reader.send_data(1,0)
-                data = self.serial_reader.wait_and_read_data(4)
-                if data is not None and len(data) == 4:
-                    self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[0] & Cmd.WL2.Down)
-                    self.custom_widgets["WL3"].update_DI(data[0] & Cmd.WL3.Up, data[0] & Cmd.WL3.Down)
-                    self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
-                    self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
+            if self.serial_reader.busy_read == False and self.serial_reader.ser is not None:
+                try:
+                    self.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
+                    self.serial_reader.send_data(1,0)
+                    data = self.serial_reader.wait_and_read_data(4)
+                    if data is not None and len(data) == 4:
+                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[0] & Cmd.WL2.Down)
+                        self.custom_widgets["WL3"].update_DI(data[0] & Cmd.WL3.Up, data[0] & Cmd.WL3.Down)
+                        self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
+                        self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
 
 
-                    self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
-                    self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
-                    self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
+                        self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
+                        self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
+                        self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
 
-                self.serial_reader.send_data(6,4)
-                data = self.serial_reader.wait_and_read_data(until='\n'.encode())
-                if data is not None and len(data) > 0:
-                    data = data.decode().strip().split(' ')
+                    self.serial_reader.send_data(6,4)
+                    data = None
+                    data = self.serial_reader.wait_and_read_data(until='\n'.encode())
+                    if data is not None and len(data) > 0:
+                        data = data.decode().strip().split(' ')
 
-                    self.custom_widgets["MFC1"].update_AI(data[0])
-                    self.custom_widgets["MFC2"].update_AI(data[1])
-                    self.custom_widgets["baratron1"].update_AI(data[2])
-                    self.custom_widgets["baratron2"].update_AI(data[3])
+                        self.custom_widgets["MFC1"].update_AI(data[0])
+                        self.custom_widgets["MFC2"].update_AI(data[1])
+                        self.custom_widgets["baratron1"].update_AI(data[2])
+                        self.custom_widgets["baratron2"].update_AI(data[3])
+                        
+                    for key in ["chamber_pressure","pump_pressure"]:
+                        data = None
+                        data = self.RS485.pirani[key].read_pressure()
+                        print(data)
+                        if len(data)==2:
+                            self.custom_widgets[key].update_pressure(data)
+                except:
+                    pass
+
                 self.serial_reader.busy_read = False # free the serial reader
-
-                self.serial_reader.send_data(8,4)
-                data = self.serial_reader.wait_and_read_data(until='\n'.encode())
-                print(data)
                 self.msleep(1000) # Sleep for 1 second
             else:
                 # print("busy_read")
                 self.msleep(50)
+
+

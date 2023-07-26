@@ -28,7 +28,7 @@ from internal.constant import *
 from internal.logger import Logger
 from internal.config import Config
 
-
+from internal.rs485 import RS485
 
 
 class MainWindow(QMainWindow):
@@ -39,9 +39,11 @@ class MainWindow(QMainWindow):
         self.config = Config()
         self.translator.load_translations()
         self.serial_reader = SerialReader(self.translator)
+        self.RS485 = RS485(self)
 
         self.custom_widgets = {}
 
+        self.icon = None
 
         self.menu_manager = MenuManager(self)
         self.menu_manager.create_menus()
@@ -51,7 +53,7 @@ class MainWindow(QMainWindow):
         QTimer.singleShot(0, self.resize_widgets)
 
 
-        self.thread = SerialReaderThread(self.serial_reader, self.custom_widgets)  # type: ignore
+        self.thread = SerialReaderThread(self)  # type: ignore
         self.thread.start()
         self.serial_reader.error_occurred.connect(self.show_error_message)
 
@@ -73,7 +75,10 @@ class MainWindow(QMainWindow):
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-        self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
+        self.icon = QIcon(base_path + "\\images\\xfab.jpg")
+
+        self.setWindowIcon(self.icon)
+
         self.resize(800, 600)
 
 

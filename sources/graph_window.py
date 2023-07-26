@@ -26,7 +26,7 @@ class GraphWindow(QMainWindow):
         self.timer.timeout.connect(self.on_timer)
         self.sensor_check_timer = QTimer()
         self.sensor_check_timer.timeout.connect(self.check_sensor)
-
+        self.is_running = False
 
         # Create widgets and layouts
         self.create_top_widgets()
@@ -50,8 +50,7 @@ class GraphWindow(QMainWindow):
         #name of the window
         self.setWindowTitle(self.parent.translator.translate(self.parent.key, number=self.parent.FourWay_number))
 
-        base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-        self.setWindowIcon(QIcon(base_path + "\\images\\xfab.jpg"))
+        self.setWindowIcon(self.parent.parent.icon)
         self.resize(800, 600)
 
 
@@ -188,15 +187,12 @@ class GraphWindow(QMainWindow):
         self.edits['min'].setEnabled(state)
 
     def on_start_button(self):
-        if self.timer.isActive():
+        if self.is_running:
             Logger.info("Stopping the cycles")
-            self.timer.stop()
-            self.sensor_check_timer.stop()  # stop checking the sensor
-            self.start_button.setText(self.parent.translator.translate('start'))
-            self.deactivate_component()  # deactivate component
-            self.component_state.append(0)  # record that the component is down
+            self.stop_cycle()
             self.edits['status'].setText('stopped')  # update status to show that the cycles are stopped
             self.change_widget_state(True)
+            
         else:
             Logger.info(f"Starting the cycles with {self.edits['cycle'].value()} cycles, filename: {self.edits['CSV File'].text()}")
             self.cycle_count = 1  # initialize cycle counter
@@ -206,17 +202,26 @@ class GraphWindow(QMainWindow):
             self.cycle_durations = []
             self.start_button.setText(self.parent.translator.translate('stop'))
             self.edits['status'].setText('home')
+            self.is_running = True  # set is_running to True to start the pre_start_cycle loop
             self.pre_start_cycle()
             self.change_widget_state(False)
-                
-
-
+                    
     def pre_start_cycle(self):
         self.activate_component()
-        if not self.is_sensor_reached():#wait that the component is down
-            QTimer.singleShot(100,self.pre_start_cycle)
+        if not self.is_sensor_reached():  # wait that the component is down
+            if self.is_running:  # check if the cycles are running
+                QTimer.singleShot(100, self.pre_start_cycle)
         else:
-            QTimer.singleShot(100,self.start_cycle)
+            QTimer.singleShot(100, self.start_cycle)
+
+    def stop_cycle(self):
+        if self.timer.isActive():
+            self.timer.stop()
+        if self.sensor_check_timer.isActive():
+            self.sensor_check_timer.stop()
+        self.start_button.setText(self.parent.translator.translate('start'))
+        self.is_running = False
+
 
     def start_cycle(self):
         # Start a cycle
@@ -318,8 +323,8 @@ class GraphWindow(QMainWindow):
             self.parent.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
             self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
             data = self.parent.serial_reader.wait_and_read_data(1)
-            self.parent.serial_reader.busy_read = False # free the serial reader
             print(data)
+            self.parent.serial_reader.busy_read = False # free the serial reader
             if len(self.component_state) == 0 or self.component_state[-1] == 1:  # if the component is up
                 return not (data[0] & self.parent.cmd.Down)
             else:  # if the component is down
@@ -355,10 +360,6 @@ class GraphWindow(QMainWindow):
             for i in range(len(ascent_times)):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
 
-
     def closeEvent(self, event):
-        if self.timer.isActive():
-            self.timer.stop()
-        if self.sensor_check_timer.isActive():
-            self.sensor_check_timer.stop()
+        self.stop_cycle()
         event.accept()

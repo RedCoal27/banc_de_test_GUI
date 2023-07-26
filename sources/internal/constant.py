@@ -49,6 +49,8 @@ class Cmd():
         Down = 2
     
         
-
+class PiraniConfig():
+    gas_types = ["N2", "Ar", "He", "CO2", "H", "Ne", "Kr"]
+    units_types = ["mBar", "Pascal", "Torr"]
 
         
