@@ -17,8 +17,7 @@ class SerialReader(QObject):
         super().__init__()
         self.ser = None
         self.translator = translator
-        self.busy_write = False
-        self.busy_read = False 
+        self.busy = False 
         self.set_com_port(self.get_available_com_ports()[0] if self.get_available_com_ports() else None)
 
 
@@ -100,9 +99,9 @@ class SerialReaderThread(QThread):
 
     def run(self):
         while True:
-            if self.serial_reader.busy_read == False and self.serial_reader.ser is not None:
+            if self.serial_reader.busy == False and self.serial_reader.ser is not None:
                 try:
-                    self.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
+                    self.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
                     self.serial_reader.send_data(1,0)
                     data = self.serial_reader.wait_and_read_data(4)
                     if data is not None and len(data) == 4:
@@ -130,16 +129,15 @@ class SerialReaderThread(QThread):
                     for key in ["chamber_pressure","pump_pressure"]:
                         data = None
                         data = self.RS485.pirani[key].read_pressure()
-                        print(data)
                         if len(data)==2:
                             self.custom_widgets[key].update_pressure(data)
                 except:
                     pass
 
-                self.serial_reader.busy_read = False # free the serial reader
+                self.serial_reader.busy = False # free the serial reader
                 self.msleep(1000) # Sleep for 1 second
             else:
-                # print("busy_read")
+                # print("busy")
                 self.msleep(50)
 
 

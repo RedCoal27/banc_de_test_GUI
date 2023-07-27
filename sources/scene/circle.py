@@ -1,10 +1,10 @@
 from PyQt5.QtGui import QPen, QColor, QBrush
 from PyQt5.QtCore import Qt, QPointF, QRectF
-from PyQt5.QtWidgets import QGraphicsEllipseItem
+from PyQt5.QtWidgets import QGraphicsEllipseItem, QMenu, QAction
 
 
 class Circle(QGraphicsEllipseItem):
-    def __init__(self, x, y, radius, color, function=None, parent=None):
+    def __init__(self, x, y, radius, color, left_click_function=None, right_click_function=None, parent=None):
         """
         A custom QGraphicsEllipseItem that retains its size based on a ratio.
 
@@ -24,7 +24,8 @@ class Circle(QGraphicsEllipseItem):
         self.setPen(QPen(QColor(self.color), 2))
         self.setBrush(QBrush(Qt.GlobalColor.white))
         self.setAcceptHoverEvents(True)
-        self.function = function
+        self.left_click_function = left_click_function
+        self.right_click_function = right_click_function
 
 
     def set_pos_size(self, width, height, scale_factor):
@@ -56,5 +57,34 @@ class Circle(QGraphicsEllipseItem):
         """
         Calls the function associated with the circle when it is clicked.
         """
-        if self.function is not None:
-            self.function()
+        if event.button() == Qt.MouseButton.LeftButton and self.left_click_function is not None:
+                self.left_click_function()
+
+    def setRightClickFunction(self, function):
+        """
+        Sets the function to be called when the circle is right clicked.
+
+        Args:
+            function (function): The function to be called.
+        """
+        self.right_click_function = function
+
+    def contextMenuEvent(self, event):
+        """
+        Creates a custom context menu (right click menu) for the circle.
+        """
+        if self.right_click_function is not None:
+            contextMenu = QMenu()
+
+            if self.right_click_function is not None:
+                cycleAction = QAction("Change State")
+                cycleAction.triggered.connect(self.left_click_function)
+                contextMenu.addAction(cycleAction)
+
+            if self.right_click_function is not None:
+                changeStateAction = QAction("Cycle")
+                changeStateAction.triggered.connect(self.right_click_function)
+                contextMenu.addAction(changeStateAction)
+
+            # Show the context menu.
+            contextMenu.exec_(event.screenPos())

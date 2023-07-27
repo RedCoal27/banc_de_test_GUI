@@ -5,7 +5,7 @@ from serial.tools.list_ports import comports
 from internal.custom_widget import CustomWidget
 
 from internal.logger import Logger
-
+from internal.constant import ConstantDialog
 
 class MenuManager:
     def __init__(self, parent):
@@ -19,8 +19,10 @@ class MenuManager:
         self.com_menu.aboutToShow.connect(self.update_com_menu)
         self.config_menu.addMenu(self.create_language_menu())
         self.config_menu.addMenu(self.create_font_size_menu())
+        self.config_menu.addAction("Constante", self.open_constant_dialog)
         self.parent.menuBar().addMenu(self.com_menu)
         self.parent.menuBar().addMenu(self.config_menu)
+
 
     def create_menu(self, menu_name, actions):
         menu = QMenu(menu_name, self.parent)
@@ -35,7 +37,7 @@ class MenuManager:
         for size in [6,7,8,9,10,11,12,13,14]:
             action = QAction(str(size), self.parent)
             action.setCheckable(True)
-            if size == 8:  # Check the default font size
+            if size == self.parent.config["gui"]["font_size"]:  # Check the default font size
                 action.setChecked(True)
             action.triggered.connect(lambda checked, s=size: self.change_font_size(s))
             action_group.addAction(action)
@@ -46,6 +48,8 @@ class MenuManager:
         for item in self.parent.scene.items():
             if isinstance(item, CustomWidget):
                 item.set_font_size(size)
+        self.parent.config["gui"]["font_size"] = size
+        self.parent.config.save_config()
         QTimer.singleShot(0, self.parent.resize_widgets)
 
     def update_com_menu(self):
@@ -83,8 +87,18 @@ class MenuManager:
         self.translator.current_language = lang
         # self.language_menu.setTitle(self.translator.translate("language"))
         self.config_menu.setTitle(self.translator.translate("Config"))
+        self.parent.config["gui"]["lang"] = lang
+        self.parent.config.save_config()
+        
         
 
         for item in self.parent.scene.items():
             if isinstance(item, CustomWidget):
                 item.change_language()
+
+
+    def open_constant_dialog(self):
+        # Ici, vous pouvez passer les constantes actuelles au dialog
+        constants = {"test":1,"aaa":12,"aa3":12,"aa43":12,"BBB":12,"ZZZ":12}  # Remplacer par vos constantes
+        dialog = ConstantDialog(constants, self.parent)
+        dialog.exec_()

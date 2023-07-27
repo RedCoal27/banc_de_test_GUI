@@ -48,7 +48,11 @@ class GraphWindow(QMainWindow):
         self.setMaximumSize(1000, 700)
 
         #name of the window
-        self.setWindowTitle(self.parent.translator.translate(self.parent.key, number=self.parent.FourWay_number))
+        try:
+            self.setWindowTitle(self.parent.translator.translate(self.parent.key, number=self.parent.FourWay_number))
+        except:
+            self.setWindowTitle(self.parent.translator.translate(self.parent.key))
+
 
         self.setWindowIcon(self.parent.parent.icon)
         self.resize(800, 600)
@@ -108,13 +112,13 @@ class GraphWindow(QMainWindow):
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
         # Create min_val, max_val, and avg_val labels for both graphs
-        for label in ['min_val_ascent', 'max_val_ascent', 'avg_val_ascent']:
+        for label in ['min_val_ascent', 'max_val_ascent', 'avg_val_ascent','last_val_ascent']:
             self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
             self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
-        for label in ['min_val_descent', 'max_val_descent', 'avg_val_descent']:
+        for label in ['min_val_descent', 'max_val_descent', 'avg_val_descent','last_val_descent']:
             self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
             self.labels[label].setFixedWidth(200)  # set a fixed width for the label
             self.layouts['values'].addWidget(self.labels[label])
@@ -297,10 +301,12 @@ class GraphWindow(QMainWindow):
                 self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val_ascent', value=f'{min(self.cycle_durations[::2]):.2f}'))
                 self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val_ascent', value=f'{max(self.cycle_durations[::2]):.2f}'))
                 self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val_ascent', value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
+                self.labels['last_val_ascent'].setText(self.parent.translator.translate('last_val_ascent', value=f'{self.cycle_durations[::2][-1]:.2f}'))
             if self.cycle_durations[1::2]:  # check if the list of descent durations is not empty
                 self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val_descent', value=f'{min(self.cycle_durations[1::2]):.2f}'))
                 self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val_descent', value=f'{max(self.cycle_durations[1::2]):.2f}'))
                 self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val_descent', value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
+                self.labels['last_val_descent'].setText(self.parent.translator.translate('last_val_descent', value=f'{self.cycle_durations[1::2][-1]:.2f}'))
             
             self.canvas.draw()
 
@@ -318,13 +324,12 @@ class GraphWindow(QMainWindow):
 
 
     def is_sensor_reached(self):
-        if self.parent.serial_reader.busy_read == False:
+        if self.parent.serial_reader.busy == False:
 
-            self.parent.serial_reader.busy_read = True # tell to serial_reader that it will be busy for some time
+            self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
             self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
             data = self.parent.serial_reader.wait_and_read_data(1)
-            print(data)
-            self.parent.serial_reader.busy_read = False # free the serial reader
+            self.parent.serial_reader.busy = False # free the serial reader
             if len(self.component_state) == 0 or self.component_state[-1] == 1:  # if the component is up
                 return not (data[0] & self.parent.cmd.Down)
             else:  # if the component is down

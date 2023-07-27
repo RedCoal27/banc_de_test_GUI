@@ -5,12 +5,12 @@ import os
 from internal.logger import Logger
 
 class Translator:
-    def __init__(self):
+    def __init__(self,config):
         self.translations = {
             "en": {},
             "fr": {},
         }
-        self.current_language = "en"
+        self.current_language = config["gui"]["lang"]
         
 
     def load_translations(self):

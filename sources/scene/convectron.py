@@ -43,10 +43,11 @@ class Convectron(CustomWidget):
         self.update_label("gas_type", gas_type = PiraniConfig.gas_types[gas_index])
         self.update_label('pressure', value = float(value[0]), unit = PiraniConfig.units_types[unit - 1])
         if self.pirani_config_gui is not None and self.pirani_config_gui.isVisible():
-            self.pirani_config_gui.update_status_bits(value[1])
+            self.pirani_config_gui.update_status_bits(int(value[1], 16))
 
     def open_pirani_config(self):
-        self.pirani_config_gui = PiraniConfigGui(self.parent,self.key)
-        self.pirani_config_gui.show()
+        if self.parent.serial_reader.ser is not None:
+            self.pirani_config_gui = PiraniConfigGui(self.parent,self.key)
+            self.pirani_config_gui.show()
 
 

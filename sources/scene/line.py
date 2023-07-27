@@ -2,9 +2,8 @@ from PyQt5.QtGui import QPen, QColor
 from PyQt5.QtCore import Qt, QPointF, QRectF
 from PyQt5.QtWidgets import QGraphicsLineItem
 
-
 class Line(QGraphicsLineItem):
-    def __init__(self, x1, y1, x2, y2, color, parent=None):
+    def __init__(self, x1, y1, x2, y2, color, width=3, parent=None):
         """
         A custom QGraphicsLineItem that retains its size based on a ratio.
 
@@ -14,14 +13,15 @@ class Line(QGraphicsLineItem):
             x2 (float): The x coordinate of the ending point.
             y2 (float): The y coordinate of the ending point.
             color (str): The color of the line in hexadecimal format (e.g. "#FFFFFF").
-            ratio (tuple): A tuple containing the x and y ratios of the line's length relative to the parent widget's width and height.
+            width (float): The width of the line. Defaults to 3.
             parent (QGraphicsItem, optional): The parent item. Defaults to None.
         """
         self.position = (x1, y1)
         self.position2 = (x2, y2)
         super(Line, self).__init__(parent)
         self.color = color
-        self.setPen(QPen(QColor(self.color), 3))
+        self.width = width
+        self.setPen(QPen(QColor(self.color), self.width))
 
     def set_line(self,scene, x1, y1, x2, y2):
         self.position = (x1, y1)
@@ -37,4 +37,4 @@ class Line(QGraphicsLineItem):
             height (int): The height of the parent widget.
         """
         self.setLine(self.position[0] * width, self.position[1] * height, self.position2[0] * width, self.position2[1] * height )
-        self.setPen(QPen(QColor(self.color), 3))
+        self.setPen(QPen(QColor(self.color), self.width))

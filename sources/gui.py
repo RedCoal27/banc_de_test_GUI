@@ -15,6 +15,7 @@ from scene.baratron import Baratron
 from scene.mfc import MFC
 from scene.line import Line
 from scene.gate import Gate
+from scene.gate_ch import GateCH
 from scene.circle import Circle
 from scene.convectron import Convectron
 from scene.pump import Pump
@@ -35,8 +36,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.translator = Translator()
         self.config = Config()
+        self.translator = Translator(self.config)
         self.translator.load_translations()
         self.serial_reader = SerialReader(self.translator)
         self.RS485 = RS485(self)
@@ -46,10 +47,11 @@ class MainWindow(QMainWindow):
         self.icon = None
 
         self.menu_manager = MenuManager(self)
-        self.menu_manager.create_menus()
-
 
         self.init_ui()
+
+
+
         QTimer.singleShot(0, self.resize_widgets)
 
 
@@ -65,6 +67,7 @@ class MainWindow(QMainWindow):
         """
         Initializes the user interface by creating the timer, menus, background, and buttons.
         """
+        self.menu_manager.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
 
@@ -80,6 +83,9 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(self.icon)
 
         self.resize(800, 600)
+
+        self.menu_manager.change_font_size(self.config["gui"]["font_size"])
+
 
 
 
@@ -184,7 +190,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.44), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)
 
-        self.custom_widgets["turbo_pump_ch_gate_ch"] = Gate((0.18,0.46), (-0.04,0.0),"turbo_pump_ch_gate", Cmd.turbo_pump_ch_gate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_ch_gate_ch"] = GateCH((0.18,0.46), (-0.04,0.0),"turbo_pump_ch_gate", Cmd.RGAGate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self)
 
         self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", 25, sens='horizontal', parent=self)

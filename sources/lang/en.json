@@ -66,6 +66,8 @@
     "max_val_descent":"Max. Val. Descent: {value}s",
     "avg_val_ascent":"Avg. Val. Ascent: {value}s",
     "avg_val_descent":"Avg. Val. Descent: {value}s",
+    "last_val_ascent":"Last Val. Ascent: {value}s",
+    "last_val_descent":"Last Val. Descent: {value}s",
 
     "pirani_config": "Pirani Config",
     "node_address": "Node Address: {value}",

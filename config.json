@@ -1,4 +1,8 @@
 {
+    "gui": {
+        "lang": "fr",
+        "font_size": 8
+    },
     "MFC1": {
         "size": 1000
     },
@@ -7,16 +11,16 @@
     },
     "chamber_pressure": {
         "address": 7,
-        "setpoint_high": 1000.0,
-        "setpoint_low": 0.0,
-        "gas_type": "Ar",
+        "setpoint_high": 900.0,
+        "setpoint_low": 800.0,
+        "gas_type": "N2",
         "pressure_unit": "mBar"
     },
     "pump_pressure": {
         "address": 6,
-        "setpoint_high": 750.06,
+        "setpoint_high": 999.99,
         "setpoint_low": 0.0,
         "gas_type": "N2",
-        "pressure_unit": "Torr"
+        "pressure_unit": "mBar"
     }
 }

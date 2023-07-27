@@ -89,7 +89,9 @@ class PiraniConfigGui(QWidget):
 
         # Calibrate gauge
         self.calibrate_button = QPushButton(self.parent.translator.translate("calibrate_gauge"))
+        self.calibrate_button.clicked.connect(self.calibrate_gauge)
         layout.addWidget(self.calibrate_button, 5, 0, 1, 2)
+
 
         # Gauge status bits
         self.status_bits_label = QLabel(self.parent.translator.translate("gauge_status_bits"))
@@ -109,6 +111,7 @@ class PiraniConfigGui(QWidget):
         self.confirm_button.clicked.connect(self.confirm)
         layout.addWidget(self.confirm_button, 8, 0, 1, 2)
 
+        layout.setColumnMinimumWidth(1,180)
         self.setLayout(layout)
         self.setFixedSize(self.sizeHint())  # Limit the window size to the size hint
 
@@ -140,7 +143,7 @@ class PiraniConfigGui(QWidget):
         setpoint_low = self.setpoint_low_spin.value() * conversion_factor
 
         # Update the maximum values for the setpoint spin boxes
-        max_value = 750.062 * self.conversion_factors[new_unit]
+        max_value = 851 * self.conversion_factors[new_unit]
         self.setpoint_high_spin.setMaximum(max_value)
         self.setpoint_low_spin.setMaximum(max_value)
 
@@ -163,3 +166,7 @@ class PiraniConfigGui(QWidget):
 
     def update_node_address_label(self):
         self.node_address_label.setText(self.parent.translator.translate("node_address", value=self.parent.config[self.key]["address"]))
+
+    
+    def calibrate_gauge(self):
+        self.parent.RS485.pirani[self.key].calibrate()
