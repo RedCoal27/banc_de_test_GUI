@@ -98,7 +98,5 @@ class MenuManager:
 
 
     def open_constant_dialog(self):
-        # Ici, vous pouvez passer les constantes actuelles au dialog
-        constants = {"test":1,"aaa":12,"aa3":12,"aa43":12,"BBB":12,"ZZZ":12}  # Remplacer par vos constantes
-        dialog = ConstantDialog(constants, self.parent)
+        dialog = ConstantDialog(self.parent)
         dialog.exec_()

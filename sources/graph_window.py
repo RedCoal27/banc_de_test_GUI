@@ -11,10 +11,13 @@ from time import sleep
 from internal.logger import Logger
 
 class GraphWindow(QMainWindow):
-    def __init__(self, parent):
+    def __init__(self, parent, state_up_key='ascent', state_down_key='descent'):
         super().__init__()
 
         self.parent = parent
+        self.state_up_key = state_up_key  # ou 'open'
+        self.state_down_key = state_down_key  # ou 'close'
+
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -41,7 +44,7 @@ class GraphWindow(QMainWindow):
         self.component_state = []
         self.cycle_durations = []
 
-        
+
         self.setCentralWidget(self.widget)
 
         self.setMinimumSize(750, 500)
@@ -97,9 +100,9 @@ class GraphWindow(QMainWindow):
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax1 = self.figure.add_subplot(211)  # the first subplot for the ascent times
-        self.ax1.set_title(self.parent.translator.translate('ascent_time'))
+        self.ax1.set_title(self.parent.translator.translate('time', state=self.state_up_key))
         self.ax2 = self.figure.add_subplot(212)  # the second subplot for the descent times
-        self.ax2.set_title(self.parent.translator.translate('descent_time'))
+        self.ax2.set_title(self.parent.translator.translate('time', state=self.state_down_key))
         self.figure.subplots_adjust(hspace=0.5)  # adjust vertical spacing between subplots
         self.toolbar = NavigationToolbar2QT(self.canvas, self)
 
@@ -112,18 +115,18 @@ class GraphWindow(QMainWindow):
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
         # Create min_val, max_val, and avg_val labels for both graphs
-        for label in ['min_val_ascent', 'max_val_ascent', 'avg_val_ascent','last_val_ascent']:
-            self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
-            self.labels[label].setFixedWidth(200)  # set a fixed width for the label
-            self.layouts['values'].addWidget(self.labels[label])
+        for label in ['min_val', 'max_val', 'avg_val', 'last_val']:
+            self.labels[label + '_ascent'] = QLabel(self.parent.translator.translate(label, state=self.state_up_key, value=0), self)
+            self.labels[label + '_ascent'].setFixedWidth(200)  # set a fixed width for the label
+            self.layouts['values'].addWidget(self.labels[label + '_ascent'])
         self.layouts['values'].addStretch(2)  # add stretch before the labels
 
-        for label in ['min_val_descent', 'max_val_descent', 'avg_val_descent','last_val_descent']:
-            self.labels[label] = QLabel(self.parent.translator.translate(label, value = 0), self)
-            self.labels[label].setFixedWidth(200)  # set a fixed width for the label
-            self.layouts['values'].addWidget(self.labels[label])
+        for label in ['min_val', 'max_val', 'avg_val', 'last_val']:
+            self.labels[label + '_descent'] = QLabel(self.parent.translator.translate(label, state=self.state_down_key, value=0), self)
+            self.labels[label + '_descent'].setFixedWidth(200)  # set a fixed width for the label
+            self.layouts['values'].addWidget(self.labels[label + '_descent'])
         self.layouts['values'].addStretch(1)  # add stretch after the labels
-        
+                
 
 
 
@@ -288,8 +291,8 @@ class GraphWindow(QMainWindow):
             # Update the graphs
             self.ax1.clear()
             self.ax2.clear()
-            self.ax1.set_title(self.parent.translator.translate('ascent_time'))  # reset title after clearing
-            self.ax2.set_title(self.parent.translator.translate('descent_time'))  # reset title after clearing
+            self.ax1.set_title(self.parent.translator.translate('time', state=self.state_up_key))  # reset title after clearing
+            self.ax2.set_title(self.parent.translator.translate('time', state=self.state_down_key))  # reset title after clearing
             self.ax1.step([i for i in range(len(self.cycle_durations[::2])+1)], [0]+[duration for duration in self.cycle_durations[::2]])  # plot ascent times in seconds
             self.ax1.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
             self.ax1.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
@@ -298,16 +301,16 @@ class GraphWindow(QMainWindow):
             self.ax2.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
 
             if self.cycle_durations[::2]:  # check if the list of ascent durations is not empty
-                self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val_ascent', value=f'{min(self.cycle_durations[::2]):.2f}'))
-                self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val_ascent', value=f'{max(self.cycle_durations[::2]):.2f}'))
-                self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val_ascent', value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
-                self.labels['last_val_ascent'].setText(self.parent.translator.translate('last_val_ascent', value=f'{self.cycle_durations[::2][-1]:.2f}'))
+                self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val', state=self.state_up_key, value=f'{min(self.cycle_durations[::2]):.2f}'))
+                self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val', state=self.state_up_key, value=f'{max(self.cycle_durations[::2]):.2f}'))
+                self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val', state=self.state_up_key, value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
+                self.labels['last_val_ascent'].setText(self.parent.translator.translate('last_val', state=self.state_up_key, value=f'{self.cycle_durations[::2][-1]:.2f}'))
             if self.cycle_durations[1::2]:  # check if the list of descent durations is not empty
-                self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val_descent', value=f'{min(self.cycle_durations[1::2]):.2f}'))
-                self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val_descent', value=f'{max(self.cycle_durations[1::2]):.2f}'))
-                self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val_descent', value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
-                self.labels['last_val_descent'].setText(self.parent.translator.translate('last_val_descent', value=f'{self.cycle_durations[1::2][-1]:.2f}'))
-            
+                self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val', state=self.state_down_key, value=f'{min(self.cycle_durations[1::2]):.2f}'))
+                self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val', state=self.state_down_key, value=f'{max(self.cycle_durations[1::2]):.2f}'))
+                self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val', state=self.state_down_key, value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
+                self.labels['last_val_descent'].setText(self.parent.translator.translate('last_val', state=self.state_down_key, value=f'{self.cycle_durations[1::2][-1]:.2f}'))
+
             self.canvas.draw()
 
         else:
@@ -327,7 +330,7 @@ class GraphWindow(QMainWindow):
         if self.parent.serial_reader.busy == False:
 
             self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
-            self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
+            self.parent.serial_reader.send_data(1,self.parent.cmdPORT)
             data = self.parent.serial_reader.wait_and_read_data(1)
             self.parent.serial_reader.busy = False # free the serial reader
             if len(self.component_state) == 0 or self.component_state[-1] == 1:  # if the component is up

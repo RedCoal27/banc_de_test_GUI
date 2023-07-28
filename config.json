@@ -1,7 +1,7 @@
 {
     "gui": {
         "lang": "fr",
-        "font_size": 8
+        "font_size": 10
     },
     "MFC1": {
         "size": 1000
@@ -10,7 +10,7 @@
         "size": 1000
     },
     "chamber_pressure": {
-        "address": 7,
+        "address": 10,
         "setpoint_high": 900.0,
         "setpoint_low": 800.0,
         "gas_type": "N2",
@@ -22,5 +22,15 @@
         "setpoint_low": 0.0,
         "gas_type": "N2",
         "pressure_unit": "mBar"
+    },
+    "constant": {
+        "timeout": {
+            "pump": 10,
+            "turbo": 10
+        },
+        "pressure_control": {
+            "pump": 1,
+            "turbo": 1
+        }
     }
 }

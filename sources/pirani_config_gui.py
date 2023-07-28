@@ -6,6 +6,7 @@ from internal.constant import PiraniConfig
 class NodeAddressWindow(QWidget):
     def __init__(self, parent):
         self.parent = parent #windows PiraniConfigGui
+
         self.key = parent.key
         self.main_parent = parent.parent #main objet (gui)
         super(NodeAddressWindow, self).__init__(None)

@@ -189,11 +189,11 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.44), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)
-
-        self.custom_widgets["turbo_pump_ch_gate_ch"] = GateCH((0.18,0.46), (-0.04,0.0),"turbo_pump_ch_gate", Cmd.RGAGate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self)
 
-        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", 25, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.46), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self)
+
+        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.RGAGate, sens='horizontal', parent=self)
 
 
 

@@ -1,5 +1,6 @@
 from scene.gate import *
 from graph_window import GraphWindow
+from PyQt5.QtWidgets import QMenu, QAction
 import math
 
 class GateCH(Gate):
@@ -7,10 +8,10 @@ class GateCH(Gate):
         super().__init__(pos, relative_pos, name, cmd, sens, parent)
         self.translator = parent.translator
         self.serial_reader = parent.serial_reader
-        self.circle.setRightClickFunction(self.open_windows)
+        self.circle.setRightClickFunction(self.on_right_click)
 
         # Initialize sensor states and sensor line
-        self.sensor_up = False
+        self.sensor_up = True
         self.sensor_down = True
         self.sensor_line = Line(0, 0, 0, 0, "#FF0000", 5)  # Using red for sensor line and a width of 2
         # Remove the original line from the scene and re-add it to make sure it's on top
@@ -28,9 +29,6 @@ class GateCH(Gate):
         """
         super().on_left_click()
 
-    def open_windows(self):
-        self.window = GraphWindow(self)
-        self.window.show()
 
     def update_DO(self, state):
         """
@@ -59,15 +57,44 @@ class GateCH(Gate):
         """
         offset = 0.0015 # Offset to compensate for the width of the line
         diag_length = (self.circle.radius) * math.sqrt(2)  # Calculate the length of the diagonal
-
+        print(self.sensor_up,self.sensor_down)
         if self.sensor_up and not self.sensor_down:
             # Draw vertical line
             self.sensor_line.set_line(self.scene, self.circle.center[0], self.circle.center[1]-self.circle.radius+offset, self.circle.center[0], self.circle.center[1]+self.circle.radius-offset)
         elif self.sensor_down and not self.sensor_up:
             # Draw horizontal line
             self.sensor_line.set_line(self.scene, self.circle.center[0]-self.circle.radius+offset, self.circle.center[1], self.circle.center[0]+self.circle.radius-offset, self.circle.center[1])
-        elif self.sensor_up == self.sensor_down:
+        elif self.sensor_up and self.sensor_down or not self.sensor_up and not self.sensor_down:
             # Draw diagonal line
             self.sensor_line.set_line(self.scene, self.circle.center[0]-diag_length/2, self.circle.center[1]-diag_length/2, self.circle.center[0]+diag_length/2, self.circle.center[1]+diag_length/2)
         else:
             self.sensor_line.hide()
+
+
+    def on_right_click(self, event):
+        contextMenu = QMenu()
+
+        sensorUpAction = QAction(f"Sensor Up: {'off' if self.sensor_up else 'on'}")
+        sensorUpAction.setEnabled(False)  # Make it non-clickable
+        contextMenu.addAction(sensorUpAction)
+
+        sensorDownAction = QAction(f"Sensor Down: {'off' if self.sensor_down else 'on'}")
+        sensorDownAction.setEnabled(False)  # Make it non-clickable
+        contextMenu.addAction(sensorDownAction)
+
+
+        cycleAction = QAction("Change State")
+        cycleAction.triggered.connect(self.on_left_click)
+        contextMenu.addAction(cycleAction)
+
+        changeStateAction = QAction("Cycle")
+        changeStateAction.triggered.connect(self.open_windows)
+        contextMenu.addAction(changeStateAction)
+
+        # Show the context menu.
+        contextMenu.exec_(event.screenPos())
+
+
+    def open_windows(self):
+        self.window = GraphWindow(self, state_up_key="opening", state_down_key="closing")
+        self.window.show()

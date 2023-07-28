@@ -72,8 +72,8 @@ class RS485:
             self.command(self.Command["change_unit"].format(unit=unit))
             self.command(self.Command["change_gas"].format(gas_type=gas_type))
 
-            print(self.command(self.Command["setpoint_high"].format(pressure=self.convert_to_exp_format(config["setpoint_high"]))))
-            print(self.command(self.Command["setpoint_low"].format(pressure=self.convert_to_exp_format(config["setpoint_low"]))))
+            self.command(self.Command["setpoint_high"].format(pressure=self.convert_to_exp_format(config["setpoint_high"])))
+            self.command(self.Command["setpoint_low"].format(pressure=self.convert_to_exp_format(config["setpoint_low"])))
 
             self.serial_reader.busy = False
 

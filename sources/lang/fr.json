@@ -29,6 +29,12 @@
     "on":"On",
     "off":"Off",
 
+    "interlock":"Interlock",
+    "roughing_pump_off": "Pompe primaire OFF",
+    "pump_pressure_high": "Pression de la pompe >100mT",
+    "chamber_open": "Chambre OUVERTE",
+    "chamber_pressure_high": "Pression de la chambre >100mT",
+
     "chamber":"Chambre",
     "change_state":"{state}",
     "cycle":"Cycle",
@@ -54,20 +60,20 @@
     "nupro_vent":"Nupro \nVent",
     "turbo_pump_rga_gate":"Iso \nRGA",
     "turbo_pump_rga_gate_p":"Iso \nRGA P",
-    "turbo_pump_ch_gate":"Gate \nTurbo",
+    "turbo_pump_gate":"Gate \nTurbo",
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
-    "ascent_time":"Temps Ascension",
-    "descent_time":"Temps Descente",
-    "min_val_ascent":"Val. Min. Ascension: {value}s",
-    "min_val_descent":"Val. Min. Descente: {value}s",
-    "max_val_ascent":"Val. Max. Ascension: {value}s",
-    "max_val_descent":"Val. Max. Descente: {value}s",
-    "avg_val_ascent":"Val. Moy. Ascension: {value}s",
-    "avg_val_descent":"Val. Moy. Descente: {value}s",
-    "last_val_ascent":"Val. Dern. Ascension: {value}s",
-    "last_val_descent":"Val. Dern. Descente: {value}s",
+
+    "time":"Temps {state}",
+    "min_val":"Min. {state}: {value}s",
+    "max_val":"Max. {state}: {value}s",
+    "avg_val":"Moy. {state}: {value}s",
+    "last_val":"Dernière {state}: {value}s",
+    "ascent":"Ascension",
+    "descent":"Descente",
+    "opening":"Ouverture",
+    "closing":"Fermeture",
 
     "pirani_config": "Configuration Pirani",
     "node_address": "Adresse du nœud: 0",
@@ -79,8 +85,11 @@
     "gauge_status_bits": "Bits de statut de la jauge: ",
     "gauge_sn": "Numéro de série de la jauge: ",
     "confirm": "Confirmer",
-    "only_one_pirani": "Ne configurez la Pirani qu'avec une seule connectée à la fois.",
+    "only_one_pirani": "Ne configurez la Pirani qu'avec une seule jauge connectée à la fois.",
     "enter_new_address": "Entrez la nouvelle adresse:",
     "new_address": "Nouvelle adresse:",
-    "confirm_button_clicked": "Bouton de confirmation cliqué"
+    "confirm_button_clicked": "Bouton de confirmation cliqué",
+
+    "timeout": "Délai d'attente",
+    "pressure_control": "Contrôle de pression"
 }

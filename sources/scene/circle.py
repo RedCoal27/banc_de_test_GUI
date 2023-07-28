@@ -74,17 +74,4 @@ class Circle(QGraphicsEllipseItem):
         Creates a custom context menu (right click menu) for the circle.
         """
         if self.right_click_function is not None:
-            contextMenu = QMenu()
-
-            if self.right_click_function is not None:
-                cycleAction = QAction("Change State")
-                cycleAction.triggered.connect(self.left_click_function)
-                contextMenu.addAction(cycleAction)
-
-            if self.right_click_function is not None:
-                changeStateAction = QAction("Cycle")
-                changeStateAction.triggered.connect(self.right_click_function)
-                contextMenu.addAction(changeStateAction)
-
-            # Show the context menu.
-            contextMenu.exec_(event.screenPos())
+            self.right_click_function(event)

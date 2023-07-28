@@ -1,39 +1,48 @@
 from typing import Any
-from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QSpinBox, QPushButton, QGridLayout
+from PyQt5.QtWidgets import QDialog, QLabel, QSpinBox, QPushButton, QGridLayout
+from PyQt5.QtCore import Qt
 
 class ConstantDialog(QDialog):
-    def __init__(self, constants, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+
+
         self.setWindowTitle('Constantes')
+
+
+        self.parent = parent
+        constants = self.parent.config["constant"]
 
         self.layout = QGridLayout()
         self.spin_boxes = {}
 
-        row = 0
-        for i, (const, value) in enumerate(constants.items()):
-            row = i // 5
-            col = i % 5
+        for i, (category, consts) in enumerate(constants.items()):
+            label = QLabel(self.parent.translator.translate(category))
+            label.setAlignment(Qt.AlignCenter)
+            self.layout.addWidget(label, 0, i*2, 1, 2)
 
-            label = QLabel(const)
-            spin_box = QSpinBox()
-            spin_box.setValue(value)
+            for j, (const, value) in enumerate(consts.items()):
+                const_label = QLabel(self.parent.translator.translate(const))
+                const_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                spin_box = QSpinBox()
+                spin_box.setValue(value)
 
-            self.layout.addWidget(label, row, col*2)
-            self.layout.addWidget(spin_box, row, col*2 + 1)
-            self.spin_boxes[const] = spin_box
+                self.layout.addWidget(const_label, j + 1, i*2)
+                self.layout.addWidget(spin_box, j + 1, i*2 + 1)
+                self.spin_boxes[(category, const)] = spin_box
+
 
         self.confirm_button = QPushButton('Confirmer')
         self.confirm_button.clicked.connect(self.confirm)
-        self.layout.addWidget(self.confirm_button, row + 1, 0, 1, 10)
+        self.layout.addWidget(self.confirm_button, len(max(constants.values(), key=len)) + 1, 0, 1, i*2 + 2)
 
         self.setLayout(self.layout)
+        self.setFixedSize(self.layout.sizeHint())
 
     def confirm(self):
-        new_constants = {const: spin_box.value() for const, spin_box in self.spin_boxes.items()}
-        # Ici, vous pouvez enregistrer les nouvelles constantes où vous voulez
-        # ...
-        self.close()
-
+        self.parent().config["constant"] = {(category, const): spin_box.value() for (category, const), spin_box in self.spin_boxes.items()}
+        self.parent().config.save_config()
 
 
 
@@ -51,7 +60,6 @@ class Cmd():
     turbo_pump_rga_gate = 16
     turbo_pump_rga_gate_p = 17
 
-    turbo_pump_ch_gate = 5 
     turbo_pump_ch_gate_p = 15
 
     iso_chamber = 14
@@ -88,10 +96,18 @@ class Cmd():
         Down = 2
 
     class RGAGate():
-        DO = 16
+        DO = 6 #CVD
         Port = MCP2_B #input port
-        Up = 1 #Open
-        Down = 2 #Close
+        Up = 4 #Open
+        Down = 8 #Close
+
+    class Interlock():
+        Port = MCP3_A
+        RoughingPumpOff = 1
+        PumpPressureHigh = 2
+        ChamberOpen = 4
+        ChamberPressureHigh = 8
+
 
         
 

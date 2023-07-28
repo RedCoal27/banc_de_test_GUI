@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QLineEdit, QHBoxLayout, QWidget, QSpinBox
-from PyQt5.QtGui import QPainterPath, QColor, QIntValidator
+from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QHBoxLayout, QWidget, QSpinBox, QVBoxLayout
+from PyQt5.QtGui import QPainterPath, QColor, QBrush, QPainter, QPixmap
 from PyQt5.QtCore import Qt, QSize
 
 class CustomWidget(QGraphicsWidget):
@@ -20,14 +20,16 @@ class CustomWidget(QGraphicsWidget):
         self.buttons = []
         self.spin_boxes = []
         self.unit_labels = []
+        self.indicators = []  # Create a new list for indicators
         self.color = color
         self.font_size = font_size
 
         self.layout = QGraphicsLinearLayout(Qt.Orientation.Vertical)  # type: ignore
         self.setLayout(self.layout)
 
-        self.layout.setSpacing(0)
+        self.layout.setSpacing(0)  # Set spacing to 0
         self.layout.setContentsMargins(2, 4, 2, 4)  # Add this line to remove margins
+
 
         #ratio = x_ratio, y_ratio, width_ratio, height_ratio
         self.position = pos
@@ -232,6 +234,98 @@ class CustomWidget(QGraphicsWidget):
                 # We found the button, so we can break the loop
                 break
 
+
+
+    def create_label_with_indicator(self, key, state=False, color="black", **kwargs):
+        """
+        Creates a label with an indicator and adds it to the widget.
+
+        Args:
+            key (str): The translation key for the label.
+            state (bool): The initial state of the indicator. Defaults to False.
+            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+        """
+        # Create the label as before
+        label_translate = {}
+        for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']: #argument du QLabel possible
+            if arg_name in kwargs:
+                label_translate[arg_name] = kwargs.pop(arg_name)
+
+        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label.setStyleSheet(f"background-color: transparent;color: {color};")
+        label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        label.setContentsMargins(0, 0, 0, 0)  # Set smaller margins for the unit QLabel
+
+        font = label.font()
+        font.setPointSizeF(self.font_size - 1)  # Reduce the font size
+        label.setFont(font)
+
+        # Create an indicator QLabel
+        indicator = QLabel()
+        indicator.setFixedSize(6, 6)  # Set a smaller fixed size for the indicator
+        indicator.setStyleSheet("background-color: transparent;")  # Set transparent background
+
+        # Create a QPixmap to draw the indicator
+        pixmap = QPixmap(indicator.size())
+        pixmap.fill(Qt.transparent)  # Fill with transparent color
+
+        # Create a QPainter to draw on the QPixmap
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)  # Enable antialiasing for a smoother circle
+
+        # Set the color based on the state
+        color = QColor("green") if state else QColor("red")
+        painter.setBrush(QBrush(color))
+
+        # Draw the circle
+        painter.drawEllipse(pixmap.rect())
+
+        # End the QPainter
+        painter.end()
+
+        # Set the QPixmap as the indicator QLabel's pixmap
+        indicator.setPixmap(pixmap)
+
+        # Create a QHBoxLayout to hold the indicator and the label
+        hbox = QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)  # Set smaller margins
+        hbox.addWidget(indicator)
+        hbox.addWidget(label)
+        hbox.addStretch(1)  # Add a stretchable space
+
+        # Create a QWidget to hold the QHBoxLayout
+        widget = QWidget()
+        widget.setLayout(hbox)
+        widget.setStyleSheet("background-color: transparent;")  # Set transparent background
+
+        # Create a QGraphicsProxyWidget to add the QWidget to the QGraphicsWidget
+        widget_proxy = QGraphicsProxyWidget(self)
+        widget_proxy.setWidget(widget)
+
+        # Add the QGraphicsProxyWidget to the layout
+        self.layout.addItem(widget_proxy)
+
+        # Store the indicator QLabel for later updates
+        self.labels.append((label, widget_proxy, key, kwargs))
+        self.indicators.append((indicator, state))  # Add the indicator to the new list
+
+
+    def update_indicator(self, indicator, state):
+        pixmap = QPixmap(indicator.size())
+        pixmap.fill(Qt.transparent)
+
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        color = QColor("green") if state else QColor("red")
+        painter.setBrush(QBrush(color))
+
+        painter.drawEllipse(pixmap.rect())
+
+        painter.end()
+
+        indicator.setPixmap(pixmap)
+        
+
     def paint(self, painter, option, widget):
         """
         Paints the widget.
@@ -295,8 +389,12 @@ class CustomWidget(QGraphicsWidget):
             font = unit_label[0].font()
             font.setPointSizeF(self.font_size)
             unit_label[0].setFont(font)
-
-
+            
+        for indicator, state in self.indicators:
+            # Resize the indicator
+            indicator.setFixedSize(int(8 * scale_factor), int(8 * scale_factor))  # Convert to int
+            # Update the indicator
+            self.update_indicator(indicator, state)
 
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()

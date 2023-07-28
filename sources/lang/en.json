@@ -13,7 +13,7 @@
     "SV":"Slit Valve",
     "do_up":"DO Up: {state}",
     "do_down":"DO Down: {state}",
-    "di_up":"DI UP: {state}",
+    "di_up":"DI Up: {state}",
     "di_down":"DI Down: {state}",
     "position":"Position: {state}",
     "p_home":"Position Home: {state}",
@@ -29,6 +29,12 @@
     "on":"On",
     "off":"Off",
     
+    "interlock":"Interlock",
+    "roughing_pump_off": "Roughing pump OFF",
+    "pump_pressure_high": "Pump Pressure >100mT",
+    "chamber_open": "Chamber OPEN",
+    "chamber_pressure_high": "Chamber Pressure >100mT",
+
     "chamber":"Chamber",
     "cycle":"Cycle",
     "change_state":"{state}",
@@ -54,20 +60,19 @@
     "nupro_vent":"Nupro \nVent",
     "turbo_pump_rga_gate":"Iso \nRGA",
     "turbo_pump_rga_gate_p":"Iso \nRGA P",
-    "turbo_pump_ch_gate":"Gate \nTurbo",
+    "turbo_pump_gate":"Gate \nTurbo",
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
-    "ascent_time":"Ascent Time",
-    "descent_time":"Descent Time",
-    "min_val_ascent":"Min. Val. Ascent: {value}s",
-    "min_val_descent":"Min. Val. Descent: {value}s",
-    "max_val_ascent":"Max. Val. Ascent: {value}s",
-    "max_val_descent":"Max. Val. Descent: {value}s",
-    "avg_val_ascent":"Avg. Val. Ascent: {value}s",
-    "avg_val_descent":"Avg. Val. Descent: {value}s",
-    "last_val_ascent":"Last Val. Ascent: {value}s",
-    "last_val_descent":"Last Val. Descent: {value}s",
+    "time":"{state} Time",
+    "min_val":"Min. {state}: {value}s",
+    "max_val":"Max. {state}: {value}s",
+    "avg_val":"Avg. {state}: {value}s",
+    "last_val":"Last {state}: {value}s",
+    "ascent":"Ascent",
+    "descent":"Descent",
+    "opening":"Opening",
+    "closing":"Closing",
 
     "pirani_config": "Pirani Config",
     "node_address": "Node Address: {value}",
@@ -82,5 +87,9 @@
     "only_one_pirani": "Only configure the Pirani with one connected at a time.",
     "enter_new_address": "Enter new address:",
     "new_address": "New address:",
-    "confirm_button_clicked": "Confirm button clicked"
+    "confirm_button_clicked": "Confirm button clicked",
+
+
+    "timeout": "Timeout",
+    "pressure_control": "Pressure Control"
 }

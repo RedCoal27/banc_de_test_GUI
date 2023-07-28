@@ -29,7 +29,7 @@ class SerialReader(QObject):
             if self.ser is not None and self.ser.port == port:
                 return
             try:
-                self.ser = Serial(port=port, baudrate=115200, timeout=0.5)
+                self.ser = Serial(port=port, baudrate=115200, timeout=0.3)
             except SerialException:
                 Logger.error(f"Error while connecting to serial port {port}.")
         else:
@@ -69,7 +69,7 @@ class SerialReader(QObject):
         """
         if self.ser is not None:
             try:
-                if until == "":
+                if until == b"":
                     data = self.ser.read(num_values)
                 else:
                     data = self.ser.read_until(until)
@@ -101,11 +101,13 @@ class SerialReaderThread(QThread):
         while True:
             if self.serial_reader.busy == False and self.serial_reader.ser is not None:
                 try:
+
                     self.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
                     self.serial_reader.send_data(1,0)
                     data = self.serial_reader.wait_and_read_data(4)
+                    print(data)
                     if data is not None and len(data) == 4:
-                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[0] & Cmd.WL2.Down)
+                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[Cmd.WL2.Port] & Cmd.WL2.Down)
                         self.custom_widgets["WL3"].update_DI(data[0] & Cmd.WL3.Up, data[0] & Cmd.WL3.Down)
                         self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
                         self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
@@ -114,6 +116,14 @@ class SerialReaderThread(QThread):
                         self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
                         self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
                         self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
+
+                        self.custom_widgets["turbo_pump_gate"].update_sensors(data[1] & Cmd.RGAGate.Up, data[1] & Cmd.RGAGate.Down)
+
+                        self.custom_widgets["interlock"].update_interlock([data[2] & Cmd.Interlock.RoughingPumpOff,
+                                                                            data[2] & Cmd.Interlock.PumpPressureHigh,
+                                                                            data[2] & Cmd.Interlock.ChamberOpen,
+                                                                            data[2] & Cmd.Interlock.ChamberPressureHigh
+                                                                            ])
 
                     self.serial_reader.send_data(6,4)
                     data = None
@@ -131,7 +141,8 @@ class SerialReaderThread(QThread):
                         data = self.RS485.pirani[key].read_pressure()
                         if len(data)==2:
                             self.custom_widgets[key].update_pressure(data)
-                except:
+                except Exception as e:
+                    print(e)
                     pass
 
                 self.serial_reader.busy = False # free the serial reader

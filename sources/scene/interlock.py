@@ -6,11 +6,11 @@ from internal.custom_widget import CustomWidget
 
 class Interlock(CustomWidget):
     def __init__(self, pos , key , parent):
-        ratio = (0.15, 0.15)
+        ratio = (0.15, 0.10)
         super().__init__(parent.translator, pos, ratio, "#FFD966")
+        self.states = []
         self.create_labels(key)
         
-
     def create_labels(self,key):
         """
         Creates labels for the FourWay widget.
@@ -19,10 +19,18 @@ class Interlock(CustomWidget):
         - key: a string representing the key of the widget
         """
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        self.create_label("")
-        self.create_label("Rouphing pump OFF")
-        self.create_label("Pump Pressure >100mT")
-        self.create_label("Chamber OPEN")
-        self.create_label("Chamber Pressure >100mT")
-        self.create_label("")
+        self.create_label_with_indicator("roughing_pump_off")
+        self.create_label_with_indicator("pump_pressure_high")
+        self.create_label_with_indicator("chamber_open")
+        self.create_label_with_indicator("chamber_pressure_high")
 
+    def update_interlock(self, states):
+        """
+        Updates the labels of the FourWay widget.
+
+        Args:
+        - states: liste of booleans representing the state of the indicators
+        """
+        states = [1,0,1,0]
+        for indicator, _ in self.indicators:
+            self.update_indicator(indicator, states.pop(0))

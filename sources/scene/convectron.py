@@ -18,6 +18,7 @@ class Convectron(CustomWidget):
         - key: a string representing the key of the widget
         - parent: a parent widget (optional)
         """
+        self.pirani_config_gui = None
         self.parent = parent
         self.key = key
         ratio = (0.12, 0.12)

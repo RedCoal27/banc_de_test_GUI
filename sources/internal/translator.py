@@ -25,7 +25,7 @@ class Translator:
             Logger.error(f"Error while loading translations: {e}")
             sys.exit(1)
         Logger.info("Translations loaded.")
-
+        
     def translate(self, key, **kwargs):
         for k, v in kwargs.items():
             kwargs[k] = self.translate(v)
