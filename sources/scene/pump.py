@@ -9,12 +9,12 @@ class Pump(CustomWidget):
     def __init__(self, pos, cmd, key , parent):
         ratio = (0.1, 0.14)
         self.serial_reader = parent.serial_reader
-        self.state = False
+        self.state = True
         self.cmd = cmd
         self.key = key
         super().__init__(parent.translator, pos, ratio, "#4472C4")
         self.create_labels(key)
-        self.create_button("change_state", self.click_DO, state = "off")
+        self.create_button("set_state", self.click_DO, state = "off")
         self.update_DO()
         
 
@@ -52,7 +52,7 @@ class Pump(CustomWidget):
 
             self.serial_reader.write_data(self.cmd, not self.state)
             self.update_label('cmd', state = "on" if self.state else "off")
-            self.update_button('change_state', state = "on" if self.state else "off")
+            self.update_button("set_state", state = "on" if self.state else "off")
 
             Logger.debug(f"{self.key} is turn {'on' if self.state else 'off'}")
 

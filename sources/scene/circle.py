@@ -28,17 +28,16 @@ class Circle(QGraphicsEllipseItem):
         self.right_click_function = right_click_function
 
 
-    def set_pos_size(self, width, height, scale_factor):
+    def set_pos_size(self, width, height):
         """
         Sets the position and size of the circle.
 
         Args:
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
-            scale_factor (float): The scale factor to be applied to the circle's pen width.
         """
         self.setRect(self.center[0] * width - self.radius * width, self.center[1] * height - self.radius * height*1.2, self.radius * 2 * width, self.radius * 2 * height*1.2)
-        self.setPen(QPen(QColor(self.color), 2 * scale_factor))
+        self.setPen(QPen(QColor(self.color), 2))
         self.setBrush(QBrush(Qt.GlobalColor.white))
 
     def hoverEnterEvent(self, event):

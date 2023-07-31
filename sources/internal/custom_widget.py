@@ -316,7 +316,7 @@ class CustomWidget(QGraphicsWidget):
 
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.Antialiasing)
-        color = QColor("green") if state else QColor("red")
+        color = QColor("red") if state else QColor("green")
         painter.setBrush(QBrush(color))
 
         painter.drawEllipse(pixmap.rect())
@@ -332,8 +332,6 @@ class CustomWidget(QGraphicsWidget):
 
         Args:
             painter (QPainter): The painter object to use for painting.
-            option: Unused.
-            widget: Unused.
         """
         path = QPainterPath()
         path.addRoundedRect(self.rect(), 6, 6)
@@ -358,7 +356,7 @@ class CustomWidget(QGraphicsWidget):
         self.font_size = size
 
 
-    def set_pos_size(self,width, height,scale_factor):
+    def set_pos_size(self,width, height):
         """
         Sets the position and size of the widget.
 
@@ -392,7 +390,7 @@ class CustomWidget(QGraphicsWidget):
             
         for indicator, state in self.indicators:
             # Resize the indicator
-            indicator.setFixedSize(int(8 * scale_factor), int(8 * scale_factor))  # Convert to int
+            indicator.setFixedSize(8, 8)  # Convert to int
             # Update the indicator
             self.update_indicator(indicator, state)
 

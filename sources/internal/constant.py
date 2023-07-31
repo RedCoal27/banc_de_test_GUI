@@ -103,10 +103,10 @@ class Cmd():
 
     class Interlock():
         Port = MCP3_A
-        RoughingPumpOff = 1
-        PumpPressureHigh = 2
-        ChamberOpen = 4
-        ChamberPressureHigh = 8
+        RoughingPumpOff = 2
+        PumpPressureHigh = 8
+        ChamberOpen = 1
+        ChamberPressureHigh = 4
 
 
         

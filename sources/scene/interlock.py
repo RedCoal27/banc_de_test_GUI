@@ -31,6 +31,5 @@ class Interlock(CustomWidget):
         Args:
         - states: liste of booleans representing the state of the indicators
         """
-        states = [1,0,1,0]
         for indicator, _ in self.indicators:
             self.update_indicator(indicator, states.pop(0))

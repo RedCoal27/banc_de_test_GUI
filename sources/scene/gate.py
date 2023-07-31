@@ -39,7 +39,7 @@ class Gate():
         self.scene = parent.scene
         self.sens = sens
         self.key = key
-        self.state = True
+        self.state = False
         self.cmd = cmd
 
         self.parent = parent
@@ -94,8 +94,8 @@ class Gate():
             self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
         
         if isinstance(self.cmd, int):
-            self.parent.serial_reader.write_data(self.cmd, not self.state)
+            self.parent.serial_reader.write_data(self.cmd, self.state)
         else:
-            self.parent.serial_reader.write_data(self.cmd.DO, not self.state)
+            self.parent.serial_reader.write_data(self.cmd.DO, self.state)
 
         Logger.debug(f"Gate {self.key} is set to {self.state}")

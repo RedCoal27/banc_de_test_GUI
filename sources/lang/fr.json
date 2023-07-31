@@ -35,8 +35,9 @@
     "chamber_open": "Chambre OUVERTE",
     "chamber_pressure_high": "Pression de la chambre >100mT",
 
+    "cycles":"Nb de cycles:",
     "chamber":"Chambre",
-    "change_state":"{state}",
+    "set_state":"{state}",
     "cycle":"Cycle",
     "pressure":"Pression: {value}{unit}",
     "offset":"Offset",
@@ -64,6 +65,9 @@
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
+    "change_state":"Changer l'état",
+    "sensor_up":"Capteur Haut",
+    "sensor_down":"Capteur Bas",
 
     "time":"Temps {state}",
     "min_val":"Min. {state}: {value}s",
@@ -76,7 +80,7 @@
     "closing":"Fermeture",
 
     "pirani_config": "Configuration Pirani",
-    "node_address": "Adresse du nœud: 0",
+    "node_address": "Adresse du nœud: {value}",
     "set_node_address": "Définir l'adresse du nœud",
     "setpoint_high": "Point de consigne haut: ",
     "setpoint_low": "Point de consigne bas: ",

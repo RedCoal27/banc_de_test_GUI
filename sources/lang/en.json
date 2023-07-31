@@ -37,7 +37,7 @@
 
     "chamber":"Chamber",
     "cycle":"Cycle",
-    "change_state":"{state}",
+    "set_state":"{state}",
     "pressure":"Pressure: {value}{unit}",
     "offset":"Offset",
     "size":"Size: {value} {unit}",
@@ -64,6 +64,11 @@
     "turbo_pump_ch_gate_p":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
+    "change_state":"Change State",
+    "sensor_up":"Sensor Up",
+    "sensor_down":"Sensor Down",
+
+    "cycles": "Number of cycles:",
     "time":"{state} Time",
     "min_val":"Min. {state}: {value}s",
     "max_val":"Max. {state}: {value}s",

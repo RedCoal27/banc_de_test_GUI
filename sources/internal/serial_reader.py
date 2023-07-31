@@ -1,7 +1,7 @@
 from serial import Serial, SerialException
 from serial.tools.list_ports import comports
 from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import QThread,pyqtSignal,QObject
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, QTimer
 
 from internal.logger import Logger
 from internal.constant import *
@@ -107,30 +107,30 @@ class SerialReaderThread(QThread):
                     data = self.serial_reader.wait_and_read_data(4)
                     print(data)
                     if data is not None and len(data) == 4:
-                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[Cmd.WL2.Port] & Cmd.WL2.Down)
+                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[0] & Cmd.WL2.Down)
                         self.custom_widgets["WL3"].update_DI(data[0] & Cmd.WL3.Up, data[0] & Cmd.WL3.Down)
                         self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
                         self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
-
-
+                        
                         self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
                         self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
                         self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
 
                         self.custom_widgets["turbo_pump_gate"].update_sensors(data[1] & Cmd.RGAGate.Up, data[1] & Cmd.RGAGate.Down)
 
+                        
                         self.custom_widgets["interlock"].update_interlock([data[2] & Cmd.Interlock.RoughingPumpOff,
                                                                             data[2] & Cmd.Interlock.PumpPressureHigh,
                                                                             data[2] & Cmd.Interlock.ChamberOpen,
                                                                             data[2] & Cmd.Interlock.ChamberPressureHigh
                                                                             ])
+                        QTimer.singleShot(0, self.parent.update_AI)
 
                     self.serial_reader.send_data(6,4)
                     data = None
                     data = self.serial_reader.wait_and_read_data(until='\n'.encode())
                     if data is not None and len(data) > 0:
                         data = data.decode().strip().split(' ')
-
                         self.custom_widgets["MFC1"].update_AI(data[0])
                         self.custom_widgets["MFC2"].update_AI(data[1])
                         self.custom_widgets["baratron1"].update_AI(data[2])
@@ -142,7 +142,7 @@ class SerialReaderThread(QThread):
                         if len(data)==2:
                             self.custom_widgets[key].update_pressure(data)
                 except Exception as e:
-                    print(e)
+                    print("Serial Reader:",e)
                     pass
 
                 self.serial_reader.busy = False # free the serial reader

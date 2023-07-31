@@ -73,8 +73,7 @@ class MainWindow(QMainWindow):
 
         #set the minimum size to 3/4 of the screen
         screen_size = QGuiApplication.primaryScreen().availableSize()
-        self.setMinimumSize(int(screen_size.width()*3/4), int(screen_size.height()*3/4))
-
+        self.setMinimumSize(int(screen_size.width()*8.8/10), int(screen_size.height()*9/10))
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -82,7 +81,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(self.icon)
 
-        self.resize(800, 600)
+        # self.resize(screen_size.width()- 50, screen_size.height() - 50)
 
         self.menu_manager.change_font_size(self.config["gui"]["font_size"])
 
@@ -193,12 +192,12 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.46), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self)
 
-        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.RGAGate, sens='horizontal', parent=self)
+        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self)
 
 
 
-
-
+    def update_AI(self):#certains éléments comme les lignes nécéssit d'être tracé uniquement depuis le thread principale
+        self.custom_widgets["turbo_pump_gate"].update_sensor_line()
 
 
     def resize_widgets(self):
@@ -209,8 +208,7 @@ class MainWindow(QMainWindow):
         """
         screen_number = QApplication.desktop().screenNumber(self)
         screen = QGuiApplication.screens()[screen_number]
-        dpi = screen.logicalDotsPerInch()
-        scale_factor = dpi / 96.0 
+
         # Get current dimensions
         width = self.width()
         height = self.height()
@@ -226,7 +224,7 @@ class MainWindow(QMainWindow):
         # Resize custom widgets
         for item in self.scene.items():
             if isinstance(item, CustomWidget) or isinstance(item, Line) or isinstance(item, Circle):
-                item.set_pos_size(width, height, scale_factor)
+                item.set_pos_size(width, height)
 
 
 
@@ -248,6 +246,8 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, False) 
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, False) 
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

@@ -330,7 +330,7 @@ class GraphWindow(QMainWindow):
         if self.parent.serial_reader.busy == False:
 
             self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
-            self.parent.serial_reader.send_data(1,self.parent.cmdPORT)
+            self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
             data = self.parent.serial_reader.wait_and_read_data(1)
             self.parent.serial_reader.busy = False # free the serial reader
             if len(self.component_state) == 0 or self.component_state[-1] == 1:  # if the component is up
@@ -363,8 +363,8 @@ class GraphWindow(QMainWindow):
         with open(path, 'w', newline='') as file:
             writer = csv.writer(file, delimiter=';')
             writer.writerow(['Cycle Number', 'Ascent Time', 'Descent Time'])
-            ascent_times = cycle_durations[::2]
-            descent_times = cycle_durations[1::2]
+            ascent_times = cycle_durations[1::2]
+            descent_times = cycle_durations[::2]
             for i in range(len(ascent_times)):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
 

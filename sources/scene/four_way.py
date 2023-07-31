@@ -55,7 +55,7 @@ class FourWay(CustomWidget):
         """
         Creates buttons for the FourWay widget.
         """
-        self.create_button("change_state", self.click_DO, state = "up")
+        self.create_button("set_state", self.click_DO, state = "up")
         self.create_button("cycle", self.open_windows)
 
     def update_DI(self, up, down):
@@ -83,7 +83,7 @@ class FourWay(CustomWidget):
             self.serial_reader.write_data(self.cmd.DO, not self.state)
             self.update_label('do_up', state = "false" if self.state else "true")
             self.update_label('do_down', state = "true" if self.state else "false")
-            self.update_button('change_state', state = "down" if self.state else "up")
+            self.update_button("set_state", state = "down" if self.state else "up")
 
             Logger.debug(f"{self.key}{self.FourWay_number} is set to {'up' if self.state else 'down'}")
 
