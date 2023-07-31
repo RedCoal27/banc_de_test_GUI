@@ -23,14 +23,51 @@
         "gas_type": "N2",
         "pressure_unit": "mBar"
     },
-    "constant": {
-        "timeout": {
-            "pump": 10,
-            "turbo": 10
+    "constants": [
+        {
+            "name": "pressure_control",
+            "values": {
+                "timeout_turbo_on": {
+                    "value": 16,
+                    "unit": "s",
+                    "tooltip": "timeout_turbo_on_tooltip"
+                }
+            }
         },
-        "pressure_control": {
-            "pump": 1,
-            "turbo": 1
+        {
+            "name": "pressure_control",
+            "values": {
+                "rouging_pump_base_pressure": {
+                    "value": 1,
+                    "unit": "mTorr",
+                    "tooltip": "rouging_pump_base_pressure_tooltip"
+                },
+                "timeout_roughing_pump": {
+                    "value": 3,
+                    "unit": "s"
+                },
+                "chamber_pressure_start_turbo": {
+                    "value": 5,
+                    "unit": "mTorr"
+                },
+                "timeout_chamber_pressure": {
+                    "value": 1,
+                    "unit": "s"
+                }
+            }
+        },
+        {
+            "name": "cycle",
+            "values": {
+                "tempo_high": {
+                    "value": 2,
+                    "unit": "s"
+                },
+                "tempo_low": {
+                    "value": 2,
+                    "unit": "s"
+                }
+            }
         }
-    }
+    ]
 }

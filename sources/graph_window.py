@@ -18,6 +18,8 @@ class GraphWindow(QMainWindow):
         self.state_up_key = state_up_key  # ou 'open'
         self.state_down_key = state_down_key  # ou 'close'
 
+        self.tempo_high = self.parent.config.get_constant_value("tempo_high")
+        self.tempo_low = self.parent.config.get_constant_value("tempo_low")
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -127,9 +129,6 @@ class GraphWindow(QMainWindow):
             self.layouts['values'].addWidget(self.labels[label + '_descent'])
         self.layouts['values'].addStretch(1)  # add stretch after the labels
                 
-
-
-
         self.values_widget = QWidget()  # create a new widget for the values
         self.values_widget.setLayout(self.layouts['values'])  # set the layout of the widget
         self.values_widget.setFixedWidth(self.values_widget.sizeHint().width())  # set the widget to its preferred width

@@ -19,13 +19,6 @@ class Config:
         except FileNotFoundError:
             Logger.error(f"Could not find config file config.json")
             sys.exit(1)
-                    
-    # def edit_config(self, key, value):
-    #     self.value[key] = value
-    #     #save json
-    #     with open(self.path, "w", encoding="utf-8") as f:
-    #         json.dump(self.value, f, indent=4) 
-    #     Logger.info(f"Edited config file: {key} = {value}")
 
     def save_config(self):
         with open(self.path, "w", encoding="utf-8") as f:
@@ -35,6 +28,9 @@ class Config:
 
     def __getitem__(self, key):
         return self.value[key]
-    
 
-
+    def get_constant_value(self, key):
+        for constant in self.value["constants"]:
+            if key in constant["values"]:
+                return constant["values"][key]["value"]
+        raise KeyError(f"Key {key} not found in constants.")

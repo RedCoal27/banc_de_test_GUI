@@ -35,7 +35,6 @@
     "chamber_open": "Chambre OUVERTE",
     "chamber_pressure_high": "Pression de la chambre >100mT",
 
-    "cycles":"Nb de cycles:",
     "chamber":"Chambre",
     "set_state":"{state}",
     "cycle":"Cycle",
@@ -69,6 +68,7 @@
     "sensor_up":"Capteur Haut",
     "sensor_down":"Capteur Bas",
 
+    "cycles":"Nb de cycles:",
     "time":"Temps {state}",
     "min_val":"Min. {state}: {value}s",
     "max_val":"Max. {state}: {value}s",
@@ -94,6 +94,16 @@
     "new_address": "Nouvelle adresse:",
     "confirm_button_clicked": "Bouton de confirmation cliqué",
 
-    "timeout": "Délai d'attente",
-    "pressure_control": "Contrôle de pression"
+    "pressure_control": "Contrôle de pression",
+    "timeout_turbo_on": "Délai d'attente turbo ON:",
+    "timeout_turbo_on_tooltip":"Temps max apres avoir démarré la turbo et detection turbo at speed signal",
+
+    "rouging_pump_base_pressure": "Pression de base de la pompe primaire",
+    "rouging_pump_base_pressure_tooltip":"En mode automatique pression  a partir de laquelle on peut ouvrir  ISO RGA , ISO turbo, iso chambre",
+    "timeout_roughing_pump":"Délai d'attente pompe primaire",
+    "chamber_pressure_start_turbo":"Pression démarrage turbo",
+    "timeout_chamber_pressure":"Délai d'attente pression chambre",
+
+    "tempo_high":"Tempo haut",
+    "tempo_low":"Tempo bas"
 }
