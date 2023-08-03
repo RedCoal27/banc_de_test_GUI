@@ -13,7 +13,7 @@ class GateCH(Gate):
         # Initialize sensor states and sensor line
         self.sensor_up = True
         self.sensor_down = True
-        self.sensor_line = Line(0, 0, 0, 0, "#FF0000", 7)  # Using red for sensor line and a width of 7
+        self.sensor_line = Line(0, 0, 0, 0, "#00FF00", 7)  # Using red for sensor line and a width of 7
         # Remove the original line from the scene and re-add it to make sure it's on top
         self.scene.removeItem(self.line)
         self.scene.addItem(self.sensor_line)

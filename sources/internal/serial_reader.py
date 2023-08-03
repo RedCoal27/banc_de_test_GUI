@@ -13,10 +13,12 @@ import time
 class SerialReader(QObject):
     error_occurred = pyqtSignal(str, str,  str) 
 
-    def __init__(self, translator):
+    def __init__(self, parent):
         super().__init__()
         self.ser = None
-        self.translator = translator
+        self.translator = parent.translator
+        self.error_occurred.connect(parent.show_error_message)
+
         self.busy = False 
         self.set_com_port(self.get_available_com_ports()[0] if self.get_available_com_ports() else None)
 
@@ -34,7 +36,9 @@ class SerialReader(QObject):
                 Logger.error(f"Error while connecting to serial port {port}.")
         else:
             Logger.warning("No COM port selected.")
-            self.error_occurred.emit("warning", "serial_port_disconnected", port)
+            QMessageBox.warning(None, self.translator.translate("warning"), self.translator.translate("no_com_port"))
+
+
 
     def float_to_bytes(self, f):
         # Convertir le float en bytes en little-endian
@@ -112,7 +116,7 @@ class SerialReaderThread(QThread):
                         self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
                         self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
                         
-                        self.custom_widgets["roughing_pump"].update_DI(data[1] & 128)
+                        self.custom_widgets["roughing_pump"].update_DI(data[2] & 2)
                         self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
                         self.custom_widgets["turbo_pump_ch"].update_DI(data[1] & 32)
 

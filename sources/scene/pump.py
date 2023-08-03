@@ -12,7 +12,7 @@ class Pump(CustomWidget):
         self.state = True
         self.cmd = cmd
         self.key = key
-        super().__init__(parent.translator, pos, ratio, "#4472C4")
+        super().__init__(parent.translator, pos, ratio, "#FF0000")
         self.create_labels(key)
         self.create_button("set_state", self.click_DO, state = "off")
         self.update_DO()
@@ -37,7 +37,7 @@ class Pump(CustomWidget):
         Args:
         - status: a boolean representing the state of the status DI
         """
-        self.update_label('status', state = "false" if status else "true")
+        self.update_label('status', state = "slow" if status else "at_speed")
 
 
     def update_DO(self, new_state = None):

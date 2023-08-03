@@ -27,7 +27,7 @@ class MFC(CustomWidget):
         self.create_label_with_spin_box("setpoint", initial_value=0, unit="sccm", function=self.update_AO)
         self.create_label("actual", value = "0")
         self.create_label_with_spin_box("offset", unit="sccm", initial_value=0, min_value = -100, max_value=100, function=self.update_offset)
-        self.create_label("size", value = self.parent.config[key]["size"], unit="sccm")
+        self.create_label("size", value = self.parent.config.get_constant_value(key), unit="sccm")
 
 
     def update_AI(self, value):

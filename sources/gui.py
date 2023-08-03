@@ -36,10 +36,14 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.config = Config()
+        self.config = Config(self)
         self.translator = Translator(self.config)
         self.translator.load_translations()
-        self.serial_reader = SerialReader(self.translator)
+
+ 
+        self.serial_reader = SerialReader(self)
+
+        
         self.RS485 = RS485(self)
 
         self.custom_widgets = {}
@@ -57,7 +61,7 @@ class MainWindow(QMainWindow):
 
         self.thread = SerialReaderThread(self)  # type: ignore
         self.thread.start()
-        self.serial_reader.error_occurred.connect(self.show_error_message)
+
 
 
     def show_error_message(self, title, message, port):
@@ -73,7 +77,7 @@ class MainWindow(QMainWindow):
 
         #set the minimum size to 3/4 of the screen
         screen_size = QGuiApplication.primaryScreen().availableSize()
-        self.setMinimumSize(int(screen_size.width()*8.8/10), int(screen_size.height()*9/10))
+        self.setMinimumSize(int(screen_size.width()*8.8/10), int(screen_size.height()*8.8/10))
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
 
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -81,7 +85,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(self.icon)
 
-        # self.resize(screen_size.width()- 50, screen_size.height() - 50)
+        self.showMaximized()
 
         self.menu_manager.change_font_size(self.config["gui"]["font_size"])
 
@@ -122,11 +126,11 @@ class MainWindow(QMainWindow):
         self.scene.addItem(Line(0.61, 0.09, 0.99, 0.09, "#4472C4")) # Numpro Vent
 
 
-        self.scene.addItem(Line(0.07, 0.39, 0.07, 0.77, "#4472C4")) # Turbo Pump RGA
-        self.scene.addItem(Line(0.07, 0.39, 0.24, 0.39, "#4472C4")) # Turbo Pump RGA
+        self.scene.addItem(Line(0.07, 0.28, 0.07, 0.77, "#4472C4")) # Turbo Pump RGA
+        self.scene.addItem(Line(0.07, 0.28, 0.24, 0.28, "#4472C4")) # Turbo Pump RGA
 
-        self.scene.addItem(Line(0.18, 0.42, 0.18, 0.77, "#4472C4")) # Turbo Pump CH
-        self.scene.addItem(Line(0.18, 0.42, 0.24, 0.42, "#4472C4")) # Turbo Pump CH
+        self.scene.addItem(Line(0.18, 0.35, 0.18, 0.77, "#4472C4")) # Turbo Pump CH
+        self.scene.addItem(Line(0.18, 0.35, 0.24, 0.35, "#4472C4")) # Turbo Pump CH
 
         self.scene.addItem(Line(0.07, 0.77, 0.38, 0.77, "#4472C4")) # Pump Pressure
 
@@ -186,11 +190,11 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["N2"] = Label((0.95,0.11),(0.02, 0.02),"N2", parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.44), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.40), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)
         self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self)
 
-        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.46), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.43), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self)
 
         self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self)
 

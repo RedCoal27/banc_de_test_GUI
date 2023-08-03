@@ -2,6 +2,8 @@ import json
 import sys
 import os
 
+import time
+
 from internal.logger import Logger
 
 class Translator:
@@ -9,6 +11,7 @@ class Translator:
         self.translations = {
             "en": {},
             "fr": {},
+            "gilles":{},
         }
         self.current_language = config["gui"]["lang"]
         
@@ -16,6 +19,7 @@ class Translator:
     def load_translations(self):
         base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         parent_path = os.path.dirname(base_path)
+        #print list of files in the directory
         try:
             for language in self.translations:
                 lang_path = os.path.join(parent_path, 'lang', f"{language}.json")
@@ -23,6 +27,7 @@ class Translator:
                     self.translations[language] = json.load(f)
         except FileNotFoundError as e:
             Logger.error(f"Error while loading translations: {e}")
+            time.sleep(1000)
             sys.exit(1)
         Logger.info("Translations loaded.")
         

@@ -5,8 +5,9 @@ import os
 from internal.logger import Logger
 
 class Config:
-    def __init__(self):
+    def __init__(self,parent):
         self.value = {}
+        self.parent = parent
         self.path = "config.json"
         self.load_translations()
 
@@ -25,6 +26,7 @@ class Config:
             json.dump(self.value, f, indent=4) 
         Logger.info(f"Saved config file")
         Logger.debug(f"Config file set to :{self.value}")
+        self.update_text()
 
     def __getitem__(self, key):
         return self.value[key]
@@ -34,3 +36,7 @@ class Config:
             if key in constant["values"]:
                 return constant["values"][key]["value"]
         raise KeyError(f"Key {key} not found in constants.")
+
+    def update_text(self):
+        self.parent.custom_widgets["MFC1"].update_label("size", value = self.get_constant_value("MFC1"), unit="sccm")
+        self.parent.custom_widgets["MFC2"].update_label("size", value = self.get_constant_value("MFC2"), unit="sccm")

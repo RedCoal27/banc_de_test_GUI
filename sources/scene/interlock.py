@@ -19,7 +19,7 @@ class Interlock(CustomWidget):
         - key: a string representing the key of the widget
         """
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        self.create_label_with_indicator("roughing_pump_off")
+        self.create_label_with_indicator("roughing_pump_state")
         self.create_label_with_indicator("pump_pressure_high")
         self.create_label_with_indicator("chamber_open")
         self.create_label_with_indicator("chamber_pressure_high")

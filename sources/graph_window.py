@@ -15,11 +15,13 @@ class GraphWindow(QMainWindow):
         super().__init__()
 
         self.parent = parent
+        self.main_parent = parent.parent
+
         self.state_up_key = state_up_key  # ou 'open'
         self.state_down_key = state_down_key  # ou 'close'
 
-        self.tempo_high = self.parent.config.get_constant_value("tempo_high")
-        self.tempo_low = self.parent.config.get_constant_value("tempo_low")
+        self.tempo_high = self.main_parent.config.get_constant_value("tempo_high")
+        self.tempo_low = self.main_parent.config.get_constant_value("tempo_low")
 
         # Initialize widget dictionaries
         self.labels = {}
@@ -60,7 +62,7 @@ class GraphWindow(QMainWindow):
 
 
         self.setWindowIcon(self.parent.parent.icon)
-        self.resize(800, 600)
+        self.resize(900, 700)
 
 
     def create_top_widgets(self):
@@ -201,7 +203,7 @@ class GraphWindow(QMainWindow):
             
         else:
             Logger.info(f"Starting the cycles with {self.edits['cycle'].value()} cycles, filename: {self.edits['CSV File'].text()}")
-            self.cycle_count = 1  # initialize cycle counter
+            self.cycle_count = 0  # initialize cycle counter
             self.starting_time = QDateTime.currentMSecsSinceEpoch()  # initialize starting time
             self.time_data = []
             self.component_state = []
@@ -220,6 +222,7 @@ class GraphWindow(QMainWindow):
         else:
             QTimer.singleShot(100, self.start_cycle)
 
+
     def stop_cycle(self):
         if self.timer.isActive():
             self.timer.stop()
@@ -233,14 +236,8 @@ class GraphWindow(QMainWindow):
         # Start a cycle
         self.deactivate_component()  # activate component
         self.component_state.append(0)
-        # Record the start time of the cycle
-        start_time = QDateTime.currentMSecsSinceEpoch()/1000
-        self.time_data.append(start_time)
-
-        self.sensor_check_start_time = start_time # initialize sensor check start time
+        self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch()/1000 # initialize sensor check start time
         self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
-        self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
-
 
     def on_timer(self):
         # This method is called when the 15-second timer expires
@@ -248,6 +245,8 @@ class GraphWindow(QMainWindow):
         self.sensor_check_timer.stop()  # stop checking the sensor
         self.start_button.setText(self.parent.translator.translate('start'))
         self.edits['status'].setText('error')  # update status to show that the sensor was not reached
+
+        
 
     def check_sensor(self):
         # This method is called every 25 ms to check the sensor
@@ -257,66 +256,77 @@ class GraphWindow(QMainWindow):
 
             # Record the time the sensor was reached
             sensor_reached_time = QDateTime.currentMSecsSinceEpoch()/1000
-            self.time_data.append(sensor_reached_time)  # record the time in seconds
+            self.time_data.append(sensor_reached_time - self.sensor_check_start_time)  # record the time in seconds
 
             # Calculate cycle duration
-            cycle_duration = sensor_reached_time - self.time_data[-2]
+            cycle_duration = sensor_reached_time - self.sensor_check_start_time
             self.cycle_durations.append(cycle_duration)
 
             # Add corresponding component state
             if self.component_state[-1] == 1:  # if the component is up
                 self.component_state.append(0)
                 self.deactivate_component()
-                self.sensor_check_timer.start(25)
+                QTimer.singleShot(self.tempo_low * 1000, self.start_sensor_check)  # wait for tempo_low seconds before starting sensor check
 
             else:  # if the component is down
                 self.component_state.append(1)
                 self.activate_component()
                 self.cycle_count += 1  # increment cycle counter only after a complete ascent and descent
+                QTimer.singleShot(self.tempo_high * 1000, self.start_sensor_check)  # wait for tempo_high seconds before starting sensor check
+
+            self.update_graph_and_labels()
 
             if self.cycle_count > self.edits['cycle'].value():
-                # If the requested number of cycles is reached, stop everything
-                self.start_button.setText(self.parent.translator.translate('start'))
-                self.save_to_csv(self.cycle_durations)
-                self.deactivate_component()  # deactivate component
-                self.change_widget_state(True)
-                self.edits['status'].setText('finished')  # update status to show that the cycles are finished
-                Logger.info("Cycles finished and saved to CSV file")
+                self.finish_cycles()
             else:
-                # If more cycles are needed, start another cycle
-                self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
                 self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
-
-            # Update the graphs
-            self.ax1.clear()
-            self.ax2.clear()
-            self.ax1.set_title(self.parent.translator.translate('time', state=self.state_up_key))  # reset title after clearing
-            self.ax2.set_title(self.parent.translator.translate('time', state=self.state_down_key))  # reset title after clearing
-            self.ax1.step([i for i in range(len(self.cycle_durations[::2])+1)], [0]+[duration for duration in self.cycle_durations[::2]])  # plot ascent times in seconds
-            self.ax1.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
-            self.ax1.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
-            self.ax2.step([i for i in range(len(self.cycle_durations[1::2])+1)], [0]+[duration for duration in self.cycle_durations[1::2]])  # plot descent times in seconds
-            self.ax2.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
-            self.ax2.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
-
-            if self.cycle_durations[::2]:  # check if the list of ascent durations is not empty
-                self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val', state=self.state_up_key, value=f'{min(self.cycle_durations[::2]):.2f}'))
-                self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val', state=self.state_up_key, value=f'{max(self.cycle_durations[::2]):.2f}'))
-                self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val', state=self.state_up_key, value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
-                self.labels['last_val_ascent'].setText(self.parent.translator.translate('last_val', state=self.state_up_key, value=f'{self.cycle_durations[::2][-1]:.2f}'))
-            if self.cycle_durations[1::2]:  # check if the list of descent durations is not empty
-                self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val', state=self.state_down_key, value=f'{min(self.cycle_durations[1::2]):.2f}'))
-                self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val', state=self.state_down_key, value=f'{max(self.cycle_durations[1::2]):.2f}'))
-                self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val', state=self.state_down_key, value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
-                self.labels['last_val_descent'].setText(self.parent.translator.translate('last_val', state=self.state_down_key, value=f'{self.cycle_durations[1::2][-1]:.2f}'))
-
-            self.canvas.draw()
-
-        else:
-            # If the sensor is not reached yet, update the status
-            self.edits['status'].setText(f'{self.cycle_count}')
+                self.edits['status'].setText(f'{self.cycle_count}')
 
 
+    def start_sensor_check(self):
+        if self.cycle_count <= self.edits['cycle'].value():
+            self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch()/1000 # reset sensor check start time
+            self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
+            self.timer.start(15000)  # start a timer to stop the cycle if it takes more than 15 seconds
+
+
+
+    def update_graph_and_labels(self):
+        # Update the graphs
+        self.ax1.clear()
+        self.ax2.clear()
+        self.ax1.set_title(self.parent.translator.translate('time', state=self.state_up_key))  # reset title after clearing
+        self.ax2.set_title(self.parent.translator.translate('time', state=self.state_down_key))  # reset title after clearing
+        self.ax1.step([i for i in range(len(self.cycle_durations[::2])+1)], [0]+[duration for duration in self.cycle_durations[::2]])  # plot ascent times in seconds
+        self.ax1.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
+        self.ax1.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
+        self.ax2.step([i for i in range(len(self.cycle_durations[1::2])+1)], [0]+[duration for duration in self.cycle_durations[1::2]])  # plot descent times in seconds
+        self.ax2.axhline(y=self.edits['max'].value(), color='r', linestyle='--')
+        self.ax2.axhline(y=self.edits['min'].value(), color='r', linestyle='--')
+
+        if self.cycle_durations[::2]:  # check if the list of ascent durations is not empty
+            self.labels['min_val_ascent'].setText(self.parent.translator.translate('min_val', state=self.state_up_key, value=f'{min(self.cycle_durations[::2]):.2f}'))
+            self.labels['max_val_ascent'].setText(self.parent.translator.translate('max_val', state=self.state_up_key, value=f'{max(self.cycle_durations[::2]):.2f}'))
+            self.labels['avg_val_ascent'].setText(self.parent.translator.translate('avg_val', state=self.state_up_key, value=f'{sum(self.cycle_durations[::2]) / len(self.cycle_durations[::2]):.2f}'))
+            self.labels['last_val_ascent'].setText(self.parent.translator.translate('last_val', state=self.state_up_key, value=f'{self.cycle_durations[::2][-1]:.2f}'))
+        if self.cycle_durations[1::2]:  # check if the list of descent durations is not empty
+            self.labels['min_val_descent'].setText(self.parent.translator.translate('min_val', state=self.state_down_key, value=f'{min(self.cycle_durations[1::2]):.2f}'))
+            self.labels['max_val_descent'].setText(self.parent.translator.translate('max_val', state=self.state_down_key, value=f'{max(self.cycle_durations[1::2]):.2f}'))
+            self.labels['avg_val_descent'].setText(self.parent.translator.translate('avg_val', state=self.state_down_key, value=f'{sum(self.cycle_durations[1::2]) / len(self.cycle_durations[1::2]):.2f}'))
+            self.labels['last_val_descent'].setText(self.parent.translator.translate('last_val', state=self.state_down_key, value=f'{self.cycle_durations[1::2][-1]:.2f}'))
+
+        self.canvas.draw()
+
+    def finish_cycles(self):
+        # If the requested number of cycles is reached, stop everything
+        self.start_button.setText(self.parent.translator.translate('start'))
+        self.save_to_csv(self.cycle_durations)
+        self.deactivate_component()  # deactivate component
+        self.change_widget_state(True)
+        self.edits['status'].setText('finished')  # update status to show that the cycles are finished
+        Logger.info("Cycles finished and saved to CSV file")
+        self.sensor_check_timer.stop()  # stop checking the sensor
+        self.timer.stop()  # stop the 15-second timer
 
     def activate_component(self): #set to up
         self.parent.update_DO(True)
@@ -338,6 +348,9 @@ class GraphWindow(QMainWindow):
                 return not (data[0] & self.parent.cmd.Up)
         else:
             return False
+
+        
+
 
     def update_csv_file(self):
         pn = self.edits['PN'].text()
@@ -364,6 +377,7 @@ class GraphWindow(QMainWindow):
             writer.writerow(['Cycle Number', 'Ascent Time', 'Descent Time'])
             ascent_times = cycle_durations[1::2]
             descent_times = cycle_durations[::2]
+            print(len(ascent_times))
             for i in range(len(ascent_times)):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
 

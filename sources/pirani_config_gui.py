@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, 
-                             QLabel, QLineEdit, QComboBox, QGridLayout, QDoubleSpinBox, QMessageBox, QSpinBox)
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton, 
+                             QLabel, QComboBox, QGridLayout, QDoubleSpinBox, QMessageBox, QSpinBox, QToolButton, QMenu, QAction)
 
 from internal.constant import PiraniConfig
+
+
 
 class NodeAddressWindow(QWidget):
     def __init__(self, parent):
@@ -94,11 +96,27 @@ class PiraniConfigGui(QWidget):
         layout.addWidget(self.calibrate_button, 5, 0, 1, 2)
 
 
-        # Gauge status bits
+         # Gauge status bits
         self.status_bits_label = QLabel(self.parent.translator.translate("gauge_status_bits"))
         self.status_bits_value = QLabel("0000 0000 0000 0000")  # initial value
+        self.status_bits_value.setToolTip(self.parent.translator.translate("status_bits_tooltip"))
+
+        # Create a QToolButton
+        self.status_bits_info_button = QToolButton()
+        self.status_bits_info_button.setText("?")
+        self.status_bits_info_button.setPopupMode(QToolButton.InstantPopup)
+
+        # Create a QMenu
+        self.status_bits_info_menu = self.create_status_bits_info_menu(0)  # initial value
+        self.status_bits_info_button.setMenu(self.status_bits_info_menu)
+
         layout.addWidget(self.status_bits_label, 6, 0)
-        layout.addWidget(self.status_bits_value, 6, 1)  # add this to the layout
+        layout.addWidget(self.status_bits_value, 6, 1)
+        layout.addWidget(self.status_bits_info_button, 6, 2)  # add this to the layout
+
+
+
+
 
         # Gauge SN
         self.sn_label = QLabel(self.parent.translator.translate("gauge_sn"))
@@ -120,6 +138,38 @@ class PiraniConfigGui(QWidget):
         self.conversion_factors = {"Torr": 1, "Pascal": 133.322, "mBar": 1.33322}
 
         self.update_units()
+
+
+    def create_status_bits_info_menu(self, status_bits):
+        status_bits_info_menu = QMenu(self)
+
+        status_bits_info = [
+            {"Bit": self.parent.translator.translate("bit"), "Value": "", "Status Flag": "", "Meaning": self.parent.translator.translate("bit_explanation")},
+            {"Bit": "0", "Value": self.get_bit_value(status_bits, 0), "Status Flag": self.parent.translator.translate("gauge_err"), "Meaning": self.parent.translator.translate("gauge_specific_error")},
+            {"Bit": "1", "Value": self.get_bit_value(status_bits, 1), "Status Flag": self.parent.translator.translate("mag_n"), "Meaning": self.parent.translator.translate("gauge_magnetron")},
+            {"Bit": "2", "Value": self.get_bit_value(status_bits, 2), "Status Flag": self.parent.translator.translate("spop_on"), "Meaning": self.parent.translator.translate("setpoint_status")},
+            {"Bit": "3", "Value": self.get_bit_value(status_bits, 3), "Status Flag": self.parent.translator.translate("gauge_lk"), "Meaning": self.parent.translator.translate("gauge_parameters")},
+            {"Bit": "4-5", "Value": self.get_multi_bit_value(status_bits, 4, 5), "Status Flag": self.parent.translator.translate("pressure_units"), "Meaning": self.parent.translator.translate("pressure_units_meaning")},
+            {"Bit": "6", "Value": self.get_bit_value(status_bits, 6), "Status Flag": self.parent.translator.translate("flashee_err"), "Meaning": self.parent.translator.translate("all_stored_parameters")},
+            {"Bit": "7", "Value": self.get_bit_value(status_bits, 7), "Status Flag": self.parent.translator.translate("calibrating"), "Meaning": self.parent.translator.translate("calibration_in_progress")},
+            {"Bit": "8", "Value": self.get_bit_value(status_bits, 8), "Status Flag": self.parent.translator.translate("mag_str"), "Meaning": self.parent.translator.translate("memory_striking")},
+            {"Bit": "9", "Value": self.get_bit_value(status_bits, 9), "Status Flag": self.parent.translator.translate("mag_strike_fail"), "Meaning": self.parent.translator.translate("magnetron_striking_failure")},
+            {"Bit": "10", "Value": self.get_bit_value(status_bits, 10), "Status Flag": self.parent.translator.translate("pir_fil_fail"), "Meaning": self.parent.translator.translate("pirani_filament_failure")},
+            {"Bit": "11", "Value": self.get_bit_value(status_bits, 11), "Status Flag": self.parent.translator.translate("str_fil_fail"), "Meaning": self.parent.translator.translate("striker_filament_failure")},
+            {"Bit": "12-14", "Value": self.get_multi_bit_value(status_bits, 12, 14), "Status Flag": self.parent.translator.translate("gas_type"), "Meaning": self.parent.translator.translate("gas_type_meaning")},
+            {"Bit": "15", "Value": self.get_bit_value(status_bits, 15), "Status Flag": self.parent.translator.translate("mag_exposure"), "Meaning": self.parent.translator.translate("magnetron_exposure_threshold")},
+        ]
+
+        for info in status_bits_info:
+            if info['Bit'] == self.parent.translator.translate("bit"):
+                action_text = f"{info['Meaning']}"
+            else:
+                action_text = f"{self.parent.translator.translate('bit')}: {info['Bit']}, {self.parent.translator.translate('value')}: {info['Value']}, {self.parent.translator.translate('status_flag')}: {info['Status Flag']}, {self.parent.translator.translate('meaning')}: {info['Meaning']}"
+            action = QAction(action_text, self)
+            action.setEnabled(False)
+            status_bits_info_menu.addAction(action)
+
+        return status_bits_info_menu
 
     def confirm(self):
         config = self.parent.config[self.key]
@@ -153,11 +203,24 @@ class PiraniConfigGui(QWidget):
 
         self.current_unit = new_unit
 
+
+    def get_bit_value(self, status_bits, bit):
+        return (status_bits >> bit) & 1
+
+    def get_multi_bit_value(self, status_bits, start_bit, end_bit):
+        mask = (2**(end_bit - start_bit + 1) - 1) << start_bit
+        return (status_bits & mask) >> start_bit
+
     def update_status_bits(self, status_bits):
         # Convert status_bits to binary and format it with spaces
         binary_status_bits = format(status_bits, '016b')
         formatted_status_bits = ' '.join(binary_status_bits[i:i+4] for i in range(0, len(binary_status_bits), 4))
         self.status_bits_value.setText(formatted_status_bits)
+        # Update the status bits info if the info window is open
+        self.status_bits_info_menu = self.create_status_bits_info_menu(status_bits)
+        self.status_bits_info_button.setMenu(self.status_bits_info_menu)
+
+        
 
 
     def set_node_address(self):

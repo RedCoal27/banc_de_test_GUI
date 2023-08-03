@@ -19,7 +19,7 @@ class Circle(QGraphicsEllipseItem):
         self.center = (x, y)
         self.radius = radius
         super(Circle, self).__init__(parent)
-        self.setRect(x- radius, y - radius, radius * 2, radius * 2)
+        self.setRect(x- radius, y - radius, radius * 2, radius * 2*1.1)
         self.color = color
         self.setPen(QPen(QColor(self.color), 2))
         self.setBrush(QBrush(Qt.GlobalColor.white))

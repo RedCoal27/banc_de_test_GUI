@@ -42,7 +42,19 @@ class Convectron(CustomWidget):
         unit = (int(value[1], 16) >> 4) & 3 #permet de récuperer uniquement les 2 bit indiquant l'unité
         gas_index = (int(value[1], 16) >> 12) & 7 #permet de récuperer uniquement les 2 bit indiquant le gas enregistré
         self.update_label("gas_type", gas_type = PiraniConfig.gas_types[gas_index])
-        self.update_label('pressure', value = float(value[0]), unit = PiraniConfig.units_types[unit - 1])
+        pressure = float(value[0])
+        if pressure < 0.1:
+            pressure_str = f"{pressure:.2e}"  # Utilise l'écriture scientifique avec 1 chiffre après le point
+            base, exp = pressure_str.split("e")  # Split la chaîne en base et exposant
+            # Enlève le zéro si l'exposant est de deux chiffres (par exemple, -02 devient -2)
+            if len(exp) == 3:
+                exp = exp[0] + exp[2]
+            pressure = base + "E" + exp
+        else:
+            pressure = f"{pressure:.3f}"
+        pressure += " "
+
+        self.update_label('pressure', value = pressure, unit = PiraniConfig.units_types[unit - 1])
         if self.pirani_config_gui is not None and self.pirani_config_gui.isVisible():
             self.pirani_config_gui.update_status_bits(int(value[1], 16))
 
