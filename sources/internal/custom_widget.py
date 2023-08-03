@@ -366,8 +366,6 @@ class CustomWidget(QGraphicsWidget):
             width (int): The width of the parent widget.
             height (int): The height of the parent widget.
         """
-
-
         for label in self.labels:
             font = label[0].font()
             font.setPointSizeF(self.font_size)

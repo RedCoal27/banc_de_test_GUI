@@ -48,7 +48,7 @@ class Gate():
         self.scene.addItem(self.text)
 
         #add circle next to text
-        self.circle = Circle(pos[0] , pos[1], 0.015, color, self.on_left_click)
+        self.circle = Circle(pos[0] , pos[1], 0.015, "#4472C4", self.on_left_click)
         self.scene.addItem(self.circle)
         
 
