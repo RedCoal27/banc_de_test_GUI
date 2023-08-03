@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QPen, QColor, QBrush
-from PyQt5.QtCore import Qt, QPointF, QRectF
-from PyQt5.QtWidgets import QGraphicsEllipseItem, QMenu, QAction
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QGraphicsEllipseItem
 
 
 class Circle(QGraphicsEllipseItem):

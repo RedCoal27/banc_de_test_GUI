@@ -1,6 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel
-from PyQt5.QtGui import QPainter, QPainterPath, QColor
-from PyQt5.QtCore import Qt, QRectF, QMargins
+from PyQt5.QtCore import Qt
 
 from internal.custom_widget import CustomWidget
 from scene.circle import Circle
@@ -10,7 +8,7 @@ from internal.logger import Logger
 
 
 class Gate():
-    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], key: str, cmd: int, sens: str, parent):
+    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], key: str, cmd: int, sens: str, parent, color="#4472C4"):
         """
         A class representing a gate in a graphical interface.
 
@@ -50,13 +48,13 @@ class Gate():
         self.scene.addItem(self.text)
 
         #add circle next to text
-        self.circle = Circle(pos[0] , pos[1], 0.015, "#4472C4", self.on_left_click)
+        self.circle = Circle(pos[0] , pos[1], 0.015, color, self.on_left_click)
         self.scene.addItem(self.circle)
         
 
 
         #draw horizontal line
-        self.line = Line(0,0,0,0, "#4472C4")
+        self.line = Line(0,0,0,0, color)
         self.on_left_click()
         self.scene.addItem(self.line)
 

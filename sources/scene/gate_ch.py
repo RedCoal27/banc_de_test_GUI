@@ -1,11 +1,11 @@
 from scene.gate import *
-from graph_window import GraphWindow
+from window.graph_window import GraphWindow
 from PyQt5.QtWidgets import QMenu, QAction
 import math
 
 class GateCH(Gate):
-    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], name: str, cmd: int, sens: str, parent):
-        super().__init__(pos, relative_pos, name, cmd, sens, parent)
+    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], name: str, cmd: int, sens: str, parent, color="#4472C4"):
+        super().__init__(pos, relative_pos, name, cmd, sens, parent, color)
         self.translator = parent.translator
         self.serial_reader = parent.serial_reader
         self.circle.setRightClickFunction(self.on_right_click)

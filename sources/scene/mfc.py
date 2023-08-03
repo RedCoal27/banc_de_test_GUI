@@ -3,7 +3,6 @@ from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
-from internal.config import Config
 
 class MFC(CustomWidget):
     def __init__(self, pos, cmd, key , parent):

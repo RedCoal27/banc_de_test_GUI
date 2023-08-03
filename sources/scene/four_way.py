@@ -1,12 +1,9 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel
-from PyQt5.QtGui import QPainter, QPainterPath, QColor
-from PyQt5.QtCore import Qt, QRectF, QMargins
-
+from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 
 from internal.logger import Logger
 
-from graph_window import GraphWindow
+from window.graph_window import GraphWindow
 
 
 class FourWay(CustomWidget):

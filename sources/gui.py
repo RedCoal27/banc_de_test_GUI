@@ -24,7 +24,7 @@ from scene.motor_lift import MotorisedLift
 from scene.throttle_valve import ThrottleValve
 from scene.label import Label
 from scene.ion_gauge import IonGauge
-from menu_manager import MenuManager
+from internal.menu_manager import MenuManager
 from internal.constant import *
 from internal.logger import Logger
 from internal.config import Config
@@ -190,13 +190,13 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["N2"] = Label((0.95,0.11),(0.02, 0.02),"N2", parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.40), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self)
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.40), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.43), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self)
+        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.43), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self)
+        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
 
 
 
@@ -241,11 +241,6 @@ class MainWindow(QMainWindow):
         """
         super().resizeEvent(event)
         self.resize_widgets()  # Call the new function here
-
-
-
-
-
 
 
 

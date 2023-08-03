@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QHBoxLayout, QWidget, QSpinBox, QVBoxLayout
+from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QHBoxLayout, QWidget, QSpinBox
 from PyQt5.QtGui import QPainterPath, QColor, QBrush, QPainter, QPixmap
 from PyQt5.QtCore import Qt, QSize
 

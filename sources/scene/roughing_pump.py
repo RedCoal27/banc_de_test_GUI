@@ -1,7 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel
-from PyQt5.QtGui import QPainter, QPainterPath, QColor
-from PyQt5.QtCore import Qt, QRectF, QMargins
-
+from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
@@ -17,7 +14,6 @@ class RoughingPump(CustomWidget):
         self.create_labels(key)
         self.create_button("set_state", self.click_DO, state = "off")
         self.update_DO()
-        
 
     def create_labels(self,key):
         """

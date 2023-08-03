@@ -1,6 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsTextItem, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel
-from PyQt5.QtGui import QPainter, QPainterPath, QColor
-from PyQt5.QtCore import Qt, QRectF, QMargins
+from PyQt5.QtCore import Qt
 
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
@@ -12,7 +10,7 @@ class Pump(CustomWidget):
         self.state = True
         self.cmd = cmd
         self.key = key
-        super().__init__(parent.translator, pos, ratio, "#FF0000")
+        super().__init__(parent.translator, pos, ratio, "#FD6801")
         self.create_labels(key)
         self.create_button("set_state", self.click_DO, state = "off")
         self.update_DO()
@@ -58,3 +56,5 @@ class Pump(CustomWidget):
 
     def click_DO(self):
         self.update_DO()
+
+

@@ -1,11 +1,13 @@
-import sys
 from PyQt5.QtWidgets import QMenu, QAction, QActionGroup
 from PyQt5.QtCore import QTimer
-from serial.tools.list_ports import comports
+
 from internal.custom_widget import CustomWidget
 
 from internal.logger import Logger
 from internal.constant import ConstantDialog
+
+from window.help_dialog import HelpDialog
+
 
 class MenuManager:
     def __init__(self, parent):
@@ -16,12 +18,15 @@ class MenuManager:
     def create_menus(self):
         self.config_menu = QMenu("Config", self.parent)
         self.com_menu = QMenu("COM", self.parent)
+        self.help_action = QAction(self.translator.translate("Help"), self.parent)
+        self.help_action.triggered.connect(self.open_help_dialog)
         self.com_menu.aboutToShow.connect(self.update_com_menu)
         self.config_menu.addMenu(self.create_language_menu())
         self.config_menu.addMenu(self.create_font_size_menu())
         self.config_menu.addAction("Constante", self.open_constant_dialog)
         self.parent.menuBar().addMenu(self.com_menu)
         self.parent.menuBar().addMenu(self.config_menu)
+        self.parent.menuBar().addAction(self.help_action)
 
 
     def create_menu(self, menu_name, actions):
@@ -96,7 +101,10 @@ class MenuManager:
             if isinstance(item, CustomWidget):
                 item.change_language()
 
-
     def open_constant_dialog(self):
         dialog = ConstantDialog(self.parent)
+        dialog.exec_()
+
+    def open_help_dialog(self):
+        dialog = HelpDialog(self.parent)
         dialog.exec_()
