@@ -4,7 +4,7 @@ from PyQt5.QtCore import QTimer
 from internal.custom_widget import CustomWidget
 
 from internal.logger import Logger
-from internal.constant import ConstantDialog
+from window.constant_dialog import ConstantDialog
 
 from window.help_dialog import HelpDialog
 
