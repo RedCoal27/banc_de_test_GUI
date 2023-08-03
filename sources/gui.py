@@ -8,8 +8,11 @@ import os
 from internal.translator import Translator
 from internal.serial_reader import *
 from internal.custom_widget import CustomWidget
+
+from scene.auto import Auto
 from scene.interlock import Interlock
 from scene.chamber import Chamber
+from scene.chamber_label import ChamberLabel
 from scene.four_way import FourWay
 from scene.baratron import Baratron
 from scene.mfc import MFC
@@ -29,6 +32,7 @@ from internal.constant import *
 from internal.logger import Logger
 from internal.config import Config
 
+
 from internal.rs485 import RS485
 
 
@@ -42,10 +46,10 @@ class MainWindow(QMainWindow):
 
  
         self.serial_reader = SerialReader(self)
-
-        
         self.RS485 = RS485(self)
 
+        self.auto = False
+        
         self.custom_widgets = {}
 
         self.icon = None
@@ -153,8 +157,10 @@ class MainWindow(QMainWindow):
         """
         self.custom_widgets = {}
  
-        self.custom_widgets["interlock"] = Interlock([0.05,0.04], "interlock", self)
-        self.custom_widgets["Chamber"] = Chamber([0.24,0.24], self)
+        self.custom_widgets["auto"] = Auto([0.05,0.01], self)
+        self.custom_widgets["interlock"] = Interlock([0.05,0.1], "interlock", self)
+        self.custom_widgets["chamber"] = Chamber([0.24,0.24], self)
+        self.custom_widgets["chamber_label"] = ChamberLabel([0.24,0.24], self)
 
 
         self.custom_widgets["WL2"] = FourWay([0.24,0.01], Cmd.WL2, "WL", number="2", parent=self)

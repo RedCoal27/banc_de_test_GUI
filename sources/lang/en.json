@@ -140,4 +140,5 @@
     "gas_type_meaning": "0=N2 (default), 1=Ar, 2=He, 3=CO2, 4=H, 5=Ne, 6=Kr",
     "mag_exposure": "Mag Exposure",
     "magnetron_exposure_threshold": "Magnetron exposure threshold exceeded"
+
 }

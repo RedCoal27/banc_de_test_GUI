@@ -2,8 +2,6 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QListView, QHBoxLayout, QTextEdit
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
-
-
 class HelpDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -23,9 +21,17 @@ class HelpDialog(QDialog):
         self.list_view.setFixedWidth(100)
 
         # Add categories to the list widget
-        self.add_category("Category 1")
-        self.add_category("Category 2")
-        # Add more categories as needed
+        categories = {
+            "WL": "description",
+            "throttle_valve": "description",
+            "motor_lift": "description",
+            "interlock": "description",
+            "convectron": "description",
+            "gate": "description",
+            "pump": "description",
+
+        }
+        self.add_categories(categories)
 
         self.list_view.setModel(self.model)
         self.list_view.selectionModel().currentChanged.connect(self.display_help)
@@ -45,11 +51,12 @@ class HelpDialog(QDialog):
         layout.addWidget(self.text_edit)
         self.setLayout(layout)
 
-    def add_category(self, category):
-        item = QStandardItem(self.translator.translate(category))
-        item.setData(self.translator.translate(f"Documentation for {category} goes here..."), Qt.UserRole + 1)
-        item.setTextAlignment(Qt.AlignCenter)  # Center the text
-        self.model.appendRow(item)
+    def add_categories(self, categories):
+        for category_key, content_key in categories.items():
+            item = QStandardItem(self.translator.translate(category_key))
+            item.setData(self.translator.translate(content_key), Qt.UserRole + 1)
+            item.setTextAlignment(Qt.AlignCenter)  # Center the text
+            self.model.appendRow(item)
 
     def display_help(self, current, previous):
         if current:
