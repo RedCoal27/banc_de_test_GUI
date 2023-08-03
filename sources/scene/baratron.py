@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
+
 class Baratron(CustomWidget):
     def __init__(self, pos , key , parent):
         ratio = (0.08, 0.1)
