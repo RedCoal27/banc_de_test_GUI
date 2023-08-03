@@ -22,8 +22,8 @@
     "steps":"Pas: {state}",
     "false":"Faux",
     "true":"Vrai",
-    "open":"Ouvert",
-    "close":"Fermé",
+    "open":"Ouverte",
+    "close":"Fermée",
     "unknown":"Inconnu",
     "up":"Haut",
     "down":"Bas",
@@ -32,9 +32,9 @@
 
     "interlock":"Interlock",
     "roughing_pump_state": "Pompe primaire {state}",
-    "pump_pressure_high": "Pression de la pompe >100mT",
-    "chamber_open": "Chambre OUVERTE",
-    "chamber_pressure_high": "Pression de la chambre >100mT",
+    "pump_pressure_high": "Pression de la pompe {sens}{value}T",
+    "chamber_open": "Chambre {state}",
+    "chamber_pressure_high": "Pression de la chambre {sens}{value}T",
 
     "chamber":"Chambre",
     "set_state":"{state}",

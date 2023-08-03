@@ -85,8 +85,6 @@ class CustomWidget(QGraphicsWidget):
                     label_kwargs[arg_name] = kwargs[arg_name]
                 # Translate the new text and update the label
                 label.setText(self.translator.translate(label_key, **label_kwargs))
-                # Refresh the proxy widget
-                label_proxy.setWidget(label)
                 # We found the label, so we can break the loop
                 break
 
@@ -236,7 +234,7 @@ class CustomWidget(QGraphicsWidget):
 
 
 
-    def create_label_with_indicator(self, key, state=False, color="black", **kwargs):
+    def create_label_with_indicator(self, key, color="black", **kwargs):
         """
         Creates a label with an indicator and adds it to the widget.
 
@@ -274,7 +272,7 @@ class CustomWidget(QGraphicsWidget):
         painter.setRenderHint(QPainter.Antialiasing)  # Enable antialiasing for a smoother circle
 
         # Set the color based on the state
-        color = QColor("green") if state else QColor("red")
+        color = QColor("green")
         painter.setBrush(QBrush(color))
 
         # Draw the circle
@@ -307,23 +305,27 @@ class CustomWidget(QGraphicsWidget):
 
         # Store the indicator QLabel for later updates
         self.labels.append((label, widget_proxy, key, kwargs))
-        self.indicators.append((indicator, state))  # Add the indicator to the new list
+        self.indicators.append((indicator, key, False))  # Add the indicator to the new list
 
 
-    def update_indicator(self, indicator, state):
-        pixmap = QPixmap(indicator.size())
-        pixmap.fill(Qt.transparent)
+    def update_indicator(self, indicator, key, state):
+        for indicator, indicator_key, _ in self.indicators:
+            if indicator_key == key:
+                pixmap = QPixmap(indicator.size())
+                pixmap.fill(Qt.transparent)
 
-        painter = QPainter(pixmap)
-        painter.setRenderHint(QPainter.Antialiasing)
-        color = QColor("red") if state else QColor("green")
-        painter.setBrush(QBrush(color))
+                painter = QPainter(pixmap)
+                painter.setRenderHint(QPainter.Antialiasing)
+                color = QColor("red") if state else QColor("green")
+                painter.setBrush(QBrush(color))
 
-        painter.drawEllipse(pixmap.rect())
+                painter.drawEllipse(pixmap.rect())
 
-        painter.end()
+                painter.end()
 
-        indicator.setPixmap(pixmap)
+                indicator.setPixmap(pixmap)
+                break
+
         
 
     def paint(self, painter, option, widget):
@@ -388,11 +390,11 @@ class CustomWidget(QGraphicsWidget):
             font.setPointSizeF(self.font_size)
             unit_label[0].setFont(font)
             
-        for indicator, state in self.indicators:
+        for indicator, key, state in self.indicators:
             # Resize the indicator
             indicator.setFixedSize(8, 8)  # Convert to int
             # Update the indicator
-            self.update_indicator(indicator, state)
+            self.update_indicator(indicator, key, state)
 
         self.resize(width*self.ratio[0], height*self.ratio[1])
         self.maximumSize = self.size()

@@ -32,9 +32,9 @@
     
     "interlock" : "Interlock",
     "roughing_pump_state" : "Roughing pump {state}",
-    "pump_pressure_high" : "Pump Pressure >100mT",
-    "chamber_open" : "Chamber OPEN",
-    "chamber_pressure_high" : "Chamber Pressure >100mT",
+    "pump_pressure_high" : "Pump Pressure {sens}{value}T",
+    "chamber_open" : "Chamber {state}",
+    "chamber_pressure_high" : "Chamber Pressure {sens}{value}T",
 
     "chamber" : "Chamber",
     "cycle" : "Cycle",
