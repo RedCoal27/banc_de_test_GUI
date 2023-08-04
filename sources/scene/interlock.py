@@ -19,7 +19,7 @@ class Interlock(CustomWidget):
         """
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label_with_indicator("roughing_pump_state", state = "On")
-        self.create_label_with_indicator("pump_pressure_high", sens = "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
+        self.create_label_with_indicator("pump_pressure_high", sens = "<", value = self.parent.config["pump_pressure"]["setpoint_low"])
         self.create_label_with_indicator("chamber_open", state = "close")
         self.create_label_with_indicator("chamber_pressure_high", sens = "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
 
@@ -37,7 +37,7 @@ class Interlock(CustomWidget):
         self.update_indicator(self, "chamber_pressure_high", states[3])
 
         self.update_label("roughing_pump_state", state = "off" if states[0] else "on")
-        self.update_label("pump_pressure_high", sens = ">" if states[0] else "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
+        self.update_label("pump_pressure_high", sens = ">" if states[0] else "<", value = self.parent.config["pump_pressure"]["setpoint_low"])
         self.update_label("chamber_open", state = "open" if states[0] else "close")
         self.update_label("chamber_pressure_high", sens = ">" if states[0] else "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
 

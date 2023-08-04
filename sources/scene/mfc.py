@@ -52,9 +52,3 @@ class MFC(CustomWidget):
         Logger.debug(f"{self.key} offset changed to {spin_box.value()}")
         self.offset = spin_box.value()
 
-    # def update_size(self, spin_box):
-    #     """
-    #     Change the upper limit of the spin box to the value of the spin box.
-    #     """
-    #     Logger.debug(f"{self.key} size changed to {spin_box.value()}")
-    #     self.update_spin_box("setpoint", spin_box.value())

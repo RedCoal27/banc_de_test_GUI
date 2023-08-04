@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QHBoxLayout, QWidget, QSpinBox
+from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, QGraphicsLinearLayout, QLabel, QSizePolicy, QHBoxLayout, QWidget, QSpinBox, QComboBox
 from PyQt5.QtGui import QPainterPath, QColor, QBrush, QPainter, QPixmap
 from PyQt5.QtCore import Qt, QSize
 
@@ -21,6 +21,7 @@ class CustomWidget(QGraphicsWidget):
         self.spin_boxes = []
         self.unit_labels = []
         self.indicators = []  # Create a new list for indicators
+        self.combo_boxes = []
         self.color = color
         self.font_size = font_size
 
@@ -326,7 +327,74 @@ class CustomWidget(QGraphicsWidget):
                 indicator.setPixmap(pixmap)
                 break
 
-        
+    def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_text="", **kwargs):
+        """
+        Creates a QLabel, a QComboBox, and a QPushButton, and adds them to the widget in a QHBoxLayout.
+
+        Args:
+            key (str): The translation key for the label.
+            combo_items (list, optional): The items to add to the QComboBox. Defaults to [].
+            button_function (function, optional): The function to be called when the QPushButton is clicked. Defaults to None.
+            color (str, optional): The color of the QLabel text. Defaults to "black".
+            button_text (str, optional): The text to display on the QPushButton. Defaults to "".
+            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+        """
+        label_translate = {}
+        for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']:  # argument du QLabel possible
+            if arg_name in kwargs:
+                label_translate[arg_name] = kwargs.pop(arg_name)
+
+        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
+
+        font = label.font()
+        font.setPointSizeF(self.font_size)
+        label.setFont(font)
+
+        combo_box = QComboBox()
+        combo_box.addItems(combo_items)
+        combo_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        combo_box.setStyleSheet("QComboBox { font-size: " + str(self.font_size) + "pt; background-color: None; }")
+        combo_box.setContentsMargins(0, 0, 0, 0)  # Remove margins for the QComboBox
+
+        font = combo_box.font()
+        font.setPointSizeF(self.font_size)
+        combo_box.setFont(font)
+
+        button = QPushButton(button_text)
+        if button_function is not None:
+            button.clicked.connect(button_function)
+        button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        button.setStyleSheet("QPushButton { font-size: " + str(self.font_size) + "pt; background-color: None; }")
+        button.setContentsMargins(1, 0, 0, 0)  # Remove margins for the QPushButton
+
+        font = button.font()
+        font.setPointSizeF(self.font_size)
+        button.setFont(font)
+
+        hbox = QHBoxLayout()
+        hbox.setContentsMargins(0,0,0,0)  # Set smaller margins
+        hbox.addWidget(label)
+        hbox.addWidget(combo_box)
+        hbox.addWidget(button)
+        hbox.addStretch(1)  # Add a stretchable space
+
+        widget = QWidget()
+        widget.setStyleSheet("background-color: transparent;")  # Set transparent background
+        widget.setLayout(hbox)
+
+        widget_proxy = QGraphicsProxyWidget(self)
+        widget_proxy.setWidget(widget)
+
+        self.layout.addItem(widget_proxy)
+
+        self.labels.append((label, widget_proxy, key, kwargs))  # Append the key for later language changes
+        self.combo_boxes.append((combo_box, key, kwargs))  # Append the initial value and kwargs for later language changes
+        self.buttons.append((button, widget_proxy, key, kwargs))  # Append the key for later language changes
+
+
 
     def paint(self, painter, option, widget):
         """

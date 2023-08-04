@@ -31,6 +31,7 @@ from internal.menu_manager import MenuManager
 from internal.constant import *
 from internal.logger import Logger
 from internal.config import Config
+from internal.recipes import Recipes
 
 
 from internal.rs485 import RS485
@@ -43,12 +44,13 @@ class MainWindow(QMainWindow):
         self.config = Config(self)
         self.translator = Translator(self.config)
         self.translator.load_translations()
+        self.recipes = Recipes(self)
+        
 
- 
         self.serial_reader = SerialReader(self)
         self.RS485 = RS485(self)
 
-        self.auto = False
+        self.auto_mode = False
         
         self.custom_widgets = {}
 
@@ -68,8 +70,11 @@ class MainWindow(QMainWindow):
 
 
 
-    def show_error_message(self, title, message, port):
-        QMessageBox.warning(self, self.translator.translate(title), self.translator.translate(message, port=port))
+    def show_error_message(self, message):
+        QMessageBox.warning(self, self.translator.translate("warning"),message)
+
+    
+
 
     def init_ui(self):
         """

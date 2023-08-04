@@ -1,0 +1,18 @@
+step1:
+  actions:
+    - action: action1
+      valeur: valeur1
+    - action: action2
+      valeur: valeur2
+  temps: 5
+  condition: condition1
+  message_erreur: message d'erreur pour l'étape 1
+step2:
+  actions:
+    - action: action3
+      valeur: valeur3
+    - action: action4
+      valeur: valeur4
+  temps: 10
+  condition: condition2
+  message_erreur: message d'erreur pour l'étape 2

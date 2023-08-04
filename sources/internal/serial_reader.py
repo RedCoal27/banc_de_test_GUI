@@ -11,7 +11,7 @@ import struct
 import time
 
 class SerialReader(QObject):
-    error_occurred = pyqtSignal(str, str,  str) 
+    error_occurred = pyqtSignal(str) 
 
     def __init__(self, parent):
         super().__init__()
@@ -56,7 +56,7 @@ class SerialReader(QObject):
                     self.ser.write(bytes(d, 'utf-8'))
             except SerialException:
                 Logger.warning(f"Error while sending data to serial port {self.ser.port}.")
-                self.error_occurred.emit("warning", "serial_port_disconnected", self.ser.port)
+                self.error_occurred.emit(self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
 
 
@@ -81,7 +81,7 @@ class SerialReader(QObject):
                 return data
             except SerialException:
                 Logger.warning(f"Error while reading data from serial port {self.ser.port}.")
-                self.error_occurred.emit("warning", "serial_port_disconnected", self.ser.port)
+                self.error_occurred.emit(self.translator.translate("serial_port_disconnected", port=self.ser.port))
                 self.ser = None
         return None
 
