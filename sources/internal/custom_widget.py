@@ -228,8 +228,6 @@ class CustomWidget(QGraphicsWidget):
                 kwargs['state'] = state
                 # Translate the new text and update the button
                 button.setText(self.translator.translate(button_key, **kwargs))
-                # Refresh the proxy widget
-                button_proxy.setWidget(button)
                 # We found the button, so we can break the loop
                 break
 
@@ -327,7 +325,7 @@ class CustomWidget(QGraphicsWidget):
                 indicator.setPixmap(pixmap)
                 break
 
-    def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_text="", **kwargs):
+    def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_key="", **kwargs):
         """
         Creates a QLabel, a QComboBox, and a QPushButton, and adds them to the widget in a QHBoxLayout.
 
@@ -362,7 +360,7 @@ class CustomWidget(QGraphicsWidget):
         font.setPointSizeF(self.font_size)
         combo_box.setFont(font)
 
-        button = QPushButton(button_text)
+        button = QPushButton(self.translator.translate(button_key, **kwargs))
         if button_function is not None:
             button.clicked.connect(button_function)
         button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -392,7 +390,7 @@ class CustomWidget(QGraphicsWidget):
 
         self.labels.append((label, widget_proxy, key, kwargs))  # Append the key for later language changes
         self.combo_boxes.append((combo_box, key, kwargs))  # Append the initial value and kwargs for later language changes
-        self.buttons.append((button, widget_proxy, key, kwargs))  # Append the key for later language changes
+        self.buttons.append((button, widget_proxy, button_key, kwargs))  # Append the key for later language changes
 
 
 

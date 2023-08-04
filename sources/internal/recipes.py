@@ -1,13 +1,15 @@
+from PyQt5.QtCore import QObject, pyqtSignal, QTimer, QThread, QEventLoop, pyqtSlot
 import yaml
 import os
 import threading
-from PyQt5.QtCore import QObject, pyqtSignal, QTimer, QThread, QEventLoop
-import time
+
 
 class Recipes(QObject):
     finished = pyqtSignal()
     warning = pyqtSignal(str)
+    request_timer_stop = pyqtSignal()
     recipe_folder = "recipes"
+
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
@@ -15,13 +17,13 @@ class Recipes(QObject):
         self.thread = QThread()
         self.moveToThread(self.thread)
         self.thread.started.connect(self.run_recipe)
-        self.stop_event = threading.Event()
+        self.request_timer_stop.connect(self.stop_timer)
         self.timer = QTimer()
         self.timer.moveToThread(self.thread)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.check_timeout)
-
         self.warning.connect(parent.show_error_message)
+        self.stop_event = threading.Event()  # Ajout de cette ligne
 
     def load_recipes(self):
         recipes = {}
@@ -31,7 +33,6 @@ class Recipes(QObject):
                     recipe_name = os.path.splitext(filename)[0]
                     recipes[recipe_name] = yaml.safe_load(f)
         return recipes
-    
 
     def execute_recipe(self, recipe_name):
         if self.thread.isRunning():
@@ -43,7 +44,6 @@ class Recipes(QObject):
 
     def is_running(self):
         return self.thread.isRunning()
-
 
     def run_recipe(self):
         recipe = self.current_recipe
@@ -61,11 +61,13 @@ class Recipes(QObject):
                 self.current_error_message = step['message_erreur']
                 condition_met = self.check_condition(self.current_condition)
                 self.timer.start(int(step['temps']) * 1000)  # QTimer expects milliseconds
+
                 while not condition_met and self.timer.isActive() and not self.stop_event.is_set():
                     loop = QEventLoop()
                     QTimer.singleShot(1000, loop.quit)  # Check the condition every second
                     loop.exec_()
                     condition_met = self.check_condition(self.current_condition)
+
                 if not condition_met:
                     break
             else:
@@ -75,23 +77,30 @@ class Recipes(QObject):
                 loop.exec_()
 
             print(f"  Error message: {step['message_erreur']}")
+
         else:
             self.finished.emit()
 
+        self.timer.stop()  # Stop the timer at the end of the recipe
+
+        
     def stop(self):
         self.stop_event.set()
-        self.timer.stop()
+        self.request_timer_stop.emit()
         self.thread.quit()
         self.thread.wait()
         self.stop_event.clear()
 
-        
+    @pyqtSlot()
+    def stop_timer(self):
+        self.timer.stop()
 
     def check_condition(self, condition):
         # Replace this with the actual code to check the condition
         return False
 
     def check_timeout(self):
+        print("Checking timeout")
         condition_met = self.check_condition(self.current_condition)
         error_message = self.current_error_message
         if not condition_met:

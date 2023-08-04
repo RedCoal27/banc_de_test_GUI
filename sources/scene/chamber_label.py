@@ -11,7 +11,7 @@ class ChamberLabel(CustomWidget):
         self.combo_items = self.recipes.recipes.keys()
 
         # Création d'un QLabel, d'un QComboBox et d'un QPushButton dans le CustomWidget
-        self.create_label_with_combo_box_and_button("auto", self.combo_items, self.button_function, color="black", button_text="Click me!")
+        self.create_label_with_combo_box_and_button("auto", self.combo_items, self.button_function, color="black", button_key="set_state",state="Start")
 
         # self.create_button("Faire le vide", alignment = Qt.AlignmentFlag.AlignCenter)
         self.hide()
@@ -20,9 +20,13 @@ class ChamberLabel(CustomWidget):
         for value, key , _ in self.combo_boxes:
             print(key)
             if key == "auto":
-                self.recipes.execute_recipe(value.currentText())
-                break
+                if self.recipes.is_running() is False:
+                    self.recipes.execute_recipe(value.currentText())
+                    self.update_button("set_state", state = "Stop")          
+                    break
+                else:
+                    self.recipes.stop()
+                    self.update_button("set_state", state = "Start")
+                    continue
 
-
-    
     
