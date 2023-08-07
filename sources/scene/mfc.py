@@ -10,6 +10,7 @@ class MFC(CustomWidget):
         self.offset = 0
         self.key = key
         self.cmd = cmd
+        self.value = 0
         self.parent = parent
         super().__init__(parent.translator, pos, ratio, "#B4C7E7")
         self.create_labels(key)
@@ -34,14 +35,14 @@ class MFC(CustomWidget):
         Updates the value of the label.
         """
         value = (float(value)/5*1000)
-        value = int(round(value - self.offset))
-        self.update_label("actual", value = value)
+        self.value = int(round(value - self.offset))
+        self.update_label("actual", value = self.value)
 
     def update_AO(self, spin_box):
         """
         Updates the value of the label.
         """
-
+        print(spin_box.value())
         self.parent.serial_reader.send_data(self.cmd, spin_box.value()/1000*5)  
         Logger.debug(f"{self.key} setpoint changed to {spin_box.value()}")
 
@@ -52,3 +53,19 @@ class MFC(CustomWidget):
         Logger.debug(f"{self.key} offset changed to {spin_box.value()}")
         self.offset = spin_box.value()
 
+    def set_value(self, value):
+        '''
+        Sets the value of the MFC. Used in recipes
+        '''
+        #change value of spinbox
+        for spin_box, spin_box_key, _, spin_box_kwargs in self.spin_boxes:
+            if spin_box_key == "setpoint":
+                spin_box.setValue(value)
+                self.update_AO(spin_box)
+                break
+
+    def get_value(self):
+        '''
+        Gets the value of the MFC. Used in recipes
+        '''
+        return self.value

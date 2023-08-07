@@ -56,3 +56,16 @@ class RoughingPump(CustomWidget):
 
     def click_DO(self):
         self.update_DO()
+
+
+    def set_value(self, value):
+        """
+        Sets the value of the RoughingPump. Used for recipes.
+        """
+        self.update_DO(value)
+
+    def get_value(self):
+        """
+        Gets the value of the RoughingPump. Used for recipes.
+        """
+        return self.state

@@ -13,10 +13,10 @@ class Cmd():
     nupro_mfc2 = 2
     nupro_vent = 4
 
-    turbo_pump_rga_gate = 16
-    turbo_pump_rga_gate_p = 17
+    iso_rga = 16
+    iso_rga_pump = 17
 
-    turbo_pump_ch_gate_p = 15
+    iso_turbo = 15
 
     iso_chamber = 14
 

@@ -11,7 +11,9 @@ class ChamberLabel(CustomWidget):
         self.combo_items = self.recipes.recipes.keys()
 
         # Création d'un QLabel, d'un QComboBox et d'un QPushButton dans le CustomWidget
-        self.create_label_with_combo_box_and_button("auto", self.combo_items, self.button_function, color="black", button_key="set_state",state="Start")
+        self.create_label_with_combo_box_and_button("recipes", self.combo_items, self.button_function, color="black", button_key="set_state",state="Start")
+        self.create_label("step", name = "", step = "", total_steps = "")
+        self.create_label("time_display", type = "")
 
         # self.create_button("Faire le vide", alignment = Qt.AlignmentFlag.AlignCenter)
         self.hide()
@@ -24,7 +26,7 @@ class ChamberLabel(CustomWidget):
     def button_function(self):
         for combo_box, key , _ in self.combo_boxes:
             print(key)
-            if key == "auto":
+            if key == "recipes":
                 if self.recipes.is_running() is False:
                     combo_box.setDisabled(True)
                     self.recipes.execute_recipe(combo_box.currentText())
@@ -35,4 +37,15 @@ class ChamberLabel(CustomWidget):
                     self.button_stop()
                     continue
 
-    
+    def update_step(self, name, step, total_steps):
+        print(name, step, total_steps)
+        self.update_label("step", name = name, step = step, total_steps = total_steps)
+
+    def update_time(self, type, time):
+        '''
+        Updates the value of the label.
+        type can be:
+        - time_left: time left before the next step
+        - timeout: time left before the timeout
+        '''
+        self.update_label("time_display", type = self.translator.translate(type, value = time))

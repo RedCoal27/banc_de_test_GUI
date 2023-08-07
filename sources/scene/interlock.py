@@ -31,6 +31,7 @@ class Interlock(CustomWidget):
         - states: liste of booleans representing the state of the indicators
         """
         # states = [not state for state in states]
+        self.states = states
         self.update_indicator(self, "roughing_pump_state", states[0])
         self.update_indicator(self, "pump_pressure_high", states[1])
         self.update_indicator(self, "chamber_open", states[2])
@@ -41,3 +42,5 @@ class Interlock(CustomWidget):
         self.update_label("chamber_open", state = "open" if states[0] else "close")
         self.update_label("chamber_pressure_high", sens = ">" if states[0] else "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
 
+    def get_states(self):
+        return self.states

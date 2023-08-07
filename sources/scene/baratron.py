@@ -9,6 +9,7 @@ class Baratron(CustomWidget):
         ratio = (0.12, 0.1)
         self.offset = 0
         self.key = key
+        self.value = 0
         super().__init__(parent.translator, pos, ratio, "#C5E0B4")
         self.create_labels(key)
         
@@ -42,6 +43,7 @@ class Baratron(CustomWidget):
             if len(exp) == 3:
                 exp = exp[0] + exp[2]
             value = base + "E" + exp
+        self.value = value
         self.update_label("pressure", value = value,unit = unit)
 
     def update_offset(self, spin_box):
@@ -51,7 +53,13 @@ class Baratron(CustomWidget):
         Logger.debug(f"{self.key} offset changed to {spin_box.value()}")
         self.offset = spin_box.value()
 
-
-
+    def get_value(self):
+        '''
+        Returns the value of the baratron. Used in recipes
+        '''
+        if self.value == "overrange":
+            return 1000
+        else:
+            return float(self.value)
 
 

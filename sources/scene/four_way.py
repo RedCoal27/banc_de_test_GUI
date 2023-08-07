@@ -26,6 +26,8 @@ class FourWay(CustomWidget):
         self.state = False
         self.key = key
         self.cmd = cmd
+        self.sensor_up = True
+        self.sensor_down = True
         self.parent = parent
 
         self.create_labels()
@@ -63,6 +65,8 @@ class FourWay(CustomWidget):
         - up: a boolean representing the state of the up DI
         - down: a boolean representing the state of the down DI
         """
+        self.sensor_up = up
+        self.sensor_down = down
         self.update_label('di_up', state = "false" if up else "true")
         self.update_label('di_down', state = "false" if down else "true")
         self.update_label('position', state = "unknown" if up*2 == down else "up" if not up else "down")
@@ -90,3 +94,19 @@ class FourWay(CustomWidget):
     def open_windows(self):
         self.window = GraphWindow(self)
         self.window.show()
+
+    def set_value(self, value):
+        """
+        Sets the value of the FourWay. Used for recipes.
+        """
+        self.update_DO(value)
+
+    def get_value(self, position):
+        """
+        Gets the value of the gate. Used for recipes.
+        
+        """
+        if position == "up":
+            return self.sensor_up
+        elif position == "down":
+            return self.sensor_down

@@ -59,10 +59,10 @@
     "nupro_mfc1":"Nupro \nMFC1",
     "nupro_mfc2":"Nupro \nMFC2",
     "nupro_vent":"Nupro \nVent",
-    "turbo_pump_rga_gate":"Iso \nRGA",
-    "turbo_pump_rga_gate_p":"Iso \nRGA P",
+    "iso_rga":"Iso \nRGA",
+    "iso_rga_pump":"Iso \nRGA P",
     "turbo_pump_gate":"Gate \nTurbo",
-    "turbo_pump_ch_gate_p":"Iso \nTurbo",
+    "iso_turbo":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
     "change_state":"Changer l'état",

@@ -36,6 +36,7 @@ class Translator:
             kwargs[k] = self.translate(v)
         try:
             translation = self.translations[self.current_language][key]
-            return translation.format(**kwargs)
+            translation = translation.format(**kwargs)
+            return translation
         except KeyError as e:
             return key

@@ -5,10 +5,10 @@ from window.pirani_config_gui import PiraniConfigGui
 from internal.constant import PiraniConfig
 
 
-class Convectron(CustomWidget):
+class JaugePression(CustomWidget):
     def __init__(self, pos , key , parent):
         """
-        Initializes a Convectron widget.
+        Initializes a JaugePression widget.
 
         Args:
         - translator: a translator object used for internationalization
@@ -19,6 +19,7 @@ class Convectron(CustomWidget):
         self.pirani_config_gui = None
         self.parent = parent
         self.key = key
+        self.value = 1000
         ratio = (0.12, 0.12)
         super().__init__(parent.translator, pos, ratio, "#E2F0D9")
         self.create_labels(key)
@@ -27,7 +28,7 @@ class Convectron(CustomWidget):
 
     def create_labels(self,key):
         """
-        Creates labels for the Convectron widget.
+        Creates labels for the JaugePression widget.
 
         Args:
         - key: a string representing the key of the widget
@@ -50,6 +51,7 @@ class Convectron(CustomWidget):
             pressure = base + "E" + exp
         else:
             pressure = f"{pressure:.3f}"
+        self.value = pressure
         pressure += " "
 
         self.update_label('pressure', value = pressure, unit = PiraniConfig.units_types[unit - 1])
@@ -61,4 +63,18 @@ class Convectron(CustomWidget):
             self.pirani_config_gui = PiraniConfigGui(self.parent,self.key)
             self.pirani_config_gui.show()
 
+
+    def get_value(self):
+        """
+        Returns the value of the label.
+        """
+        value = self.value
+        #convert unit to torr
+        if value == "overrange":
+            return 1000
+        if self.parent.config[self.key]["pressure_unit"] == "mBar":
+            value = float(value)*0.75
+        elif self.parent.config[self.key]["pressure_unit"] == "Pascal":
+            value = float(value)*0.0075
+        return value
 

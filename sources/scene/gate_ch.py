@@ -97,3 +97,13 @@ class GateCH(Gate):
     def open_windows(self):
         self.window = GraphWindow(self, state_up_key="opening", state_down_key="closing")
         self.window.show()
+
+    def get_value(self, position):
+        """
+        Gets the value of the gate. Used for recipes.
+        
+        """
+        if position == "up":
+            return self.sensor_up
+        elif position == "down":
+            return self.sensor_down

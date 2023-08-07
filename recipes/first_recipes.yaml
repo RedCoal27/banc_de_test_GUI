@@ -1,18 +1,30 @@
-step1:
+AAA:
   actions:
-    - action: action1
-      valeur: valeur1
-    - action: action2
-      valeur: valeur2
-  temps: 5
-  condition: condition1
+    - action: nupro_MFC1
+      value: 0
+    - action: nupro_final
+      value: 0
+  conditions:
+    - condition: baratron1
+      value: "<40"
+  time: 5
   message_erreur: message d'erreur pour l'étape 1
-step2:
+BBB:
   actions:
-    - action: action3
-      valeur: valeur3
-    - action: action4
-      valeur: valeur4
-  temps: 10
-  condition: condition2
+    - action: MFC1
+      value: 50
+  conditions:
+    - condition: MFC1
+      value: ">40"
+    - condition: MFC1
+      value: "<60"
+  time: 10
   message_erreur: message d'erreur pour l'étape 2
+CCC:
+  actions:
+    - action: nupro_MFC1
+      value: 0
+    - action: nupro_final
+      value: 0
+  time: 1
+  message_erreur: message d'erreur pour l'étape 3

@@ -20,7 +20,7 @@ from scene.line import Line
 from scene.gate import Gate
 from scene.gate_ch import GateCH
 from scene.circle import Circle
-from scene.convectron import Convectron
+from scene.jauge_pression import JaugePression
 from scene.pump import Pump
 from scene.roughing_pump import RoughingPump
 from scene.motor_lift import MotorisedLift
@@ -73,7 +73,16 @@ class MainWindow(QMainWindow):
     def show_error_message(self, message):
         QMessageBox.warning(self, self.translator.translate("warning"),message)
 
-    
+    def set_value(self, key, value):
+        """
+        Sets the value of a custom widget.
+
+        Args:
+            key (str): The key of the custom widget.
+            value (float): The new value.
+        """
+        print(f"Setting value of {key} to {value}")
+        self.custom_widgets[key].set_value(value)
 
 
     def init_ui(self):
@@ -179,11 +188,11 @@ class MainWindow(QMainWindow):
         self.custom_widgets["MFC1"] = MFC([0.79,0.15], Cmd.MFC1, "MFC1", self)
         self.custom_widgets["MFC2"] = MFC([0.79,0.29], Cmd.MFC2, "MFC2", self)
 
-        self.custom_widgets["chamber_pressure"] = Convectron([0.76,0.7], "chamber_pressure", parent=self)
+        self.custom_widgets["chamber_pressure"] = JaugePression([0.76,0.7], "chamber_pressure", parent=self)
 
         self.custom_widgets["ion_gauge"] = IonGauge([0.76,0.83], "ion_gauge", parent=self)
 
-        self.custom_widgets["pump_pressure"] = Convectron([0.38,0.73], "pump_pressure", parent=self)
+        self.custom_widgets["pump_pressure"] = JaugePression([0.38,0.73], "pump_pressure", parent=self)
 
         self.custom_widgets["turbo_pump_rga"] = Pump([0.02,0.51], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = Pump([0.13,0.51], Cmd.TurboCH, "turbo_pump_ch", parent=self)
@@ -201,9 +210,9 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["N2"] = Label((0.95,0.11),(0.02, 0.02),"N2", parent=self)
 
-        self.custom_widgets["turbo_pump_rga_gate_ch"] = Gate((0.07,0.40), (-0.04,0.0),"turbo_pump_rga_gate", Cmd.turbo_pump_rga_gate, sens='horizontal', parent=self, color="#FD6801")
-        self.custom_widgets["turbo_pump_rga_gate_p"] = Gate((0.07,0.71), (-0.04,0.0),"turbo_pump_rga_gate_p", Cmd.turbo_pump_rga_gate_p, sens='horizontal', parent=self, color="#FD6801")
-        self.custom_widgets["turbo_pump_ch_gate_p"] = Gate((0.18,0.71), (-0.04,0.0),"turbo_pump_ch_gate_p", Cmd.turbo_pump_ch_gate_p, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_rga_ch"] = Gate((0.07,0.40), (-0.04,0.0),"iso_rga", Cmd.iso_rga, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_rga_pump"] = Gate((0.07,0.71), (-0.04,0.0),"iso_rga_pump", Cmd.iso_rga_pump, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_turbo"] = Gate((0.18,0.71), (-0.04,0.0),"iso_turbo", Cmd.iso_turbo, sens='horizontal', parent=self, color="#FD6801")
 
         self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.43), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
 

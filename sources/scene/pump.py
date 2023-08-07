@@ -58,3 +58,14 @@ class Pump(CustomWidget):
         self.update_DO()
 
 
+    def set_value(self, value):
+        """
+        Sets the value of the pump. Used for recipes.
+        """
+        self.update_DO(value)
+
+    def get_value(self):
+        """
+        Returns the value of the pump. Used for recipes.
+        """
+        return self.state

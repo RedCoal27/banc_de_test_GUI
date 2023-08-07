@@ -90,10 +90,20 @@ class Gate():
         else:
             #draw horizontal line
             self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
-        
+
         if isinstance(self.cmd, int):
             self.parent.serial_reader.write_data(self.cmd, self.state)
         else:
             self.parent.serial_reader.write_data(self.cmd.DO, self.state)
 
         Logger.debug(f"Gate {self.key} is set to {self.state}")
+
+
+    def set_value(self, value):
+        """
+        Sets the state of the gate. Used for recipes.
+
+        Args:
+        - value: a boolean representing the new state of the gate
+        """
+        self.change_state(value)
