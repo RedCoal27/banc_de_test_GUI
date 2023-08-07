@@ -16,17 +16,23 @@ class ChamberLabel(CustomWidget):
         # self.create_button("Faire le vide", alignment = Qt.AlignmentFlag.AlignCenter)
         self.hide()
 
+    def button_stop(self):
+        self.update_button("set_state", state = "Start")
+        for combo_box, key , _ in self.combo_boxes:
+            combo_box.setDisabled(False)
+
     def button_function(self):
-        for value, key , _ in self.combo_boxes:
+        for combo_box, key , _ in self.combo_boxes:
             print(key)
             if key == "auto":
                 if self.recipes.is_running() is False:
-                    self.recipes.execute_recipe(value.currentText())
+                    combo_box.setDisabled(True)
+                    self.recipes.execute_recipe(combo_box.currentText())
                     self.update_button("set_state", state = "Stop")          
                     break
                 else:
-                    self.recipes.stop()
-                    self.update_button("set_state", state = "Start")
+                    self.recipes.request_timer_stop.emit()
+                    self.button_stop()
                     continue
 
     

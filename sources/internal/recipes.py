@@ -2,6 +2,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer, QThread, QEventLoop, pyqtS
 import yaml
 import os
 import threading
+from time import sleep
 
 
 class Recipes(QObject):
@@ -17,7 +18,7 @@ class Recipes(QObject):
         self.thread = QThread()
         self.moveToThread(self.thread)
         self.thread.started.connect(self.run_recipe)
-        self.request_timer_stop.connect(self.stop_timer)
+        self.request_timer_stop.connect(self.stop_recipes)
         self.timer = QTimer()
         self.timer.moveToThread(self.thread)
         self.timer.setSingleShot(True)
@@ -78,22 +79,22 @@ class Recipes(QObject):
 
             print(f"  Error message: {step['message_erreur']}")
 
-        else:
-            self.finished.emit()
-
-        self.timer.stop()  # Stop the timer at the end of the recipe
+        self.stop()
 
         
     def stop(self):
+        self.timer.stop()
         self.stop_event.set()
-        self.request_timer_stop.emit()
         self.thread.quit()
-        self.thread.wait()
+        sleep(0.1)
         self.stop_event.clear()
+        self.parent.custom_widgets["chamber_label"].button_stop()
+
+
 
     @pyqtSlot()
-    def stop_timer(self):
-        self.timer.stop()
+    def stop_recipes(self):
+        self.stop()
 
     def check_condition(self, condition):
         # Replace this with the actual code to check the condition
