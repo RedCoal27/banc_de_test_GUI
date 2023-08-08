@@ -3,15 +3,21 @@ import yaml
 import os
 import threading
 from time import sleep
-
+from internal.logger import Logger
+import sys
 
 class Recipes(QObject):
+    valid_actions = ['roughing_pump', 'iso_chamber', 'iso_turbo', 'turbo_pump_ch', 'turbo_pump_gate']
+    valid_conditions = ['pump_pressure', 'chamber_pressure', 'turbo_pump_ch']
+
     dictionnaire = {
         "on":0,
         "off":1,
         "open":0,
         "close":1,
-        "at_speed": 0
+        "at_speed": 0,
+        "up": 1,
+        "down":0,
     }
     finished = pyqtSignal()
     warning = pyqtSignal(str)
@@ -23,6 +29,7 @@ class Recipes(QObject):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
+        self.translator = self.parent.translator
         self.recipes = self.load_recipes()
         self.thread = QThread()
         self.moveToThread(self.thread)
@@ -41,9 +48,46 @@ class Recipes(QObject):
 
         self.stop_event = threading.Event()  # Ajout de cette ligne
 
+
+    def verify_yaml(self, yaml_path):
+        with open(yaml_path, 'r') as f:
+            content = yaml.safe_load(f)
+
+        for step_num, step in content.items():
+            # Vérification de 'name'
+            if "name" not in step:
+                error_message = self.translator.translate('missing_name', step_num=step_num)
+                sys.exit(error_message)
+
+            # Vérification des 'actions'
+            if "actions" in step:
+                for action_name in step["actions"].keys():
+                    if action_name not in self.valid_actions:
+                        error_message = self.translator.translate('invalid_action', step_num=step_num, action_name=action_name)
+                        sys.exit(error_message)
+
+            # Vérification des 'conditions'
+            if "conditions" in step:
+                for condition_name in step["conditions"].keys():
+                    if condition_name not in self.valid_conditions:
+                        error_message = self.translator.translate('invalid_condition', step_num=step_num, condition_name=condition_name)
+                        sys.exit(error_message)
+
+                # Vérification de 'message_erreur' si 'conditions' est présent
+                if "message_erreur" not in step:
+                    error_message = self.translator.translate('missing_error_message', step_num=step_num)
+                    sys.exit(error_message)
+
+            # Vérification de 'timeout'
+            if "timeout" not in step:
+                error_message = self.translator.translate('missing_timeout', step_num=step_num)
+                sys.exit(error_message)
+
+    
     def load_recipes(self):
         recipes = {}
         for filename in os.listdir(self.recipe_folder):
+            self.v
             if filename.endswith('.yaml'):
                 with open(os.path.join(self.recipe_folder, filename), 'r', encoding="utf-8") as f:
                     recipe_name = os.path.splitext(filename)[0]
@@ -64,19 +108,24 @@ class Recipes(QObject):
 
     def run_recipe(self):
         recipe = self.current_recipe
-        for index, (step_name, step) in enumerate(recipe.items()):
-            print(step_name,step)
+        for index, step in enumerate(recipe.values()):  # On utilise values() pour obtenir seulement les valeurs
+            step_name = step["name"]
+            print(step_name, step)
             if self.stop_event.is_set():
                 break
             self.parent.custom_widgets["chamber_label"].update_step(step_name, index + 1, len(recipe))
-            for action in step['actions']:
-                if action["value"] in self.dictionnaire.keys():
-                    action["value"] = self.dictionnaire[action["value"]]
-                self.action.emit(action["action"], action["value"])
+            if 'actions' in step:
+                for action_name, action_value in step['actions'].items():
+                    if action_value in self.dictionnaire.keys():
+                        action_value = self.dictionnaire[action_value]
+                    self.action.emit(action_name, action_value)
             if 'conditions' in step:
                 print(f"  Condition: {step['conditions']}")
                 self.current_conditions = step['conditions']
-                self.current_error_message = step['message_erreur']
+                if 'message_erreur' in step:
+                    self.current_error_message = step['message_erreur']
+                else:
+                    self.current_error_message = "Error"
                 condition_met = self.check_conditions(self.current_conditions)
                 self.timer.start(int(step['timeout']) * 1000)  # Timeouts
 
@@ -128,18 +177,22 @@ class Recipes(QObject):
         - a boolean: the state of the widget must be equal to the boolean
         - < or > followed by a number: the value of the widget must be less than or greater than the number
         '''
-        for condition in conditions:
-            value = self.parent.custom_widgets[condition["condition"]].get_value()
-            if value in self.dictionnaire.keys():
-                value = self.dictionnaire[condition]
-            condition = condition["value"]
-            if isinstance(condition, bool) or isinstance(condition, int):
-                return value == condition
-            elif isinstance(condition, str):
-                if condition[0] == '<':
-                    return value < float(condition[1:])
-                elif condition[0] == '>':
-                    return value > float(condition[1:])
+        for condition_name, condition_value in conditions.items():
+            value = self.parent.custom_widgets[condition_name].get_value()
+            if condition_value in self.dictionnaire.keys():
+                condition_value = self.dictionnaire[condition_value]
+            if isinstance(condition_value, bool) or isinstance(condition_value, int):
+                if value != condition_value:
+                    return False
+            elif isinstance(condition_value, str):
+                if condition_value[0] == '<':
+                    if value >= float(condition_value[1:]):
+                        return False
+                elif condition_value[0] == '>':
+                    if value <= float(condition_value[1:]):
+                        return False
+        return True
+
                 
 
     def check_timeout(self):

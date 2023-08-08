@@ -99,14 +99,13 @@ class FourWay(CustomWidget):
         """
         Sets the value of the FourWay. Used for recipes.
         """
-        self.update_DO(value)
+        self.update_DO(not value)
 
-    def get_value(self, position):
+    def get_value(self):
         """
         Gets the value of the gate. Used for recipes.
         
         """
-        if position == "up":
-            return self.sensor_up
-        elif position == "down":
-            return self.sensor_down
+        state = -1 if self.sensor_up*2 == self.sensor_down else 1 if not self.sensor_up else 0
+        print(state)
+        return state

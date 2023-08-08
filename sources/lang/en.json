@@ -76,6 +76,8 @@
     "change_state" : "Change State",
     "sensor_up" : "Sensor Up",
     "sensor_down" : "Sensor Down",
+    "sensor_open": "Sensor Open: {state}",
+    "sensor_close": "Sensor Close: {state}",
 
     "cycles" : "Number of cycles:",
     "time" :"{state} Time",
@@ -147,6 +149,11 @@
     "gas_type_pirani": "Gas type",
     "gas_type_meaning": "0=N2 (default), 1=Ar, 2=He, 3=CO2, 4=H, 5=Ne, 6=Kr",
     "mag_exposure": "Mag Exposure",
-    "magnetron_exposure_threshold": "Magnetron exposure threshold exceeded"
+    "magnetron_exposure_threshold": "Magnetron exposure threshold exceeded",
 
+    "missing_name": "Erreur : 'name' manquant dans l'étape {step_num}.",
+    "invalid_action": "Erreur : Action '{action_name}' non valide dans l'étape {step_num}.",
+    "invalid_condition": "Erreur : Condition '{condition_name}' non valide dans l'étape {step_num}.",
+    "missing_error_message": "Erreur : 'message_erreur' manquant alors que 'conditions' est présent dans l'étape {step_num}.",
+    "missing_timeout": "Erreur : 'timeout' manquant dans l'étape {step_num}."
 }

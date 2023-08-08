@@ -4,7 +4,7 @@
         "font_size": 10
     },
     "chamber_pressure": {
-        "address": 8,
+        "address": 7,
         "setpoint_high": 0.1,
         "setpoint_low": 0.1,
         "gas_type": "N2",

@@ -38,6 +38,10 @@ class JaugePression(CustomWidget):
         self.create_label("pressure", value = "0", unit = "")
 
     def update_pressure(self, value):
+        if value[0] == 'error':
+            self.update_label('pressure', value = "error", unit = "")
+            return
+
         unit = (int(value[1], 16) >> 4) & 3 #permet de récuperer uniquement les 2 bit indiquant l'unité
         gas_index = (int(value[1], 16) >> 12) & 7 #permet de récuperer uniquement les 2 bit indiquant le gas enregistré
         self.update_label("gas_type", gas_type = PiraniConfig.gas_types[gas_index])
@@ -76,5 +80,5 @@ class JaugePression(CustomWidget):
             value = float(value)*0.75
         elif self.parent.config[self.key]["pressure_unit"] == "Pascal":
             value = float(value)*0.0075
-        return value
+        return float(value)
 

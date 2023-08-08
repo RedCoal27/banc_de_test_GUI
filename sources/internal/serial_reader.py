@@ -143,7 +143,8 @@ class SerialReaderThread(QThread):
                     for key in ["chamber_pressure","pump_pressure"]:
                         data = None
                         data = self.RS485.pirani[key].read_pressure()
-                        if len(data)==2:
+                        print(data)
+                        if len(data)==2 or data[0]=='error':
                             self.custom_widgets[key].update_pressure(data)
                 except Exception as e:
                     print("Serial Reader:",e)

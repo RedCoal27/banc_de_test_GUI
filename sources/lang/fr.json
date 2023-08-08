@@ -3,6 +3,7 @@
     "en": "English",
     "fr": "Français",
     "gilles": "Gilles",
+    
     "none_available": "Aucun disponible",
     "serial_port_error": "Impossible d'ouvrir le port {port}. Le programme continuera sans lire le port série.",
     "warning": "Avertissement",
@@ -36,9 +37,16 @@
     "chamber_open": "Chambre {state}",
     "chamber_pressure_high": "Pression de la chambre {sens}{value}T",
 
-    "chamber":"Chambre",
-    "set_state":"{state}",
+    
+    "chamber" : "Chambre",
+    "recipes" : "Recette",
+    "step": "{name} ({step}/{total_steps})",
+    "timeout" : "Timeouts: {value}s",
+    "time_left" : "Temps restant: {value}s",
+    "time_display": "{type}",
+
     "cycle":"Cycle",
+    "set_state":"{state}",
     "pressure":"Pression: {value}{unit}",
     "offset":"Offset",
     "size":"Taille: {value} {unit}",
@@ -65,9 +73,11 @@
     "iso_turbo":"Iso \nTurbo",
     "iso_chamber":"Iso \nChamber",
 
-    "change_state":"Changer l'état",
-    "sensor_up":"Capteur Haut",
-    "sensor_down":"Capteur Bas",
+    "change_state" : "Changer l'état",
+    "sensor_up" : "Capteur Haut",
+    "sensor_down" : "Capteur Bas",
+    "sensor_open": "Capteur ouvert: {state}",
+    "sensor_close": "Capteur fermé: {state}",
 
     "cycles":"Nb de cycles:",
     "time":"Temps {state}",
@@ -139,5 +149,11 @@
     "gas_type_pirani": "Type de Gaz",
     "gas_type_meaning": "0=N2 (default), 1=Ar, 2=He, 3=CO2, 4=H, 5=Ne, 6=Kr",
     "mag_exposure": "Exposition Mag",
-    "magnetron_exposure_threshold": "Seuil d'exposition du magnétron dépassé"
+    "magnetron_exposure_threshold": "Seuil d'exposition du magnétron dépassé",
+
+    "missing_name": "Erreur : 'name' manquant dans l'étape {step_num}.",
+    "invalid_action": "Erreur : Action '{action_name}' non valide dans l'étape {step_num}.",
+    "invalid_condition": "Erreur : Condition '{condition_name}' non valide dans l'étape {step_num}.",
+    "missing_error_message": "Erreur : 'message_erreur' manquant alors que 'conditions' est présent dans l'étape {step_num}.",
+    "missing_timeout": "Erreur : 'timeout' manquant dans l'étape {step_num}."
 }

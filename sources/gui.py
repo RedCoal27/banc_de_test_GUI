@@ -21,7 +21,7 @@ from scene.gate import Gate
 from scene.gate_ch import GateCH
 from scene.circle import Circle
 from scene.jauge_pression import JaugePression
-from scene.pump import Pump
+from scene.turbo_pump import TurboPump
 from scene.roughing_pump import RoughingPump
 from scene.motor_lift import MotorisedLift
 from scene.throttle_valve import ThrottleValve
@@ -194,8 +194,8 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["pump_pressure"] = JaugePression([0.38,0.73], "pump_pressure", parent=self)
 
-        self.custom_widgets["turbo_pump_rga"] = Pump([0.02,0.51], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
-        self.custom_widgets["turbo_pump_ch"] = Pump([0.13,0.51], Cmd.TurboCH, "turbo_pump_ch", parent=self)
+        self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02,0.51], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
+        self.custom_widgets["turbo_pump_ch"] = TurboPump([0.13,0.51], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
         self.custom_widgets["roughing_pump"] = RoughingPump([0.245,0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 

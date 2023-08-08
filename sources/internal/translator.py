@@ -32,11 +32,18 @@ class Translator:
         Logger.info("Translations loaded.")
         
     def translate(self, key, **kwargs):
+        if not isinstance(key,str):
+            key = str(key)
         for k, v in kwargs.items():
             kwargs[k] = self.translate(v)
         try:
+            # Try to get the translation in the current language
             translation = self.translations[self.current_language][key]
+        except KeyError:
+            # If not found, fallback to English
+            translation = self.translations["en"].get(key, key)
+        try:
             translation = translation.format(**kwargs)
             return translation
-        except KeyError as e:
+        except:
             return key

@@ -1,0 +1,25 @@
+1:
+  name: Close iso
+  actions:
+    iso_chamber: close
+    iso_rga_ch: close
+    iso_rga_pump: close
+    iso_turbo: close
+    turbo_pump_gate: close
+  timeout: 1
+2:
+  name: Turn OFF
+  actions:
+    turbo_pump_rga: off
+    turbo_pump_ch: off
+  timeout: 10
+3:
+  name: Ventilation
+  actions:
+    nupro_venta: open
+  conditions:
+    chamber_pressure: ">740"
+  timeout: 10000
+4:
+  name: Wait
+  timeout: 60

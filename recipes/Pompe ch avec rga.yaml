@@ -1,0 +1,45 @@
+Starting pump:
+  actions:
+    - action: roughing_pump
+      value: on
+  conditions:
+    - condition: pump_pressure
+      value: <0.02 #Torr
+  timeout: 60
+  message_erreur: La roughing pump n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+
+Open iso chamber:
+  actions:
+    - action: iso_chamber
+      value: open
+  conditions:
+    - condition: chamber_pressure
+      value: <0.1 #Torr
+  timeout: 60
+  message_erreur: La chambre n'a pas atteint la pression de 0.1 mbar en 60 secondes.
+
+Close iso chamber:
+  actions:
+    - action: iso_chamber
+      value: close
+  timeout: 3
+  
+# Open iso turbo:
+#   actions:
+#     - action: iso_turbo
+#       value: 0
+#   conditions:
+#     - condition: pump_pressure
+#       value: <0.02
+#   timeout: 60
+#   message_erreur: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+  
+# Start turbo pump:
+#   actions:
+#     - action: turbo_pump
+#       value: on
+#   conditions:
+#     - condition: turbo_pump
+#       value: at_speed
+#   timeout: 60
+#   message_erreur: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.

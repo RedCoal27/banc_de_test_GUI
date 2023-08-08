@@ -11,8 +11,8 @@ class GateCH(Gate):
         self.circle.setRightClickFunction(self.on_right_click)
 
         # Initialize sensor states and sensor line
-        self.sensor_up = True
-        self.sensor_down = True
+        self.sensor_open = True
+        self.sensor_close = True
         self.sensor_line = Line(0, 0, 0, 0, "#00FF00", 7)  # Using red for sensor line and a width of 7
         # Remove the original line from the scene and re-add it to make sure it's on top
         self.scene.removeItem(self.line)
@@ -39,16 +39,16 @@ class GateCH(Gate):
         """
         self.change_state(state)
 
-    def update_sensors(self, sensor_up, sensor_down):
+    def update_sensors(self, sensor_open, sensor_close):
         """
         Updates the sensor state of the gate.
 
         Args:
-        - sensor_up: a boolean representing the state of the upper sensor
-        - sensor_down: a boolean representing the state of the lower sensor
+        - sensor_open: a boolean representing the state of the upper sensor
+        - sensor_close: a boolean representing the state of the lower sensor
         """
-        self.sensor_up = sensor_up
-        self.sensor_down = sensor_down
+        self.sensor_open = sensor_open
+        self.sensor_close = sensor_close
 
     def update_sensor_line(self):
         """
@@ -56,13 +56,13 @@ class GateCH(Gate):
         """
         offset = 0.0015 # Offset to compensate for the width of the line
         diag_length = (self.circle.radius) * math.sqrt(2)  # Calculate the length of the diagonal
-        if self.sensor_up and not self.sensor_down:
+        if self.sensor_open and not self.sensor_close:
             # Draw vertical line
             self.sensor_line.set_line(self.scene, self.circle.center[0]-self.circle.radius+offset, self.circle.center[1], self.circle.center[0]+self.circle.radius-offset, self.circle.center[1])
-        elif self.sensor_down and not self.sensor_up:
+        elif self.sensor_close and not self.sensor_open:
             # Draw horizontal line
             self.sensor_line.set_line(self.scene, self.circle.center[0], self.circle.center[1]-self.circle.radius+offset, self.circle.center[0], self.circle.center[1]+self.circle.radius-offset)
-        elif self.sensor_up and self.sensor_down or not self.sensor_up and not self.sensor_down:
+        elif self.sensor_open and self.sensor_close or not self.sensor_open and not self.sensor_close:
             # Draw diagonal line
             self.sensor_line.set_line(self.scene, self.circle.center[0]-diag_length/2, self.circle.center[1]-diag_length/2, self.circle.center[0]+diag_length/2, self.circle.center[1]+diag_length/2)
         else:
@@ -73,11 +73,11 @@ class GateCH(Gate):
     def on_right_click(self, event):
         contextMenu = QMenu()
 
-        sensorUpAction = QAction(self.translator.translate("sensor_up", state= 'off' if self.sensor_up else 'on'))
+        sensorUpAction = QAction(self.translator.translate("sensor_open", state= 'off' if self.sensor_open else 'on'))
         sensorUpAction.setEnabled(False)  # Make it non-clickable
         contextMenu.addAction(sensorUpAction)
 
-        sensorDownAction = QAction(self.translator.translate("sensor_down", state= 'off' if self.sensor_down else 'on'))
+        sensorDownAction = QAction(self.translator.translate("sensor_close", state= 'off' if self.sensor_close else 'on'))
         sensorDownAction.setEnabled(False)  # Make it non-clickable
         contextMenu.addAction(sensorDownAction)
 
@@ -98,12 +98,10 @@ class GateCH(Gate):
         self.window = GraphWindow(self, state_up_key="opening", state_down_key="closing")
         self.window.show()
 
-    def get_value(self, position):
+    def get_value(self):
         """
         Gets the value of the gate. Used for recipes.
         
         """
-        if position == "up":
-            return self.sensor_up
-        elif position == "down":
-            return self.sensor_down
+        state = -1 if self.sensor_open*2 == self.sensor_close else 0 if not self.sensor_open else 1
+        return state

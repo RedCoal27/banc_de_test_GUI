@@ -15,6 +15,7 @@ class ChamberLabel(CustomWidget):
         self.create_label("step", name = "", step = "", total_steps = "")
         self.create_label("time_display", type = "")
 
+
         # self.create_button("Faire le vide", alignment = Qt.AlignmentFlag.AlignCenter)
         self.hide()
 

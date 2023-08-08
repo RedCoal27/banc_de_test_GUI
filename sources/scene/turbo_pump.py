@@ -3,13 +3,14 @@ from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
 from internal.logger import Logger
 
-class Pump(CustomWidget):
+class TurboPump(CustomWidget):
     def __init__(self, pos, cmd, key , parent):
         ratio = (0.1, 0.14)
         self.serial_reader = parent.serial_reader
         self.state = True
         self.cmd = cmd
         self.key = key
+        self.status = 0
         super().__init__(parent.translator, pos, ratio, "#FD6801")
         self.create_labels(key)
         self.create_button("set_state", self.click_DO, state = "off")
@@ -35,6 +36,7 @@ class Pump(CustomWidget):
         Args:
         - status: a boolean representing the state of the status DI
         """
+        self.status = status
         self.update_label('status', state = "slow" if status else "at_speed")
 
 
@@ -68,4 +70,4 @@ class Pump(CustomWidget):
         """
         Returns the value of the pump. Used for recipes.
         """
-        return self.state
+        return self.status

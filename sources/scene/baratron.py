@@ -32,7 +32,7 @@ class Baratron(CustomWidget):
         """
         unit = " Torr"
         value = float(value)
-        if value > 10: 
+        if value > 10.5: 
             value = "overrange"
             unit = ""
         else :
