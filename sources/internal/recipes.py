@@ -7,8 +7,8 @@ from internal.logger import Logger
 import sys
 
 class Recipes(QObject):
-    valid_actions = ['roughing_pump', 'iso_chamber', 'iso_turbo', 'turbo_pump_ch', 'turbo_pump_gate']
-    valid_conditions = ['pump_pressure', 'chamber_pressure', 'turbo_pump_ch']
+    valid_actions = ['WL1','WL2','WL3','SV','throttle_valve','motor_lift','MFC1','MFC2', 'roughing_pump', 'turbo_pump_ch', 'turbo_pump_rga', 'turbo_pump_gate','nupro_final','nupro_MFC1','nupro_MFC2','nupro_vent','iso_rga_ch','iso_rga_pump', 'iso_turbo','turbo_pump_gate', 'iso_chamber']
+    valid_conditions = ['interlock','WL1','WL2','WL3','SV','baratron1','baratron2','MFC1','MFC2','chamber_pressure','pump_pressure','ion_gauge','roughing_pump','turbo_pump_ch','turbo_pump_rga','turbo_pump_gate']
 
     dictionnaire = {
         "on":0,
@@ -19,6 +19,7 @@ class Recipes(QObject):
         "up": 1,
         "down":0,
     }
+    
     finished = pyqtSignal()
     warning = pyqtSignal(str)
     request_timer_stop = pyqtSignal()
@@ -53,46 +54,54 @@ class Recipes(QObject):
         with open(yaml_path, 'r') as f:
             content = yaml.safe_load(f)
 
+        filename = os.path.basename(yaml_path)
+        if not isinstance(content, dict):
+            self.handle_error('invalid_yaml', filename=filename)
+            
         for step_num, step in content.items():
             # Vérification de 'name'
             if "name" not in step:
-                error_message = self.translator.translate('missing_name', step_num=step_num)
-                sys.exit(error_message)
+                self.handle_error('missing_name', filename=filename, step_num=step_num)
 
             # Vérification des 'actions'
             if "actions" in step:
                 for action_name in step["actions"].keys():
                     if action_name not in self.valid_actions:
-                        error_message = self.translator.translate('invalid_action', step_num=step_num, action_name=action_name)
-                        sys.exit(error_message)
+                        self.handle_error('invalid_action', filename=filename, step_num=step_num, action_name=action_name)
 
             # Vérification des 'conditions'
             if "conditions" in step:
                 for condition_name in step["conditions"].keys():
                     if condition_name not in self.valid_conditions:
-                        error_message = self.translator.translate('invalid_condition', step_num=step_num, condition_name=condition_name)
-                        sys.exit(error_message)
+                        self.handle_error('invalid_condition', filename=filename, step_num=step_num, condition_name=condition_name)
 
-                # Vérification de 'message_erreur' si 'conditions' est présent
-                if "message_erreur" not in step:
-                    error_message = self.translator.translate('missing_error_message', step_num=step_num)
-                    sys.exit(error_message)
+                # Vérification de 'error_message' si 'conditions' est présent
+                if "error_message" not in step:
+                    self.handle_error('missing_error_message', filename=filename, step_num=step_num)
 
             # Vérification de 'timeout'
             if "timeout" not in step:
-                error_message = self.translator.translate('missing_timeout', step_num=step_num)
-                sys.exit(error_message)
+                self.handle_error('missing_timeout', filename=filename, step_num=step_num)
 
-    
+    def handle_error(self, error_key, **kwargs):
+        error_message = self.translator.translate(error_key, **kwargs)
+        Logger.error(error_message)
+        raise ValueError(error_message)  # Lève une exception avec le message d'erreur
+
     def load_recipes(self):
         recipes = {}
         for filename in os.listdir(self.recipe_folder):
-            self.v
-            if filename.endswith('.yaml'):
-                with open(os.path.join(self.recipe_folder, filename), 'r', encoding="utf-8") as f:
-                    recipe_name = os.path.splitext(filename)[0]
-                    recipes[recipe_name] = yaml.safe_load(f)
+            path = os.path.join(self.recipe_folder, filename)
+            try:  # Essaye de vérifier et de charger le fichier
+                self.verify_yaml(path)
+                if filename.endswith('.yaml'):
+                    with open(path, 'r', encoding="utf-8") as f:
+                        recipe_name = os.path.splitext(filename)[0]
+                        recipes[recipe_name] = yaml.safe_load(f)
+            except ValueError as e:  # Gère l'exception si une erreur est trouvée
+                print(f"Erreur lors du chargement de {filename}: {str(e)}")
         return recipes
+
 
     def execute_recipe(self, recipe_name):
         if self.thread.isRunning():
@@ -122,8 +131,8 @@ class Recipes(QObject):
             if 'conditions' in step:
                 print(f"  Condition: {step['conditions']}")
                 self.current_conditions = step['conditions']
-                if 'message_erreur' in step:
-                    self.current_error_message = step['message_erreur']
+                if 'error_message' in step:
+                    self.current_error_message = step['error_message']
                 else:
                     self.current_error_message = "Error"
                 condition_met = self.check_conditions(self.current_conditions)

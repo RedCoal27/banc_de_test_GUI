@@ -5,7 +5,7 @@
   conditions:
     pump_pressure: "<0.02" #Torr
   timeout: 60
-  message_erreur: La roughing pump n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+  error_message: La roughing pump n'a pas atteint la pression de 0.02 mbar en 60 secondes.
 
 2:
   name: Open iso chamber
@@ -14,7 +14,7 @@
   conditions:
     chamber_pressure: "<0.05" #Torr
   timeout: 60
-  message_erreur: La chambre n'a pas atteint la pression de 0.1 mbar en 60 secondes.
+  error_message: La chambre n'a pas atteint la pression de 0.1 mbar en 60 secondes.
 
 3:
   name: Close iso chamber
@@ -29,7 +29,7 @@
   conditions:
     pump_pressure: "<0.02"
   timeout: 60
-  message_erreur: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+  error_message: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
   
 5:
   name: Starting turbo pump
@@ -38,6 +38,7 @@
   conditions:
     pump_pressure: "<0.02"
   timeout: 2
+  error_message: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
 
 6:
   name: Close iso turbo 2
@@ -52,7 +53,7 @@
   conditions:
     turbo_pump_ch: at_speed
   timeout: 300
-  message_erreur: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+  error_message: La turbo pompe n'a pas atteint la vitesse maximale en 300 secondes.
 
 8:
   name: Close iso chamber
@@ -68,6 +69,7 @@
   conditions:
     turbo_pump_gate: open
   timeout: 60
+  error_message: La vanne de la turbo pompe n'a pas atteint la position ouverte en 60 secondes.
 
 10:
   name: Wait

@@ -154,6 +154,6 @@
     "missing_name": "Erreur : 'name' manquant dans l'étape {step_num}.",
     "invalid_action": "Erreur : Action '{action_name}' non valide dans l'étape {step_num}.",
     "invalid_condition": "Erreur : Condition '{condition_name}' non valide dans l'étape {step_num}.",
-    "missing_error_message": "Erreur : 'message_erreur' manquant alors que 'conditions' est présent dans l'étape {step_num}.",
+    "missing_error_message": "Erreur : 'error_message' manquant alors que 'conditions' est présent dans l'étape {step_num}.",
     "missing_timeout": "Erreur : 'timeout' manquant dans l'étape {step_num}."
 }

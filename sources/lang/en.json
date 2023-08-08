@@ -151,9 +151,10 @@
     "mag_exposure": "Mag Exposure",
     "magnetron_exposure_threshold": "Magnetron exposure threshold exceeded",
 
-    "missing_name": "Erreur : 'name' manquant dans l'étape {step_num}.",
-    "invalid_action": "Erreur : Action '{action_name}' non valide dans l'étape {step_num}.",
-    "invalid_condition": "Erreur : Condition '{condition_name}' non valide dans l'étape {step_num}.",
-    "missing_error_message": "Erreur : 'message_erreur' manquant alors que 'conditions' est présent dans l'étape {step_num}.",
-    "missing_timeout": "Erreur : 'timeout' manquant dans l'étape {step_num}."
+    "invalid_yaml": "Invalid YAML file.",
+    "missing_name": "Error in '{filename}': 'name' is missing in step {step_num}.",
+    "invalid_action": "Error in '{filename}': Invalid action '{action_name}' in step {step_num}.",
+    "invalid_condition": "Error in '{filename}': Invalid condition '{condition_name}' in step {step_num}.",
+    "missing_error_message": "Error in '{filename}': 'error_message' is missing while 'conditions' is present in step {step_num}.",
+    "missing_timeout": "Error in '{filename}': 'timeout' is missing in step {step_num}."
 }

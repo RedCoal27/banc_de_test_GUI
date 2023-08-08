@@ -16,9 +16,10 @@
 3:
   name: Ventilation
   actions:
-    nupro_venta: open
+    nupro_vent: open
   conditions:
     chamber_pressure: ">740"
+  error_message: La chambre n'a pas atteint la pression de 740 mbar en 60 secondes.
   timeout: 10000
 4:
   name: Wait

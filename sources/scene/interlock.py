@@ -42,5 +42,12 @@ class Interlock(CustomWidget):
         self.update_label("chamber_open", state = "open" if states[0] else "close")
         self.update_label("chamber_pressure_high", sens = ">" if states[0] else "<", value = self.parent.config["chamber_pressure"]["setpoint_low"])
 
-    def get_states(self):
-        return self.states
+    def get_value(self):
+        '''
+        Returns the value of the widget. Used in the recipe.
+        '''
+        value = 0
+        for i, state in enumerate(self.states):
+            if state:
+                value += 2**i
+        return value
