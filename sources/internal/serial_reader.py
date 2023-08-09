@@ -105,16 +105,16 @@ class SerialReaderThread(QThread):
         while True:
             if self.serial_reader.busy == False and self.serial_reader.ser is not None:
                 try:
-
+                    #read all DI
                     self.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
                     self.serial_reader.send_data(1,0)
                     data = self.serial_reader.wait_and_read_data(4)
-                    print(data)
+                    # print(data)
                     if data is not None and len(data) == 4:
-                        self.custom_widgets["WL2"].update_DI(data[0] & Cmd.WL2.Up, data[0] & Cmd.WL2.Down)
-                        self.custom_widgets["WL3"].update_DI(data[0] & Cmd.WL3.Up, data[0] & Cmd.WL3.Down)
-                        self.custom_widgets["SV"].update_DI(data[0] & Cmd.SV.Up, data[0] & Cmd.SV.Down)
-                        self.custom_widgets["WL1"].update_DI(data[0] & Cmd.WL1.Up, data[0] & Cmd.WL1.Down)
+                        self.custom_widgets["wafer_lift2"].update_DI(data[0] & Cmd.wafer_lift2.Up, data[0] & Cmd.wafer_lift2.Down)
+                        self.custom_widgets["wafer_lift3"].update_DI(data[0] & Cmd.wafer_lift3.Up, data[0] & Cmd.wafer_lift3.Down)
+                        self.custom_widgets["slit_valve"].update_DI(data[0] & Cmd.slit_valve.Up, data[0] & Cmd.slit_valve.Down)
+                        self.custom_widgets["wafer_lift1"].update_DI(data[0] & Cmd.wafer_lift1.Up, data[0] & Cmd.wafer_lift1.Down)
                         
                         self.custom_widgets["roughing_pump"].update_DI(data[2] & 2)
                         self.custom_widgets["turbo_pump_rga"].update_DI(data[1] & 64)
@@ -130,6 +130,7 @@ class SerialReaderThread(QThread):
                                                                             ])
                         QTimer.singleShot(0, self.parent.update_AI)
 
+                    # read analog inputs 1 (MFC1, MFC2, baratron1, baratron2)
                     self.serial_reader.send_data(6,4)
                     data = None
                     data = self.serial_reader.wait_and_read_data(until='\n'.encode())
@@ -140,14 +141,25 @@ class SerialReaderThread(QThread):
                         self.custom_widgets["baratron1"].update_AI(data[2])
                         self.custom_widgets["baratron2"].update_AI(data[3])
                         
+                    #read analog inputs 2 (generator1 source power, generator1 reflected power, generator2 source power, generator2 reflected power)
+                    self.serial_reader.send_data(6,5)
+                    data = None
+                    data = self.serial_reader.wait_and_read_data(until='\n'.encode())
+                    if data is not None and len(data) > 0:
+                        data = data.decode().strip().split(' ')
+                        self.custom_widgets["generator1"].update_AI(data[0:2])
+                        self.custom_widgets["generator2"].update_AI(data[2:4])
+                        
+                    # read RS485 sensors
                     for key in ["chamber_pressure","pump_pressure"]:
                         data = None
                         data = self.RS485.pirani[key].read_pressure()
-                        print(data)
+                        # print(data)
                         if len(data)==2 or data[0]=='error':
                             self.custom_widgets[key].update_pressure(data)
+
                 except Exception as e:
-                    print("Serial Reader:",e)
+                    # print("Serial Reader:",e)
                     pass
 
                 self.serial_reader.busy = False # free the serial reader

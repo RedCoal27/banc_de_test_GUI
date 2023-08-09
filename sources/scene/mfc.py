@@ -24,8 +24,8 @@ class MFC(CustomWidget):
         - key: a string representing the key of the widget
         """
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        self.create_label_with_spin_box("setpoint", initial_value=0, unit="sccm", function=self.update_AO)
-        self.create_label("actual", value = "0")
+        self.create_label_with_spin_box("setpoint", initial_value=0, max_value=self.parent.config.get_constant_value(key), unit="sccm", function=self.update_AO)
+        self.create_label("actual", value = "0", unit = "sccm")
         self.create_label_with_spin_box("offset", unit="sccm", initial_value=0, min_value = -100, max_value=100, function=self.update_offset)
         self.create_label("size", value = self.parent.config.get_constant_value(key), unit="sccm")
 
@@ -34,16 +34,16 @@ class MFC(CustomWidget):
         """
         Updates the value of the label.
         """
-        value = (float(value)/5*1000)
+        value = (float(value)/5*self.parent.config.get_constant_value(self.key))
         self.value = int(round(value - self.offset))
-        self.update_label("actual", value = self.value)
+        self.update_label("actual", value = self.value, unit="sccm")
 
     def update_AO(self, spin_box):
         """
         Updates the value of the label.
         """
-        print(spin_box.value())
-        self.parent.serial_reader.send_data(self.cmd, spin_box.value()/1000*5)  
+        value = spin_box.value()/self.parent.config.get_constant_value(self.key)*5 #transform value to 0-5V
+        self.parent.serial_reader.send_data(self.cmd, value)  
         Logger.debug(f"{self.key} setpoint changed to {spin_box.value()}")
 
     def update_offset(self, spin_box):

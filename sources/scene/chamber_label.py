@@ -23,15 +23,16 @@ class ChamberLabel(CustomWidget):
         self.update_button("set_state", state = "Start")
         for combo_box, key , _ in self.combo_boxes:
             combo_box.setDisabled(False)
+            self.parent.custom_widgets["auto"].buttons[0][0].setDisabled(False)
 
     def button_function(self):
         for combo_box, key , _ in self.combo_boxes:
-            print(key)
             if key == "recipes":
                 if self.recipes.is_running() is False:
                     combo_box.setDisabled(True)
                     self.recipes.execute_recipe(combo_box.currentText())
-                    self.update_button("set_state", state = "Stop")          
+                    self.update_button("set_state", state = "Stop")  
+                    self.parent.custom_widgets["auto"].buttons[0][0].setDisabled(True)        
                     break
                 else:
                     self.recipes.request_timer_stop.emit()
@@ -39,7 +40,6 @@ class ChamberLabel(CustomWidget):
                     continue
 
     def update_step(self, name, step, total_steps):
-        print(name, step, total_steps)
         self.update_label("step", name = name, step = step, total_steps = total_steps)
 
     def update_time(self, type, time):

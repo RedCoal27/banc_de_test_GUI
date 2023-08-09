@@ -55,7 +55,6 @@ class RS485:
 
         def convert_to_exp_format(self,value):
             value = "{:.1e}".format(value)
-            print(value)
             return value
         
 

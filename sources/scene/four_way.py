@@ -107,5 +107,4 @@ class FourWay(CustomWidget):
         
         """
         state = -1 if self.sensor_up*2 == self.sensor_down else 1 if not self.sensor_up else 0
-        print(state)
         return state

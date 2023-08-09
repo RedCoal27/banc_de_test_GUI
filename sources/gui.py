@@ -27,6 +27,8 @@ from scene.motor_lift import MotorisedLift
 from scene.throttle_valve import ThrottleValve
 from scene.label import Label
 from scene.ion_gauge import IonGauge
+from scene.generator import Generator
+
 from internal.menu_manager import MenuManager
 from internal.constant import *
 from internal.logger import Logger
@@ -177,12 +179,12 @@ class MainWindow(QMainWindow):
         self.custom_widgets["chamber_label"] = ChamberLabel([0.24,0.24], self)
 
 
-        self.custom_widgets["WL2"] = FourWay([0.24,0.01], Cmd.WL2, "WL", number="2", parent=self)
-        self.custom_widgets["WL3"] = FourWay([0.365,0.01], Cmd.WL3, "WL", number="3", parent=self)
-        self.custom_widgets["SV"] = FourWay([0.49,0.01], Cmd.SV, "SV", parent=self)
+        self.custom_widgets["wafer_lift2"] = FourWay([0.24,0.01], Cmd.wafer_lift2, "wafer_lift_n", number="2", parent=self)
+        self.custom_widgets["wafer_lift3"] = FourWay([0.365,0.01], Cmd.wafer_lift3, "wafer_lift_n", number="3", parent=self)
+        self.custom_widgets["slit_valve"] = FourWay([0.49,0.01], Cmd.slit_valve, "slit_valve", parent=self)
         self.custom_widgets["throttle_valve"] = ThrottleValve([0.24,0.44], "throttle_valve", parent=self)
         self.custom_widgets["motor_lift"] = MotorisedLift([0.37,0.44], "motor_lift", parent=self)
-        self.custom_widgets["WL1"] = FourWay([0.51,0.44] , Cmd.WL1, "WL", number="1", parent=self)
+        self.custom_widgets["wafer_lift1"] = FourWay([0.51,0.44] , Cmd.wafer_lift1, "wafer_lift_n", number="1", parent=self)
         self.custom_widgets["baratron1"] = Baratron([0.76,0.44], "baratron1", parent=self)
         self.custom_widgets["baratron2"] = Baratron([0.76,0.57], "baratron2", parent=self)
         self.custom_widgets["MFC1"] = MFC([0.79,0.15], Cmd.MFC1, "MFC1", self)
@@ -199,6 +201,8 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["roughing_pump"] = RoughingPump([0.245,0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 
+        self.custom_widgets["generator1"] = Generator([0.01,0.8], Cmd.Generator1, "generator1", parent=self)
+        self.custom_widgets["generator2"] = Generator([0.12,0.8], Cmd.Generator2, "generator2", parent=self)
 
         for key, custom_widget in self.custom_widgets.items():
             self.scene.addItem(custom_widget)

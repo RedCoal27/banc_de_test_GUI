@@ -8,7 +8,7 @@
     turbo_pump_gate: close
   timeout: 1
 2:
-  name: Turn OFF
+  name: Turn OF
   actions:
     turbo_pump_rga: off
     turbo_pump_ch: off
@@ -19,7 +19,7 @@
     nupro_vent: open
   conditions:
     chamber_pressure: ">740"
-  error_message: La chambre n'a pas atteint la pression de 740 mbar en 60 secondes.
+  error_message: La chambre n'a pas atteint la pression de 740 Torr en 60 secondes.
   timeout: 10000
 4:
   name: Wait

@@ -7,8 +7,8 @@ from internal.logger import Logger
 import sys
 
 class Recipes(QObject):
-    valid_actions = ['WL1','WL2','WL3','SV','throttle_valve','motor_lift','MFC1','MFC2', 'roughing_pump', 'turbo_pump_ch', 'turbo_pump_rga', 'turbo_pump_gate','nupro_final','nupro_MFC1','nupro_MFC2','nupro_vent','iso_rga_ch','iso_rga_pump', 'iso_turbo','turbo_pump_gate', 'iso_chamber']
-    valid_conditions = ['interlock','WL1','WL2','WL3','SV','baratron1','baratron2','MFC1','MFC2','chamber_pressure','pump_pressure','ion_gauge','roughing_pump','turbo_pump_ch','turbo_pump_rga','turbo_pump_gate']
+    valid_actions = ['wafer_lift1','wafer_lift2','wafer_lift3','SV','throttle_valve','motor_lift','MFC1','MFC2', 'roughing_pump', 'turbo_pump_ch', 'turbo_pump_rga', 'turbo_pump_gate','nupro_final','nupro_MFC1','nupro_MFC2','nupro_vent','iso_rga_ch','iso_rga_pump', 'iso_turbo','turbo_pump_gate', 'iso_chamber']
+    valid_conditions = ['interlock','wafer_lift1','wafer_lift2','wafer_lift3','SV','baratron1','baratron2','MFC1','MFC2','chamber_pressure','pump_pressure','ion_gauge','roughing_pump','turbo_pump_ch','turbo_pump_rga','turbo_pump_gate']
 
     dictionnaire = {
         "on":0,
@@ -16,6 +16,7 @@ class Recipes(QObject):
         "open":0,
         "close":1,
         "at_speed": 0,
+        "slow":1,
         "up": 1,
         "down":0,
     }
@@ -99,13 +100,13 @@ class Recipes(QObject):
                         recipe_name = os.path.splitext(filename)[0]
                         recipes[recipe_name] = yaml.safe_load(f)
             except ValueError as e:  # Gère l'exception si une erreur est trouvée
-                print(f"Erreur lors du chargement de {filename}: {str(e)}")
+                Logger.error(f"Erreur lors du chargement de {filename}: {str(e)}")
         return recipes
 
 
     def execute_recipe(self, recipe_name):
         if self.thread.isRunning():
-            print("A recipe is already running. Please wait for it to finish or stop it before starting a new one.")
+            Logger.info("A recipe is already running. Please wait for it to finish or stop it before starting a new one.")
             return
         if recipe_name in self.recipes:
             self.stop_event.clear()
@@ -119,7 +120,6 @@ class Recipes(QObject):
         recipe = self.current_recipe
         for index, step in enumerate(recipe.values()):  # On utilise values() pour obtenir seulement les valeurs
             step_name = step["name"]
-            print(step_name, step)
             if self.stop_event.is_set():
                 break
             self.parent.custom_widgets["chamber_label"].update_step(step_name, index + 1, len(recipe))
@@ -129,7 +129,6 @@ class Recipes(QObject):
                         action_value = self.dictionnaire[action_value]
                     self.action.emit(action_name, action_value)
             if 'conditions' in step:
-                print(f"  Condition: {step['conditions']}")
                 self.current_conditions = step['conditions']
                 if 'error_message' in step:
                     self.current_error_message = step['error_message']
@@ -147,16 +146,12 @@ class Recipes(QObject):
                 if not condition_met:
                     break
             else:
-                print(f"  No condition")
-                print(f"  Time: {step['timeout']}")
                 for time in range(int(step['timeout']), 0, -1):
                     self.parent.custom_widgets["chamber_label"].update_time("time_left", time)
                     loop = QEventLoop()
                     QTimer.singleShot(1000, loop.quit)  # Check the condition every second
                     loop.exec_()
-                    print(time)
                     if self.stop_event.is_set():
-                        print("stop")
                         break
             if self.stop_event.is_set():
                 break
@@ -164,11 +159,9 @@ class Recipes(QObject):
 
         
     def stop(self):
-        print("stop")
         self.timer.stop()
         self.stop_event.set()
         self.thread.quit()
-        print(self.stop_event.is_set())
         self.parent.custom_widgets["chamber_label"].button_stop()
 
 

@@ -37,7 +37,7 @@
     turbo_pump_ch: on
   conditions:
     pump_pressure: "<0.02"
-  timeout: 2
+  timeout: 10
   error_message: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
 
 6:

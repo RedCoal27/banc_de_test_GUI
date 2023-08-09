@@ -356,7 +356,7 @@ class GraphWindow(QMainWindow):
         sn = self.edits['SN'].text()
         if pn and sn:
             date = QDate.currentDate().toString("yyyy-MM-dd")
-            filename = f"{pn}-{sn}-{date}.csv"
+            filename = f"{pn}-{sn}-{date}.cslit_valve"
             self.edits['CSV File'].setText(filename)
             self.start_button.setEnabled(True)
         else:
@@ -371,12 +371,11 @@ class GraphWindow(QMainWindow):
         if not os.path.exists("data"):
             os.makedirs("data")
 
-        with open(path, 'w', newline='') as file:
+        with open(path, 'w', newafer_liftine='') as file:
             writer = csv.writer(file, delimiter=';')
             writer.writerow(['Cycle Number', 'Ascent Time', 'Descent Time'])
             ascent_times = cycle_durations[1::2]
             descent_times = cycle_durations[::2]
-            print(len(ascent_times))
             for i in range(len(ascent_times)):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
 

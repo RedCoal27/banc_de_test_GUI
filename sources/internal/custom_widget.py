@@ -2,6 +2,11 @@ from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsProxyWidget, QPushButton, 
 from PyQt5.QtGui import QPainterPath, QColor, QBrush, QPainter, QPixmap
 from PyQt5.QtCore import Qt, QSize
 
+
+
+
+
+
 class CustomWidget(QGraphicsWidget):
     def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, font_size=8):
         """
@@ -352,9 +357,10 @@ class CustomWidget(QGraphicsWidget):
 
         combo_box = QComboBox()
         combo_box.addItems(combo_items)
-        combo_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        combo_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         combo_box.setStyleSheet("QComboBox { font-size: " + str(self.font_size) + "pt; background-color: None; }")
         combo_box.setContentsMargins(0, 0, 0, 0)  # Remove margins for the QComboBox
+
 
         font = combo_box.font()
         font.setPointSizeF(self.font_size)
@@ -391,7 +397,7 @@ class CustomWidget(QGraphicsWidget):
         self.labels.append((label, widget_proxy, key, kwargs))  # Append the key for later language changes
         self.combo_boxes.append((combo_box, key, kwargs))  # Append the initial value and kwargs for later language changes
         self.buttons.append((button, widget_proxy, button_key, kwargs))  # Append the key for later language changes
-
+        widget_proxy.setZValue(1)
 
 
     def paint(self, painter, option, widget):
@@ -444,10 +450,12 @@ class CustomWidget(QGraphicsWidget):
             #change button size
             button[0].setFixedWidth(int(width*self.ratio[0]))
 
+        #number of élément in the layout
+        nb_element = self.layout.count()
         for spin_box in self.spin_boxes:
             spin_box[0].setStyleSheet("QSpinBox { font-size: " + str(self.font_size-1) + "pt; }")
             spin_box[0].setFixedWidth(int(width*self.ratio[0]/3.5))  # Adjust the 4 as needed
-            spin_box[0].setFixedHeight(int(height*self.ratio[1]/5.5))  # Adjust the 4 as needed
+            spin_box[0].setFixedHeight(int(height*self.ratio[1]/(nb_element*1.2)))
 
         for unit_label in self.unit_labels:
             font = unit_label[0].font()

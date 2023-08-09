@@ -27,25 +27,25 @@ class Cmd():
     MFC1 = 2
     MFC2 = 3
 
-    class WL1():
+    class wafer_lift1():
         DO = 10
         Port = MCP2_A #input port
         Up = 64
         Down = 128
 
-    class WL2():
+    class wafer_lift2():
         DO = 9
         Port = MCP2_A #input port
         Up = 16
         Down = 32
 
-    class WL3():
+    class wafer_lift3():
         DO = 8
         Port = MCP2_A #input port
         Up = 4
         Down = 8
 
-    class SV():
+    class slit_valve():
         DO = 7
         Port = MCP2_A #input port
         Up = 1
@@ -64,6 +64,15 @@ class Cmd():
         ChamberOpen = 1
         ChamberPressureHigh = 4
 
+    class Generator1():
+        Enable = 29
+        Interlock = 30
+        AO = 4
+
+    class Generator2():
+        Enable = 31
+        Interlock = 32
+        AO = 5
 
         
 

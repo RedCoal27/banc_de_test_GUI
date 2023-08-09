@@ -1,6 +1,6 @@
 {
     "gui": {
-        "lang": "en",
+        "lang": "fr",
         "font_size": 10
     },
     "chamber_pressure": {
@@ -32,35 +32,18 @@
                     "unit": "sccm",
                     "min": 0,
                     "max": 10000
-                }
-            }
-        },
-        {
-            "name": "pressure_control",
-            "values": {
-                "timeout_turbo_on": {
-                    "value": 16,
-                    "unit": "s",
-                    "tooltip": "timeout_turbo_on_tooltip"
                 },
-                "rouging_pump_base_pressure": {
+                "generator1": {
                     "value": 1000,
-                    "unit": "mTorr",
-                    "tooltip": "rouging_pump_base_pressure_tooltip",
+                    "unit": "V",
                     "min": 0,
-                    "max": 1000
+                    "max": 10000
                 },
-                "timeout_roughing_pump": {
-                    "value": 3,
-                    "unit": "s"
-                },
-                "chamber_pressure_start_turbo": {
-                    "value": 5,
-                    "unit": "mTorr"
-                },
-                "timeout_chamber_pressure": {
-                    "value": 1,
-                    "unit": "s"
+                "generator2": {
+                    "value": 1000,
+                    "unit": "V",
+                    "min": 0,
+                    "max": 10000
                 }
             }
         },

@@ -83,10 +83,14 @@ class GateCH(Gate):
 
 
         cycleAction = QAction(self.translator.translate("change_state"))
+        if self.parent.auto_mode is True:
+            cycleAction.setEnabled(False)
         cycleAction.triggered.connect(self.on_left_click)
         contextMenu.addAction(cycleAction)
 
         changeStateAction = QAction(self.translator.translate("cycle"))
+        if self.parent.auto_mode is True:
+            changeStateAction.setEnabled(False)
         changeStateAction.triggered.connect(self.open_windows)
         contextMenu.addAction(changeStateAction)
 

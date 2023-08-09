@@ -1,3 +1,12 @@
+"""
+This module contains the Gate class, which represents a gate in a graphical interface.
+
+The Gate class has the following methods:
+- __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], key: str, cmd: int, sens: str, parent, color="#4472C4"): initializes the Gate object with the given parameters.
+- on_left_click(self): a method called when the gate is clicked. Toggles the state of the gate and updates the line connecting the circle to the gate accordingly.
+- change_state(self, new_state=None): changes the state of the gate and updates the line connecting the circle to the gate accordingly.
+- set_value(self, value): sets the state of the gate. Used for recipes.
+"""
 from PyQt5.QtCore import Qt
 
 from internal.custom_widget import CustomWidget
@@ -64,7 +73,7 @@ class Gate():
 
         Toggles the state of the gate and updates the line connecting the circle to the gate accordingly.
         """
-        if self.parent.serial_reader.ser is not None:
+        if self.parent.serial_reader.ser is not None and self.parent.auto_mode is False:
             self.change_state()
 
     def change_state(self, new_state=None):

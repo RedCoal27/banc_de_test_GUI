@@ -5,9 +5,11 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 class HelpDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.translator = parent.translator
         self.setWindowTitle(self.translator.translate("Help"))
+        self.resize(800, 400)
         self.init_ui()
 
     def init_ui(self):
@@ -18,19 +20,25 @@ class HelpDialog(QDialog):
         self.text_edit.setReadOnly(True)
 
         # Set a fixed width for the list widget
-        self.list_view.setFixedWidth(100)
+        self.list_view.setFixedWidth(300)
 
         # Add categories to the list widget
         categories = {
-            "WL": "description",
-            "throttle_valve": "description",
-            "motor_lift": "description",
-            "interlock": "description",
-            "convectron": "description",
-            "gate": "description",
-            "pump": "description",
-
+            "manuel_automatic": "manuel_automatic_description",
+            "interlock": "interlock_description",
+            "roughing_pump": "roughing_pump_description",
+            "turbo_pump": "turbo_pump_description",
+            "iso_nupro": "iso_nupro_description",
+            "gate_turbo": "gate_turbo_description",
+            "wafer_lift_slit_valve": "wafer_lift_slit_valve_description",
+            "mfc": "mfc_description",
+            "baratron": "baratron_description",
+            "jauge_pirani": "jauge_pirani_description",
+            "throttle_valve": "not_defined",
+            "motor_lift": "not_defined",
+            "convectron": "not_defined",
         }
+
         self.add_categories(categories)
 
         self.list_view.setModel(self.model)
@@ -42,7 +50,7 @@ class HelpDialog(QDialog):
             border: none;
         """)
         self.text_edit.setStyleSheet("""
-            background-color: #ffffff;
+            background-color: #fdfdfd;
             border: 1px solid #dddddd;
             padding: 1px;
         """)
@@ -55,10 +63,11 @@ class HelpDialog(QDialog):
         for category_key, content_key in categories.items():
             item = QStandardItem(self.translator.translate(category_key))
             item.setData(self.translator.translate(content_key), Qt.UserRole + 1)
-            item.setTextAlignment(Qt.AlignCenter)  # Center the text
+            item.setTextAlignment(Qt.AlignJustify)  # Center the text
+            item.setEditable(False)
             self.model.appendRow(item)
 
     def display_help(self, current, previous):
         if current:
             self.text_edit.setPlainText(current.data(Qt.UserRole + 1))
-            self.text_edit.setAlignment(Qt.AlignCenter)
+            self.text_edit.setAlignment(Qt.AlignJustify)

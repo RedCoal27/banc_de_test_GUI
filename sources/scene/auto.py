@@ -14,12 +14,33 @@ class Auto(CustomWidget):
         self.create_button("set_state", function=self.auto, state = "manual")
 
     def auto(self):
-        self.parent.auto_mode = not self.parent.auto_mode
         if self.parent.auto_mode is True:
-            self.update_button("set_state", state = "auto")
-            self.parent.custom_widgets["chamber_label"].show()
+            self.set_manual()
         else:
-            self.update_button("set_state", state = "manual")
-            self.parent.custom_widgets["chamber_label"].hide()
-
+            self.set_auto()
     
+    def set_auto(self):
+        self.parent.auto_mode = True
+        self.parent.custom_widgets["chamber_label"].show()
+        for custom_widget in self.parent.custom_widgets.values():
+            if isinstance(custom_widget, CustomWidget):
+                for button in custom_widget.buttons:
+                    button[0].setEnabled(False)
+                for spin_box in custom_widget.spin_boxes:
+                    spin_box[0].setEnabled(False)
+
+        self.update_button("set_state", state = "auto")
+        self.buttons[0][0].setEnabled(True)
+        self.parent.custom_widgets["chamber_label"].buttons[0][0].setEnabled(True)
+
+    def set_manual(self):
+        self.parent.auto_mode = False
+        self.parent.custom_widgets["chamber_label"].hide()
+        for custom_widget in self.parent.custom_widgets.values():
+            if isinstance(custom_widget, CustomWidget):
+                for button in custom_widget.buttons:
+                    button[0].setEnabled(True)
+                for spin_box in custom_widget.spin_boxes:
+                    spin_box[0].setEnabled(True)
+
+        self.update_button("set_state", state = "manual")
