@@ -39,7 +39,7 @@ class Auto(CustomWidget):
         self.parent.auto_mode = False
         super().__init__(parent.translator, pos, ratio, "#FFD966")
         self.layout.setContentsMargins(8, 8, 8, 8)  # Ajouter cette ligne pour supprimer les marges
-        self.create_button("set_state", function=self.auto, state="manuel")
+        self.create_button("set_state", function=self.auto, state="manual")
 
     def auto(self):
         """
@@ -80,4 +80,4 @@ class Auto(CustomWidget):
                 for spin_box in custom_widget.spin_boxes:
                     spin_box[0].setEnabled(True)
 
-        self.update_button("set_state", state="manuel")
+        self.update_button("set_state", state="manual")

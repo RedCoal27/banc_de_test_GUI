@@ -52,7 +52,7 @@ class RoughingPump(CustomWidget):
             key: Clé utilisée pour identifier la pompe.
             parent: Référence à l'objet parent du widget.
         """
-        ratio = (0.09, 0.14)
+        ratio = (0.1, 0.14)
         self.serial_reader = parent.serial_reader
         self.state = True
         self.cmd = cmd

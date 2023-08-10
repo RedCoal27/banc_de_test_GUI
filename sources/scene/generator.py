@@ -83,7 +83,7 @@ class Generator(CustomWidget):
             key: Clé utilisée pour identifier le générateur.
             parent: Objet parent du widget.
         """
-        ratio = (0.1225, 0.15)
+        ratio = (0.105, 0.16)
         self.serial_reader = parent.serial_reader
         self.key = key
         self.cmd = cmd
@@ -106,7 +106,7 @@ class Generator(CustomWidget):
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label_with_spin_box("setpoint", initial_value=0, max_value=self.parent.config.get_constant_value(self.key), unit="V", function=self.update_AO)
         self.create_label("source_power", value="0")
-        self.create_label("voltage_reflected", value="0")
+        self.create_label("voltage_reflected", value="1000")
 
     def create_buttons(self):
         """

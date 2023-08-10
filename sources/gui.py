@@ -193,10 +193,10 @@ class MainWindow(QMainWindow):
         self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02, 0.50], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = TurboPump([0.14, 0.50], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
-        self.custom_widgets["roughing_pump"] = RoughingPump([0.27, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
+        self.custom_widgets["roughing_pump"] = RoughingPump([0.265, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 
-        self.custom_widgets["generator1"] = Generator([0.005, 0.8], Cmd.Generator1, "generator1", parent=self)
-        self.custom_widgets["generator2"] = Generator([0.135, 0.8], Cmd.Generator2, "generator2", parent=self)
+        self.custom_widgets["generator1"] = Generator([0.0105, 0.795], Cmd.Generator1, "generator1", parent=self)
+        self.custom_widgets["generator2"] = Generator([0.135, 0.795], Cmd.Generator2, "generator2", parent=self)
 
         for key, custom_widget in self.custom_widgets.items():
             self.scene.addItem(custom_widget)
