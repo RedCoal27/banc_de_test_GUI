@@ -10,12 +10,60 @@ from window.help_dialog import HelpDialog
 
 
 class MenuManager:
+    """
+    La classe MenuManager gère la création et la gestion des menus dans l'interface graphique.
+
+    Attributes:
+        parent: Référence à l'objet parent.
+        translator: Objet de traduction.
+        serial_reader: Lecteur série pour la communication avec les ports COM.
+
+    Methods:
+        __init__(self, parent):
+            Constructeur de la classe MenuManager.
+
+        create_menus(self):
+            Crée les menus dans la barre de menu.
+
+        create_menu(self, menu_name, actions):
+            Crée un menu avec les actions spécifiées.
+
+        create_font_size_menu(self):
+            Crée le menu de sélection de la taille de la police.
+
+        change_font_size(self, size):
+            Change la taille de la police dans les widgets.
+
+        update_com_menu(self):
+            Met à jour le menu des ports COM disponibles.
+
+        create_language_menu(self):
+            Crée le menu de sélection de la langue.
+
+        change_language(self, lang):
+            Change la langue de l'interface graphique.
+
+        open_constant_dialog(self):
+            Ouvre la boîte de dialogue pour les constantes.
+
+        open_help_dialog(self):
+            Ouvre la boîte de dialogue d'aide.
+    """
     def __init__(self, parent):
+        """
+        Constructeur de la classe MenuManager.
+
+        Args:
+            parent: Référence à l'objet parent.
+        """
         self.parent = parent
         self.translator = parent.translator
         self.serial_reader = parent.serial_reader
 
     def create_menus(self):
+        """
+        Crée les menus dans la barre de menu.
+        """
         self.config_menu = QMenu("Config", self.parent)
         self.com_menu = QMenu("COM", self.parent)
         self.help_action = QAction(self.translator.translate("Help"), self.parent)
@@ -30,12 +78,25 @@ class MenuManager:
 
 
     def create_menu(self, menu_name, actions):
+        """
+        Crée un menu avec les actions spécifiées.
+
+        Args:
+            menu_name: Nom du menu.
+            actions: Liste des actions du menu.
+        """
         menu = QMenu(menu_name, self.parent)
         for action in actions:
             menu.addAction(action)
         return menu
 
     def create_font_size_menu(self):
+        """
+        Crée le menu de sélection de la taille de la police.
+
+        Returns:
+            Menu de sélection de la taille de la police.
+        """
         font_size_menu = QMenu(self.translator.translate("Font size"), self.parent)
         action_group = QActionGroup(self.parent)
         action_group.setExclusive(True)
@@ -50,6 +111,12 @@ class MenuManager:
         return font_size_menu
 
     def change_font_size(self, size):
+        """
+        Change la taille de la police dans les widgets.
+
+        Args:
+            size: Taille de la police à définir.
+        """
         for item in self.parent.scene.items():
             if isinstance(item, CustomWidget):
                 item.set_font_size(size)
@@ -57,7 +124,11 @@ class MenuManager:
         self.parent.config.save_config()
         QTimer.singleShot(0, self.parent.resize_widgets)
 
+
     def update_com_menu(self):
+        """
+        Met à jour le menu des ports COM disponibles.
+        """
         self.com_menu.clear()
         action_group = QActionGroup(self.parent)
         action_group.setExclusive(True)
@@ -75,6 +146,12 @@ class MenuManager:
             self.com_menu.addAction(self.translator.translate("none_available"))
 
     def create_language_menu(self):
+        """
+        Crée le menu de sélection de la langue.
+
+        Returns:
+            Menu de sélection de la langue.
+        """
         language_menu = QMenu(self.translator.translate("language"), self.parent)
         action_group = QActionGroup(self.parent)
         action_group.setExclusive(True)
@@ -89,6 +166,12 @@ class MenuManager:
         return language_menu
 
     def change_language(self, lang):
+        """
+        Change la langue de l'interface graphique.
+
+        Args:
+            lang: Langue à définir.
+        """
         self.translator.current_language = lang
         # self.language_menu.setTitle(self.translator.translate("language"))
         self.config_menu.setTitle(self.translator.translate("Config"))
@@ -102,9 +185,15 @@ class MenuManager:
                 item.change_language()
 
     def open_constant_dialog(self):
+        """
+        Ouvre la boîte de dialogue pour les constantes.
+        """
         dialog = ConstantDialog(self.parent)
         dialog.exec_()
 
     def open_help_dialog(self):
+        """
+        Ouvre la boîte de dialogue d'aide.
+        """
         dialog = HelpDialog(self.parent)
         dialog.exec_()

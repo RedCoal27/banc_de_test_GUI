@@ -5,6 +5,12 @@ QCoreApplication.setAttribute(Qt.AA_DisableHighDpiScaling)
 
 class ConstantDialog(QDialog):
     def __init__(self, parent=None):
+        """
+        Constructeur de la classe ConstantDialog.
+
+        Args:
+            parent: Objet parent.
+        """
         super().__init__(parent)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
@@ -79,6 +85,9 @@ class ConstantDialog(QDialog):
         self.setFixedSize(self.sizeHint())
 
     def confirm(self):
+        """
+        Confirme les modifications apportées aux constantes et les enregistre dans la configuration.
+        """
         for (index, const), spin_box in self.spin_boxes.items():
             self.parent.config["constants"][index]["values"][const]["value"] = spin_box.value()
 

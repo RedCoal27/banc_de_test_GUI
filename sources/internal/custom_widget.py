@@ -9,7 +9,6 @@ from PyQt5.QtCore import Qt, QSize
 
 class CustomWidget(QGraphicsWidget):
     """
-    Description:
     Classe CustomWidget, un widget personnalisé pouvant contenir des étiquettes et des boutons.
 
     Methods:

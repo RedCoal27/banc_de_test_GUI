@@ -14,6 +14,12 @@ class SerialReader(QObject):
     error_occurred = pyqtSignal(str) 
 
     def __init__(self, parent):
+        """
+        Constructeur de la classe SerialReader.
+
+        Args:
+            parent: Objet parent.
+        """
         super().__init__()
         self.ser = None
         self.translator = parent.translator
@@ -24,9 +30,21 @@ class SerialReader(QObject):
 
 
     def get_available_com_ports(self):
+        """
+        Obtient la liste des ports COM disponibles.
+
+        Returns:
+            List[str]: Liste des ports COM disponibles.
+        """
         return [port.device for port in comports()]
 
     def set_com_port(self, port):
+        """
+        Définit le port COM à utiliser.
+
+        Args:
+            port (str): Port COM à utiliser.
+        """
         if port is not None:
             if self.ser is not None and self.ser.port == port:
                 return
@@ -41,10 +59,27 @@ class SerialReader(QObject):
 
 
     def float_to_bytes(self, f):
+        """
+        Convertit un nombre flottant en bytes au format little-endian.
+
+        Args:
+            f (float): Nombre flottant à convertir.
+
+        Returns:
+            bytes: Valeur convertie en bytes.
+        """
         # Convertir le float en bytes en little-endian
         return struct.pack('<f', f)
     
     def send_data(self, type, data, other_data=[]):
+        """
+        Envoie des données via le port série.
+
+        Args:
+            type (int): Type de données à envoyer.
+            data: Données à envoyer.
+            other_data (list): Autres données à envoyer.
+        """
         if self.ser is not None:
             try:
                 self.ser.write(bytes([type]))
@@ -63,13 +98,14 @@ class SerialReader(QObject):
 
     def wait_and_read_data(self, num_values=1, until:bytes="".encode()):
         """
-        Waits for data to be available on the serial port and reads it.
+        Attend que des données soient disponibles sur le port série et les lit.
 
         Args:
-            num_values (int): The number of bytes to read from the serial port.
+            num_values (int): Nombre d'octets à lire depuis le port série.
+            until (bytes): Données jusqu'auxquelles lire.
 
         Returns:
-            bytes: The data read from the serial port, or None if there was an error.
+            bytes: Données lues depuis le port série, ou None en cas d'erreur.
         """
         if self.ser is not None:
             try:
@@ -86,6 +122,13 @@ class SerialReader(QObject):
         return None
 
     def write_data(self, action, state):
+        """
+        Écrit des données via le port série.
+
+        Args:
+            action (int): Action à écrire.
+            state (int): État à écrire.
+        """
         self.send_data(0, action*2 + state)
 
 
@@ -93,6 +136,12 @@ class SerialReader(QObject):
 
 
 class SerialReaderThread(QThread):
+    """
+    Constructeur de la classe SerialReaderThread.
+
+    Args:
+        gui: Interface utilisateur associée.
+    """
     def __init__(self, gui):
         super().__init__()
         self.parent = gui
@@ -102,6 +151,9 @@ class SerialReaderThread(QThread):
 
 
     def run(self):
+        """
+        Démarre le thread de lecture série.
+        """
         while True:
             if self.serial_reader.busy == False and self.serial_reader.ser is not None:
                 try:

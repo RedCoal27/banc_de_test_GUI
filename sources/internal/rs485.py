@@ -3,11 +3,48 @@ import time
 
 class RS485:
     def __init__(self,parent) -> None:
+        """
+        Constructeur de la classe RS485.
+
+        Args:
+            parent: Objet parent.
+        """
         self.pirani = {}
         self.pirani["chamber_pressure"] = self.__Pirani__(parent, "chamber_pressure")
         self.pirani["pump_pressure"] = self.__Pirani__(parent, "pump_pressure")
 
     class __Pirani__:
+        """
+        Cette classe gère la communication avec un capteur Pirani via RS485.
+
+        Methods:
+            __init__(self, parent, key):
+                Constructeur de la classe Pirani.
+
+            command(self, cmd):
+                Envoie une commande au capteur Pirani.
+
+            wait_to_send_command(self, cmd):
+                Attend que la liaison série soit libre avant d'envoyer une commande au capteur Pirani.
+
+            update_address(self):
+                Met à jour l'adresse du capteur Pirani.
+
+            convert_to_exp_format(self, value):
+                Convertit une valeur en notation exponentielle.
+
+            update_config(self):
+                Met à jour la configuration du capteur Pirani.
+
+            read_pressure(self):
+                Lit la pression à partir du capteur Pirani.
+
+            read_SN(self):
+                Lit le numéro de série du capteur Pirani.
+
+            calibrate(self):
+                Effectue une calibration du capteur Pirani.
+        """
         Command = {
             "change_address": "!S750 {address}",
             "read_pressure" : "?V752",
@@ -20,6 +57,13 @@ class RS485:
         }
 
         def __init__(self,parent,key) -> None:
+            """
+                Constructeur de la classe Pirani.
+
+            Args:
+                parent: Objet parent.
+                key: Clé pour accéder à la configuration du capteur Pirani.
+            """
             self.parent = parent
             self.serial_reader = parent.serial_reader
             self.key = key
@@ -27,11 +71,29 @@ class RS485:
 
 
         def command(self,cmd):#envois une commande
+            """
+                Envoie une commande au capteur Pirani.
+
+            Args:
+                cmd: Commande à envoyer.
+
+            Returns:
+                Résultat de la commande.
+            """
             self.serial_reader.send_data(8,self.address, cmd + "\n")
             data = self.serial_reader.wait_and_read_data(until='\n')
             return data.decode().strip().split(';')
 
-        def wait_to_send_command(self,cmd):#attend que la liaison série soit libéré avant d'envoyer une commande
+        def wait_to_send_command(self,cmd):
+            """
+                Attend que la liaison série soit libre avant d'envoyer une commande au capteur Pirani.
+
+            Args:
+                cmd: Commande à envoyer.
+
+            Returns:
+                Résultat de la commande.
+            """
             while(self.serial_reader.busy == True):
                 time.sleep(0.01)
             self.serial_reader.busy = True
@@ -42,6 +104,9 @@ class RS485:
 
 
         def update_address(self):
+            """
+                Met à jour l'adresse du capteur Pirani.
+            """
             while(self.serial_reader.busy == True):
                 time.sleep(0.01)
             self.serial_reader.busy = True
@@ -54,11 +119,23 @@ class RS485:
             self.serial_reader.busy = False
 
         def convert_to_exp_format(self,value):
+            """
+                Convertit une valeur en notation exponentielle.
+
+            Args:
+                value: Valeur à convertir.
+
+            Returns:
+                Valeur convertie en notation exponentielle.
+            """
             value = "{:.1e}".format(value)
             return value
         
 
         def update_config(self):
+            """
+                Met à jour la configuration du capteur Pirani.
+            """
             while(self.serial_reader.busy == True):
                 time.sleep(0.01)
             self.serial_reader.busy = True
@@ -78,11 +155,26 @@ class RS485:
 
 
         def read_pressure(self):
+            """
+                Lit la pression à partir du capteur Pirani.
+
+            Returns:
+                Résultat de la lecture de la pression.
+            """
             return self.command(self.Command["read_pressure"])
         
         def read_SN(self):
+            """
+                Lit le numéro de série du capteur Pirani.
+
+            Returns:
+                Numéro de série du capteur Pirani.
+            """
             return self.wait_to_send_command(self.Command["read_SN"])[0]
 
 
         def calibrate(self):
+            """
+                Effectue une calibration du capteur Pirani.
+            """
             self.wait_to_send_command(self.Command["calibration_atm"])[0]

@@ -41,6 +41,9 @@ from internal.rs485 import RS485
 
 class MainWindow(QMainWindow):
     def __init__(self):
+        """
+        Constructeur de la classe MainWindow.
+        """
         super().__init__()
 
         self.config = Config(self)
@@ -73,15 +76,21 @@ class MainWindow(QMainWindow):
 
 
     def show_error_message(self, message):
+        """
+        Affiche une boîte de dialogue d'erreur avec le message spécifié.
+
+        Args:
+            message (str): Le message d'erreur à afficher.
+        """
         QMessageBox.warning(self, self.translator.translate("warning"),message)
 
     def set_value(self, key, value):
         """
-        Sets the value of a custom widget.
+        Définit la valeur d'un widget personnalisé.
 
         Args:
-            key (str): The key of the custom widget.
-            value (float): The new value.
+            key (str): La clé du widget personnalisé.
+            value (float): La nouvelle valeur.
         """
         print(f"Setting value of {key} to {value}")
         self.custom_widgets[key].set_value(value)
@@ -89,7 +98,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         """
-        Initializes the user interface by creating the timer, menus, background, and buttons.
+        Initialise l'interface utilisateur en créant la minuterie, les menus, l'arrière-plan et les boutons.
         """
         self.menu_manager.create_menus()
         self.create_background_and_buttons()
@@ -115,7 +124,7 @@ class MainWindow(QMainWindow):
 
     def create_background_and_buttons(self):
         """
-        Creates the background and custom widgets.
+        Crée l'arrière-plan et les widgets personnalisés.
         """
         self.scene = QGraphicsScene()
         self.view = QGraphicsView(self.scene, self)
@@ -131,7 +140,7 @@ class MainWindow(QMainWindow):
 
     def create_lines(self):
         """
-        Draws a line on the scene.
+        Dessine des lignes sur la scène.
         """
         self.scene.addItem(Line(0.73, 0.21, 0.95, 0.21, "#4472C4")) # Numpro MFC1
         self.scene.addItem(Line(0.73, 0.21, 0.73, 0.35, "#4472C4")) # Numpro MFC1
@@ -164,7 +173,7 @@ class MainWindow(QMainWindow):
 
     def create_custom_widgets(self):
         """
-        Creates the custom widgets.
+        Crée les widgets personnalisés.
         """
         self.custom_widgets = {}
 
@@ -217,15 +226,16 @@ class MainWindow(QMainWindow):
         self.custom_widgets["iso_chamber"] = Gate((0.315, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
 
 
-    def update_AI(self):#certains éléments comme les lignes nécéssit d'être tracé uniquement depuis le thread principale
+    def update_AI(self):
+        """
+        Met à jour certains éléments tels que les lignes depuis le thread principal.
+        """
         self.custom_widgets["turbo_pump_gate"].update_sensor_line()
 
 
     def resize_widgets(self):
         """
-        Resizes the view and buttons.
-
-        This function is separated from resizeEvent so that it can be called on initialization.
+        Redimensionne la vue et les widgets en fonction de la taille de la fenêtre.
         """
         screen_number = QApplication.desktop().screenNumber(self)
         screen = QGuiApplication.screens()[screen_number]
@@ -251,10 +261,10 @@ class MainWindow(QMainWindow):
 
     def resizeEvent(self, event):
         """
-        Resizes the view and buttons when the window is resized.
+        Redimensionne la vue et les widgets lorsque la fenêtre est redimensionnée.
 
         Args:
-            event (QResizeEvent): The resize event.
+            event (QResizeEvent): L'événement de redimensionnement.
         """
         super().resizeEvent(event)
         self.resize_widgets()  # Call the new function here

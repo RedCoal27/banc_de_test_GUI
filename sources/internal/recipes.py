@@ -7,6 +7,62 @@ from internal.logger import Logger
 import sys
 
 class Recipes(QObject):
+    """
+    La classe Recipes gère l'exécution des recettes du système. Elle charge les recettes à partir de fichiers YAML et exécute les étapes spécifiées.
+
+    Attributes:
+        valid_actions: Liste des actions valides.
+        valid_conditions: Liste des conditions valides.
+        dictionnaire: Dictionnaire pour la correspondance des valeurs.
+        finished: Signal émis lorsque l'exécution d'une recette est terminée.
+        warning: Signal émis en cas d'avertissement.
+        request_timer_stop: Signal émis pour demander l'arrêt des recettes en cours.
+        recipe_folder: Chemin du dossier contenant les fichiers de recettes.
+        action: Signal émis pour déclencher une action.
+        parent: Référence à l'objet parent.
+        translator: Référence à l'objet Translator.
+        recipes: Dictionnaire contenant les recettes.
+        thread: Référence au thread de la classe.
+        timer: Référence au timer de la classe.
+        warning: Signal émis en cas d'avertissement.
+        action: Signal émis pour déclencher une action.
+        stop_event: Objet Event pour arrêter l'exécution d'une recette.
+
+
+    Methods:
+        __init__(self, parent):
+            Constructeur de la classe Recipes.
+
+        verify_yaml(self, yaml_path):
+            Vérifie la validité d'un fichier YAML de recette.
+
+        handle_error(self, error_key, **kwargs):
+            Gère les erreurs rencontrées lors de la vérification des recettes.
+
+        load_recipes(self):
+            Charge les recettes à partir des fichiers YAML.
+
+        execute_recipe(self, recipe_name):
+            Exécute une recette spécifique.
+
+        is_running(self):
+            Vérifie si une recette est en cours d'exécution.
+
+        run_recipe(self):
+            Exécute les étapes d'une recette.
+
+        stop(self):
+            Arrête l'exécution de la recette en cours.
+
+        stop_recipes(self):
+            Arrête toutes les recettes en cours.
+
+        check_conditions(self, conditions):
+            Vérifie si les conditions sont remplies pour l'exécution de l'étape.
+
+        check_timeout(self):
+            Vérifie si le temps imparti pour une étape est écoulé.
+    """
     valid_actions = ['wafer_lift1','wafer_lift2','wafer_lift3','SV','throttle_valve','motor_lift','MFC1','MFC2', 'roughing_pump', 'turbo_pump_ch', 'turbo_pump_rga', 'turbo_pump_gate','nupro_final','nupro_MFC1','nupro_MFC2','nupro_vent','iso_rga_ch','iso_rga_pump', 'iso_turbo','turbo_pump_gate', 'iso_chamber']
     valid_conditions = ['interlock','wafer_lift1','wafer_lift2','wafer_lift3','SV','baratron1','baratron2','MFC1','MFC2','chamber_pressure','pump_pressure','ion_gauge','roughing_pump','turbo_pump_ch','turbo_pump_rga','turbo_pump_gate']
 
@@ -29,6 +85,12 @@ class Recipes(QObject):
     action = pyqtSignal(object, object)
 
     def __init__(self, parent):
+        """
+        Constructeur de la classe Recipes.
+
+        Args:
+            parent: Référence à l'objet parent.
+        """
         super().__init__()
         self.parent = parent
         self.translator = self.parent.translator
@@ -52,6 +114,12 @@ class Recipes(QObject):
 
 
     def verify_yaml(self, yaml_path):
+        """
+        Vérifie la validité d'un fichier YAML de recette.
+
+        Args:
+            yaml_path: Chemin du fichier YAML de recette.
+        """
         with open(yaml_path, 'r') as f:
             content = yaml.safe_load(f)
 
@@ -85,11 +153,21 @@ class Recipes(QObject):
                 self.handle_error('missing_timeout', filename=filename, step_num=step_num)
 
     def handle_error(self, error_key, **kwargs):
+        """
+        Gère les erreurs rencontrées lors de la vérification des recettes.
+
+        Args:
+            error_key: Clé de l'erreur.
+            **kwargs: Arguments spécifiques à l'erreur.
+        """
         error_message = self.translator.translate(error_key, **kwargs)
         Logger.error(error_message)
         raise ValueError(error_message)  # Lève une exception avec le message d'erreur
 
     def load_recipes(self):
+        """
+        Charge les recettes à partir des fichiers YAML.
+        """
         recipes = {}
         for filename in os.listdir(self.recipe_folder):
             path = os.path.join(self.recipe_folder, filename)
@@ -105,6 +183,12 @@ class Recipes(QObject):
 
 
     def execute_recipe(self, recipe_name):
+        """
+        Exécute une recette spécifique.
+
+        Args:
+            recipe_name: Nom de la recette à exécuter.
+        """
         if self.thread.isRunning():
             Logger.info("A recipe is already running. Please wait for it to finish or stop it before starting a new one.")
             return
@@ -114,9 +198,18 @@ class Recipes(QObject):
             self.thread.start()
 
     def is_running(self):
+        """
+        Vérifie si une recette est en cours d'exécution.
+
+        Returns:
+            True si une recette est en cours d'exécution, False sinon.
+        """
         return self.thread.isRunning()
 
     def run_recipe(self):
+        """
+        Exécute les étapes d'une recette.
+        """
         recipe = self.current_recipe
         for index, step in enumerate(recipe.values()):  # On utilise values() pour obtenir seulement les valeurs
             step_name = step["name"]
@@ -159,26 +252,32 @@ class Recipes(QObject):
 
         
     def stop(self):
+        """
+        Arrête l'exécution de la recette en cours.
+        """
         self.timer.stop()
         self.stop_event.set()
         self.thread.quit()
         self.parent.custom_widgets["chamber_label"].button_stop()
 
 
-
     @pyqtSlot()
     def stop_recipes(self):
+        """
+        Permet d'arrêter l'exécution de la recette en cours depuis un autre thread.
+        """
         self.stop()
 
     def check_conditions(self, conditions):
-        '''
-        Checks if the conditions are met.
-        Condition can be a single condition or a list of conditions.
-        A condition is a dictionary with the name of the widget as key and a test to perform as value.
-        The test can be:
-        a boolean: the state of the widget must be equal to the boolean
-        < or > followed by a number: the value of the widget must be less than or greater than the number
-        '''
+        """
+        Vérifie si les conditions sont remplies pour l'exécution de l'étape.
+
+        Args:
+            conditions: Conditions à vérifier. Une condition doit être un nombre, un booléen ou une chaîne de caractères contenant < ou > suivi d'un nombre.
+
+        Returns:
+            True si les conditions sont satisfaites, False sinon.
+        """
         for condition_name, condition_value in conditions.items():
             value = self.parent.custom_widgets[condition_name].get_value()
             if condition_value in self.dictionnaire.keys():
@@ -198,6 +297,9 @@ class Recipes(QObject):
                 
 
     def check_timeout(self):
+        """
+        Vérifie si le temps imparti pour une étape est écoulé.
+        """
         condition_met = self.check_conditions(self.current_conditions)
         error_message = self.current_error_message
         if not condition_met:

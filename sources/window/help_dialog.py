@@ -4,6 +4,12 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 class HelpDialog(QDialog):
     def __init__(self, parent=None):
+        """
+        Constructeur de la classe HelpDialog.
+
+        Args:
+            parent: Objet parent.
+        """
         super().__init__(parent)
 
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
@@ -13,6 +19,9 @@ class HelpDialog(QDialog):
         self.init_ui()
 
     def init_ui(self):
+        """
+        Initialise l'interface utilisateur de la fenêtre d'aide.
+        """
         layout = QHBoxLayout()
         self.list_view = QListView()
         self.model = QStandardItemModel(self.list_view)
@@ -60,6 +69,12 @@ class HelpDialog(QDialog):
         self.setLayout(layout)
 
     def add_categories(self, categories):
+        """
+        Ajoute les catégories à la liste de catégories.
+
+        Args:
+            categories: Dictionnaire de catégories et de clés de contenu associées.
+        """
         for category_key, content_key in categories.items():
             item = QStandardItem(self.translator.translate(category_key))
             item.setData(self.translator.translate(content_key), Qt.UserRole + 1)
@@ -68,6 +83,13 @@ class HelpDialog(QDialog):
             self.model.appendRow(item)
 
     def display_help(self, current, previous):
+        """
+        Affiche le contenu d'aide correspondant à la catégorie sélectionnée.
+
+        Args:
+            current: Élément de la liste actuellement sélectionné.
+            previous: Élément précédemment sélectionné. (inutilisé mais requis par le signal)
+        """
         if current:
             self.text_edit.setPlainText(current.data(Qt.UserRole + 1))
             self.text_edit.setAlignment(Qt.AlignJustify)

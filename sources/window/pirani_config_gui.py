@@ -14,17 +14,23 @@ from internal.constant import PiraniConfig
 
 class NodeAddressWindow(QWidget):
     """
-    A class representing a window for setting the node address.
+    Une classe représentant une fenêtre pour définir l'adresse du nœud.
 
     Attributes:
-    parent: the parent window (PiraniConfigGui)
-    key: the key for the configuration dictionary
-    main_parent: the main object (gui)
-    address_spin: a QSpinBox for entering the new address
-    confirm_button: a QPushButton for confirming the new address
+        parent: la fenêtre parent (PiraniConfigGui)
+        key: la clé pour le dictionnaire de configuration
+        main_parent: l'objet principal (gui)
+        address_spin: un QSpinBox pour entrer la nouvelle adresse
+        confirm_button: un QPushButton pour confirmer la nouvelle adresse
     """
 
     def __init__(self, parent):
+        """
+        Constructeur de la classe NodeAddressWindow.
+
+        Args:
+            parent: Objet parent (PiraniConfigGui).
+        """
         self.parent = parent #windows PiraniConfigGui
 
         self.key = parent.key
@@ -47,11 +53,11 @@ class NodeAddressWindow(QWidget):
 
     def confirm(self):
         """
-        A method for confirming the new address.
+        Méthode pour confirmer la nouvelle adresse.
 
-        This method updates the configuration dictionary with the new address,
-        updates the node address label in the parent window, saves the configuration,
-        and closes the current window.
+        Cette méthode met à jour le dictionnaire de configuration avec la nouvelle adresse,
+        met à jour l'étiquette d'adresse du nœud dans la fenêtre parent, enregistre la configuration,
+        et ferme la fenêtre actuelle.
         """
         self.main_parent.config[self.key]["address"] = self.address_spin.value()
         self.main_parent.RS485.pirani[self.key].update_address()
@@ -63,35 +69,41 @@ class NodeAddressWindow(QWidget):
 
 class PiraniConfigGui(QWidget):
     """
-    A GUI window for configuring Pirani gauges.
+    Une fenêtre GUI pour la configuration des jauges Pirani.
 
     Args:
-        parent: The parent widget.
-        key: The key for the gauge configuration.
+        parent: Le widget parent.
+        key: La clé pour la configuration de la jauge.
 
     Attributes:
-        parent: The parent widget.
-        key: The key for the gauge configuration.
-        node_address_label: QLabel for displaying the node address.
-        node_address_button: QPushButton for setting the node address.
-        setpoint_high_spin: QDoubleSpinBox for setting the high setpoint.
-        setpoint_high_unit: QLabel for displaying the unit of the high setpoint.
-        setpoint_low_spin: QDoubleSpinBox for setting the low setpoint.
-        setpoint_low_unit: QLabel for displaying the unit of the low setpoint.
-        gas_type_combo: QComboBox for selecting the gas type.
-        pressure_unit_combo: QComboBox for selecting the pressure unit.
-        calibrate_button: QPushButton for calibrating the gauge.
-        status_bits_label: QLabel for displaying the gauge status bits.
-        status_bits_value: QLabel for displaying the value of the gauge status bits.
-        status_bits_info_button: QToolButton for displaying the gauge status bits information.
-        status_bits_info_menu: QMenu for displaying the gauge status bits information.
-        sn_label: QLabel for displaying the gauge serial number.
-        sn_value: QLabel for displaying the value of the gauge serial number.
-        confirm_button: QPushButton for confirming the gauge configuration.
-        current_unit: The current pressure unit.
-        conversion_factors: The conversion factors for pressure units.
+        parent: Le widget parent.
+        key: La clé pour la configuration de la jauge.
+        node_address_label: QLabel pour afficher l'adresse du nœud.
+        node_address_button: QPushButton pour définir l'adresse du nœud.
+        setpoint_high_spin: QDoubleSpinBox pour définir le point haut.
+        setpoint_high_unit: QLabel pour afficher l'unité du point haut.
+        setpoint_low_spin: QDoubleSpinBox pour définir le point bas.
+        setpoint_low_unit: QLabel pour afficher l'unité du point bas.
+        gas_type_combo: QComboBox pour définir le type de gaz.
+        pressure_unit_combo: QComboBox pour définir l'unité de pression.
+        calibrate_button: QPushButton pour calibrer la jauge.
+        status_bits_label: QLabel pour afficher les bits d'état.
+        status_bits_button: QPushButton pour afficher les bits d'état.
+        status_bits_menu: QMenu pour afficher les bits d'état.
+        sn_label: QLabel pour afficher le numéro de série.
+        sn_value: QLabel pour afficher la valeur du numéro de série.
+        confirm_button: QPushButton pour confirmer la configuration.
+        current_unit: L'unité de pression actuelle.
+        conversion_factor: Le facteur de conversion actuel.
     """
     def __init__(self, parent, key):
+        """
+        Constructeur de la classe PiraniConfigGui.
+
+        Args:
+            parent: Le widget parent.
+            key: La clé pour la configuration de la jauge.
+        """
         self.parent = parent
         self.key = key
         super(PiraniConfigGui, self).__init__(None)
@@ -171,9 +183,6 @@ class PiraniConfigGui(QWidget):
         layout.addWidget(self.status_bits_info_button, 6, 2)  # add this to the layout
 
 
-
-
-
         # Gauge SN
         self.sn_label = QLabel(self.parent.translator.translate("gauge_sn"))
         self.sn_value = QLabel(self.parent.RS485.pirani[self.key].read_SN())  # replace "SN Value" with the actual initial value
@@ -198,13 +207,13 @@ class PiraniConfigGui(QWidget):
 
     def create_status_bits_info_menu(self, status_bits):
         """
-        Creates a QMenu for displaying the gauge status bits information.
+        Crée un menu QMenu pour afficher les informations sur les bits d'état de la jauge.
 
         Args:
-            status_bits: The value of the gauge status bits.
+            status_bits: La valeur des bits d'état de la jauge.
 
         Returns:
-            A QMenu for displaying the gauge status bits information.
+            Un QMenu pour afficher les informations sur les bits d'état de la jauge.
         """
         status_bits_info_menu = QMenu(self)
 
@@ -237,6 +246,12 @@ class PiraniConfigGui(QWidget):
         return status_bits_info_menu
 
     def confirm(self):
+        """
+        Méthode pour confirmer la configuration de la jauge.
+
+        Cette méthode met à jour la configuration de la jauge, enregistre la configuration,
+        et ferme la fenêtre.
+        """
         config = self.parent.config[self.key]
         config["setpoint_high"] = self.setpoint_high_spin.value()
         config["setpoint_low"] = self.setpoint_low_spin.value()
@@ -248,6 +263,9 @@ class PiraniConfigGui(QWidget):
         self = None
 
     def update_units(self):
+        """
+        Met à jour les unités d'affichage en fonction de l'unité de pression sélectionnée.
+        """
         new_unit = self.pressure_unit_combo.currentText()
         self.setpoint_high_unit.setText(new_unit)
         self.setpoint_low_unit.setText(new_unit)
@@ -270,13 +288,40 @@ class PiraniConfigGui(QWidget):
 
 
     def get_bit_value(self, status_bits, bit):
+        """
+        Obtient la valeur d'un bit donné dans les bits d'état.
+
+        Args:
+            status_bits: La valeur des bits d'état.
+            bit: Le numéro du bit.
+
+        Returns:
+            La valeur du bit (0 ou 1).
+        """
         return (status_bits >> bit) & 1
 
     def get_multi_bit_value(self, status_bits, start_bit, end_bit):
+        """
+        Obtient la valeur d'un ensemble de bits donné dans les bits d'état.
+
+        Args:
+            status_bits: La valeur des bits d'état.
+            start_bit: Le numéro du premier bit.
+            end_bit: Le numéro du dernier bit.
+
+        Returns:
+            La valeur de l'ensemble de bits.
+        """
         mask = (2**(end_bit - start_bit + 1) - 1) << start_bit
         return (status_bits & mask) >> start_bit
 
     def update_status_bits(self, status_bits):
+        """
+        Met à jour l'affichage des bits d'état.
+
+        Args:
+            status_bits: La valeur des bits d'état.
+        """
         # Convert status_bits to binary and format it with spaces
         binary_status_bits = format(status_bits, '016b')
         formatted_status_bits = ' '.join(binary_status_bits[i:i+4] for i in range(0, len(binary_status_bits), 4))
@@ -285,17 +330,24 @@ class PiraniConfigGui(QWidget):
         self.status_bits_info_menu = self.create_status_bits_info_menu(status_bits)
         self.status_bits_info_button.setMenu(self.status_bits_info_menu)
 
-        
-
 
     def set_node_address(self):
+        """
+        Ouvre une fenêtre pour définir l'adresse du nœud.
+        """
         QMessageBox.warning(self, self.parent.translator.translate("warning"), self.parent.translator.translate("only_one_pirani"))
         self.node_address_window = NodeAddressWindow(self)
         self.node_address_window.show()
 
     def update_node_address_label(self):
+        """
+        Met à jour l'étiquette d'adresse du nœud dans la fenêtre.
+        """
         self.node_address_label.setText(self.parent.translator.translate("node_address", value=self.parent.config[self.key]["address"]))
 
     
     def calibrate_gauge(self):
+        """
+        Lance la calibration de la jauge.
+        """
         self.parent.RS485.pirani[self.key].calibrate()

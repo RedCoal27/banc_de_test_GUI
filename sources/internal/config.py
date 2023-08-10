@@ -6,7 +6,6 @@ from internal.logger import Logger
 
 class Config:
     """
-    Description:
     La classe Config gère la configuration du système. Elle charge et sauvegarde les paramètres à partir d'un fichier JSON.
 
     Attributes:

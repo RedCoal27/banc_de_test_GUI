@@ -11,6 +11,14 @@ from internal.logger import Logger
 
 class GraphWindow(QMainWindow):
     def __init__(self, parent, state_up_key='ascent', state_down_key='descent'):
+        """
+        Constructeur de la classe GraphWindow.
+
+        Args:
+            parent: Objet parent.
+            state_up_key: Clé d'état pour la montée.
+            state_down_key: Clé d'état pour la descente.
+        """
         super().__init__()
 
         self.parent = parent
@@ -65,6 +73,9 @@ class GraphWindow(QMainWindow):
 
 
     def create_top_widgets(self):
+        """
+        Crée les widgets pour les options en haut de la fenêtre.
+        """
         self.labels['cycle'] = QLabel(self.parent.translator.translate('cycles'), self)
         self.edits['cycle'] = QSpinBox(self)
         self.edits['cycle'].setRange(0, 100)
@@ -81,11 +92,17 @@ class GraphWindow(QMainWindow):
             self.layouts['top'].addWidget(self.edits[widget])
 
     def create_start_button(self):
+        """
+        Crée le bouton de démarrage/arrêt des cycles.
+        """
         self.start_button = QPushButton(self.parent.translator.translate('start'), self)
         self.start_button.clicked.connect(self.on_start_button)
         self.start_button.setEnabled(False)  # initially disabled until a CSV file name is defined
 
     def create_max_min_widgets(self):
+        """
+        Crée les widgets pour les valeurs maximales et minimales.
+        """
         for label in ['max', 'min']:
             self.labels[label] = QLabel(self.parent.translator.translate(label), self)
             self.edits[label] = QSpinBox(self)
@@ -100,6 +117,9 @@ class GraphWindow(QMainWindow):
             self.layouts['max_min'].addLayout(self.layouts[layout])
 
     def create_graph(self):
+        """
+        Crée le graphique et les labels de valeurs associées.
+        """
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax1 = self.figure.add_subplot(211)  # the first subplot for the ascent times
@@ -136,6 +156,9 @@ class GraphWindow(QMainWindow):
 
 
     def create_pn_sn_widgets(self):
+        """
+        Crée les widgets pour entrer le PN, le SN et le nom du fichier CSV.
+        """
         for label in ['PN', 'SN']:
             self.labels[label] = QLabel(self.parent.translator.translate(label), self)
             self.edits[label] = QLineEdit(self)
@@ -159,6 +182,9 @@ class GraphWindow(QMainWindow):
             self.layouts['pn_sn'].addLayout(self.layouts[layout])
 
     def create_main_layout(self):
+        """
+        Crée la mise en page principale de la fenêtre.
+        """
         self.widget = QWidget()
         self.layouts['main'] = QVBoxLayout(self.widget)
 
@@ -187,6 +213,12 @@ class GraphWindow(QMainWindow):
 
 
     def change_widget_state(self,state):
+        """
+        Active ou désactive certains widgets en fonction de l'état spécifié.
+
+        Args:
+            state: État pour activer ou désactiver les widgets.
+        """
         self.edits['PN'].setEnabled(state)
         self.edits['SN'].setEnabled(state)
         self.edits['cycle'].setEnabled(state)
@@ -194,6 +226,9 @@ class GraphWindow(QMainWindow):
         self.edits['min'].setEnabled(state)
 
     def on_start_button(self):
+        """
+        Gère l'événement de clic sur le bouton de démarrage/arrêt des cycles.
+        """
         if self.is_running:
             Logger.info("Stopping the cycles")
             self.stop_cycle()
@@ -214,6 +249,9 @@ class GraphWindow(QMainWindow):
             self.change_widget_state(False)
                     
     def pre_start_cycle(self):
+        """
+        Prépare le cycle en activant le composant et en attendant qu'il soit dans la position souhaitée par défaut.
+        """
         self.activate_component()
         if not self.is_sensor_reached():  # wait that the component is down
             if self.is_running:  # check if the cycles are running
@@ -221,8 +259,20 @@ class GraphWindow(QMainWindow):
         else:
             QTimer.singleShot(100, self.start_cycle)
 
+    def start_cycle(self):
+        """
+        Démarre un cycle en activant le composant et en commençant à vérifier le capteur.
+        """
+        self.deactivate_component()  # activate component
+        self.component_state.append(0)
+        self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch()/1000 # initialize sensor check start time
+        self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
+
 
     def stop_cycle(self):
+        """
+        Arrête les cycles en cours.
+        """
         if self.timer.isActive():
             self.timer.stop()
         if self.sensor_check_timer.isActive():
@@ -231,14 +281,10 @@ class GraphWindow(QMainWindow):
         self.is_running = False
 
 
-    def start_cycle(self):
-        # Start a cycle
-        self.deactivate_component()  # activate component
-        self.component_state.append(0)
-        self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch()/1000 # initialize sensor check start time
-        self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
-
     def on_timer(self):
+        """
+        Gère l'événement de fin du minuteur de 15 secondes.
+        """
         # This method is called when the 15-second timer expires
         self.timer.stop()  # stop the timer
         self.sensor_check_timer.stop()  # stop checking the sensor
@@ -248,6 +294,9 @@ class GraphWindow(QMainWindow):
         
 
     def check_sensor(self):
+        """
+        Vérifie périodiquement si le capteur a été atteint.
+        """
         # This method is called every 25 ms to check the sensor
         if self.is_sensor_reached():
             self.sensor_check_timer.stop()  # stop checking the sensor
@@ -283,6 +332,9 @@ class GraphWindow(QMainWindow):
 
 
     def start_sensor_check(self):
+        """
+        Démarre la vérification du capteur pour le prochain cycle.
+        """
         if self.cycle_count <= self.edits['cycle'].value():
             self.sensor_check_start_time = QDateTime.currentMSecsSinceEpoch()/1000 # reset sensor check start time
             self.sensor_check_timer.start(25)  # start checking the sensor every 25 ms
@@ -291,6 +343,9 @@ class GraphWindow(QMainWindow):
 
 
     def update_graph_and_labels(self):
+        """
+        Met à jour le graphique et les labels de valeurs affichées.
+        """
         # Update the graphs
         self.ax1.clear()
         self.ax2.clear()
@@ -317,6 +372,9 @@ class GraphWindow(QMainWindow):
         self.canvas.draw()
 
     def finish_cycles(self):
+        """
+        Termine les cycles en enregistrant les données et en réinitialisant les valeurs.
+        """
         # If the requested number of cycles is reached, stop everything
         self.start_button.setText(self.parent.translator.translate('start'))
         self.save_to_csv(self.cycle_durations)
@@ -327,14 +385,26 @@ class GraphWindow(QMainWindow):
         self.sensor_check_timer.stop()  # stop checking the sensor
         self.timer.stop()  # stop the 15-second timer
 
-    def activate_component(self): #set to up
+    def activate_component(self):
+        """
+        Active le composant (le fait monter).
+        """
         self.parent.update_DO(True)
 
-    def deactivate_component(self): #set to down
+    def deactivate_component(self):
+        """
+        Désactive le composant (le fait descendre).
+        """
         self.parent.update_DO(False)
 
 
     def is_sensor_reached(self):
+        """
+        Vérifie si le capteur a été atteint.
+
+        Returns:
+            bool: True si le capteur est atteint, False sinon.
+        """
         if self.parent.serial_reader.busy == False:
 
             self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
@@ -349,9 +419,10 @@ class GraphWindow(QMainWindow):
             return False
 
         
-
-
     def update_csv_file(self):
+        """
+        Met à jour le nom du fichier CSV en fonction des entrées PN et SN.
+        """
         pn = self.edits['PN'].text()
         sn = self.edits['SN'].text()
         if pn and sn:
@@ -364,6 +435,12 @@ class GraphWindow(QMainWindow):
             self.start_button.setEnabled(False)
 
     def save_to_csv(self, cycle_durations):
+        """
+        Enregistre les durées des cycles dans un fichier CSV.
+
+        Args:
+            cycle_durations: Liste des durées des cycles.
+        """
         filename = self.edits['CSV File'].text()
         path = "data/" + filename
 
@@ -380,5 +457,8 @@ class GraphWindow(QMainWindow):
                 writer.writerow([i + 1, round(ascent_times[i],3), round(descent_times[i],3)])
 
     def closeEvent(self, event):
+        """
+        Gère l'événement de fermeture de la fenêtre.
+        """
         self.stop_cycle()
         event.accept()
