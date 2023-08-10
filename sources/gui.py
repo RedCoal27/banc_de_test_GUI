@@ -133,95 +133,88 @@ class MainWindow(QMainWindow):
         """
         Draws a line on the scene.
         """
-        self.scene.addItem(Line(0.71, 0.21, 0.94, 0.21, "#4472C4")) # Numpro MFC1
-        self.scene.addItem(Line(0.71, 0.21, 0.71, 0.35, "#4472C4")) # Numpro MFC1
+        self.scene.addItem(Line(0.73, 0.21, 0.95, 0.21, "#4472C4")) # Numpro MFC1
+        self.scene.addItem(Line(0.73, 0.21, 0.73, 0.35, "#4472C4")) # Numpro MFC1
         
-        self.scene.addItem(Line(0.64, 0.35, 0.94, 0.35, "#4472C4")) # Numpro Final/ Numpro MFC2
+        self.scene.addItem(Line(0.66, 0.35, 0.95, 0.35, "#4472C4")) # Numpro Final/ Numpro MFC2
 
-        self.scene.addItem(Line(0.94, 0.16, 0.94, 0.35, "#4472C4")) # Numpro MFC2
-        self.scene.addItem(Line(0.94, 0.16, 0.99, 0.16, "#4472C4")) # Numpro MFC2
+        self.scene.addItem(Line(0.95, 0.16, 0.95, 0.35, "#4472C4")) # Numpro MFC2
+        self.scene.addItem(Line(0.95, 0.16, 1, 0.16, "#4472C4")) # Numpro MFC2
 
-
-        self.scene.addItem(Line(0.61, 0.09, 0.61, 0.24, "#4472C4")) # Numpro Vent
-        self.scene.addItem(Line(0.61, 0.09, 0.99, 0.09, "#4472C4")) # Numpro Vent
-
+        self.scene.addItem(Line(0.63, 0.09, 0.63, 0.24, "#4472C4")) # Numpro Vent
+        self.scene.addItem(Line(0.63, 0.09, 1, 0.09, "#4472C4")) # Numpro Vent
 
         self.scene.addItem(Line(0.07, 0.28, 0.07, 0.77, "#4472C4")) # Turbo Pump RGA
-        self.scene.addItem(Line(0.07, 0.28, 0.24, 0.28, "#4472C4")) # Turbo Pump RGA
+        self.scene.addItem(Line(0.07, 0.28, 0.26, 0.28, "#4472C4")) # Turbo Pump RGA
 
-        self.scene.addItem(Line(0.18, 0.35, 0.18, 0.77, "#4472C4")) # Turbo Pump CH
-        self.scene.addItem(Line(0.18, 0.35, 0.24, 0.35, "#4472C4")) # Turbo Pump CH
+        self.scene.addItem(Line(0.19, 0.35, 0.19, 0.77, "#4472C4")) # Turbo Pump CH
+        self.scene.addItem(Line(0.19, 0.35, 0.26, 0.35, "#4472C4")) # Turbo Pump CH
 
-        self.scene.addItem(Line(0.07, 0.77, 0.38, 0.77, "#4472C4")) # Pump Pressure
+        self.scene.addItem(Line(0.07, 0.77, 0.40, 0.77, "#4472C4")) # Pump Pressure
 
-        self.scene.addItem(Line(0.64, 0.4, 0.71, 0.4, "#4472C4")) #Baratron/Chamber pressure
-        self.scene.addItem(Line(0.71, 0.4, 0.71, 0.88, "#4472C4")) #Baratron/Chamber pressure
+        self.scene.addItem(Line(0.66, 0.4, 0.73, 0.4, "#4472C4")) #Baratron/Chamber pressure
+        self.scene.addItem(Line(0.73, 0.4, 0.73, 0.88, "#4472C4")) #Baratron/Chamber pressure
 
-        self.scene.addItem(Line(0.71, 0.49, 0.76, 0.49, "#4472C4")) #Baratron1
-        self.scene.addItem(Line(0.71, 0.62, 0.76, 0.62, "#4472C4")) #Baratron2
-        self.scene.addItem(Line(0.71, 0.74, 0.76, 0.74, "#4472C4")) #Chamber pressure
-        self.scene.addItem(Line(0.71, 0.88, 0.76, 0.88, "#4472C4")) #Chamber pressure
+        self.scene.addItem(Line(0.73, 0.49, 0.78, 0.49, "#4472C4")) #Baratron1
+        self.scene.addItem(Line(0.73, 0.62, 0.78, 0.62, "#4472C4")) #Baratron2
+        self.scene.addItem(Line(0.73, 0.74, 0.78, 0.74, "#4472C4")) #Chamber pressure
+        self.scene.addItem(Line(0.73, 0.88, 0.78, 0.88, "#4472C4")) #Chamber pressure
 
-        self.scene.addItem(Line(0.295, 0.58, 0.295, 0.8, "#4472C4")) #throttle valve/rouffing pump
-
-
-
+        self.scene.addItem(Line(0.315, 0.58, 0.315, 0.8, "#4472C4")) #throttle valve/rouffing pump
 
     def create_custom_widgets(self):
         """
         Creates the custom widgets.
         """
         self.custom_widgets = {}
- 
-        self.custom_widgets["auto"] = Auto([0.05,0.01], self)
-        self.custom_widgets["interlock"] = Interlock([0.05,0.1], "interlock", self)
-        self.custom_widgets["chamber"] = Chamber([0.24,0.24], self)
-        self.custom_widgets["chamber_label"] = ChamberLabel([0.24,0.24], self)
 
+        self.custom_widgets["auto"] = Auto([0.07, 0.01], self)
+        self.custom_widgets["interlock"] = Interlock([0.07, 0.1], "interlock", self)
+        self.custom_widgets["chamber"] = Chamber([0.26, 0.24], self)
+        self.custom_widgets["chamber_label"] = ChamberLabel([0.26, 0.24], self)
 
-        self.custom_widgets["wafer_lift2"] = FourWay([0.24,0.01], Cmd.wafer_lift2, "wafer_lift_n", number="2", parent=self)
-        self.custom_widgets["wafer_lift3"] = FourWay([0.365,0.01], Cmd.wafer_lift3, "wafer_lift_n", number="3", parent=self)
-        self.custom_widgets["slit_valve"] = FourWay([0.49,0.01], Cmd.slit_valve, "slit_valve", parent=self)
-        self.custom_widgets["throttle_valve"] = ThrottleValve([0.24,0.44], "throttle_valve", parent=self)
-        self.custom_widgets["motor_lift"] = MotorisedLift([0.37,0.44], "motor_lift", parent=self)
-        self.custom_widgets["wafer_lift1"] = FourWay([0.51,0.44] , Cmd.wafer_lift1, "wafer_lift_n", number="1", parent=self)
-        self.custom_widgets["baratron1"] = Baratron([0.76,0.44], "baratron1", parent=self)
-        self.custom_widgets["baratron2"] = Baratron([0.76,0.57], "baratron2", parent=self)
-        self.custom_widgets["MFC1"] = MFC([0.79,0.15], Cmd.MFC1, "MFC1", self)
-        self.custom_widgets["MFC2"] = MFC([0.79,0.29], Cmd.MFC2, "MFC2", self)
+        self.custom_widgets["wafer_lift2"] = FourWay([0.26, 0.01], Cmd.wafer_lift2, "wafer_lift_n", number="2", parent=self)
+        self.custom_widgets["wafer_lift3"] = FourWay([0.385, 0.01], Cmd.wafer_lift3, "wafer_lift_n", number="3", parent=self)
+        self.custom_widgets["slit_valve"] = FourWay([0.51, 0.01], Cmd.slit_valve, "slit_valve", parent=self)
+        self.custom_widgets["throttle_valve"] = ThrottleValve([0.26, 0.44], "throttle_valve", parent=self)
+        self.custom_widgets["motor_lift"] = MotorisedLift([0.39, 0.44], "motor_lift", parent=self)
+        self.custom_widgets["wafer_lift1"] = FourWay([0.53, 0.44], Cmd.wafer_lift1, "wafer_lift_n", number="1", parent=self)
+        self.custom_widgets["baratron1"] = Baratron([0.78, 0.44], "baratron1", parent=self)
+        self.custom_widgets["baratron2"] = Baratron([0.78, 0.57], "baratron2", parent=self)
+        self.custom_widgets["MFC1"] = MFC([0.81, 0.15], Cmd.MFC1, "MFC1", self)
+        self.custom_widgets["MFC2"] = MFC([0.81, 0.29], Cmd.MFC2, "MFC2", self)
 
-        self.custom_widgets["chamber_pressure"] = JaugePression([0.76,0.7], "chamber_pressure", parent=self)
+        self.custom_widgets["chamber_pressure"] = JaugePression([0.78, 0.7], "chamber_pressure", parent=self)
 
-        self.custom_widgets["ion_gauge"] = IonGauge([0.76,0.83], "ion_gauge", parent=self)
+        self.custom_widgets["ion_gauge"] = IonGauge([0.78, 0.83], "ion_gauge", parent=self)
 
-        self.custom_widgets["pump_pressure"] = JaugePression([0.38,0.73], "pump_pressure", parent=self)
+        self.custom_widgets["pump_pressure"] = JaugePression([0.40, 0.73], "pump_pressure", parent=self)
 
-        self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02,0.51], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
-        self.custom_widgets["turbo_pump_ch"] = TurboPump([0.13,0.51], Cmd.TurboCH, "turbo_pump_ch", parent=self)
+        self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02, 0.50], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
+        self.custom_widgets["turbo_pump_ch"] = TurboPump([0.14, 0.50], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
-        self.custom_widgets["roughing_pump"] = RoughingPump([0.245,0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
+        self.custom_widgets["roughing_pump"] = RoughingPump([0.27, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 
-        self.custom_widgets["generator1"] = Generator([0.01,0.8], Cmd.Generator1, "generator1", parent=self)
-        self.custom_widgets["generator2"] = Generator([0.12,0.8], Cmd.Generator2, "generator2", parent=self)
+        self.custom_widgets["generator1"] = Generator([0.005, 0.8], Cmd.Generator1, "generator1", parent=self)
+        self.custom_widgets["generator2"] = Generator([0.135, 0.8], Cmd.Generator2, "generator2", parent=self)
 
         for key, custom_widget in self.custom_widgets.items():
             self.scene.addItem(custom_widget)
 
-        self.custom_widgets["nupro_final"] = Gate((0.675,0.35), (0,-0.05), "nupro_final", Cmd.nupro_final, sens='vertical', parent=self)
-        self.custom_widgets["nupro_MFC1"] = Gate((0.745,0.21), (0,-0.05), "nupro_mfc1", Cmd.nupro_mfc1, sens='vertical', parent=self)
-        self.custom_widgets["nupro_MFC2"] = Gate((0.745,0.35), (0,-0.05), "nupro_mfc2", Cmd.nupro_mfc2, sens='vertical', parent=self)
-        self.custom_widgets["nupro_vent"] = Gate((0.675,0.09), (0,-0.05), "nupro_vent", Cmd.nupro_vent, sens='vertical', parent=self)
+        self.custom_widgets["nupro_final"] = Gate((0.695, 0.35), (0, -0.05), "nupro_final", Cmd.nupro_final, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC1"] = Gate((0.765, 0.21), (0, -0.05), "nupro_mfc1", Cmd.nupro_mfc1, sens='vertical', parent=self)
+        self.custom_widgets["nupro_MFC2"] = Gate((0.765, 0.35), (0, -0.05), "nupro_mfc2", Cmd.nupro_mfc2, sens='vertical', parent=self)
+        self.custom_widgets["nupro_vent"] = Gate((0.695, 0.09), (0, -0.05), "nupro_vent", Cmd.nupro_vent, sens='vertical', parent=self)
 
-        self.custom_widgets["N2"] = Label((0.95,0.11),(0.02, 0.02),"N2", parent=self)
+        self.custom_widgets["N2"] = Label((0.96, 0.11), (0.02, 0.02), "N2", parent=self)
 
-        self.custom_widgets["iso_rga_ch"] = Gate((0.07,0.40), (-0.04,0.0),"iso_rga", Cmd.iso_rga, sens='horizontal', parent=self, color="#FD6801")
-        self.custom_widgets["iso_rga_pump"] = Gate((0.07,0.71), (-0.04,0.0),"iso_rga_pump", Cmd.iso_rga_pump, sens='horizontal', parent=self, color="#FD6801")
-        self.custom_widgets["iso_turbo"] = Gate((0.18,0.71), (-0.04,0.0),"iso_turbo", Cmd.iso_turbo, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_rga_ch"] = Gate((0.07, 0.42), (-0.04, 0.0), "iso_rga", Cmd.iso_rga, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_rga_pump"] = Gate((0.07, 0.71), (-0.04, 0.0), "iso_rga_pump", Cmd.iso_rga_pump, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_turbo"] = Gate((0.19, 0.71), (-0.04, 0.0), "iso_turbo", Cmd.iso_turbo, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["turbo_pump_gate"] = GateCH((0.18,0.43), (-0.04,0.0),"turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["turbo_pump_gate"] = GateCH((0.19, 0.42), (-0.04, 0.0), "turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["iso_chamber"] = Gate((0.295,0.73),(-0.04,-0.005),"iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
-
+        self.custom_widgets["iso_chamber"] = Gate((0.315, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
 
 
     def update_AI(self):#certains éléments comme les lignes nécéssit d'être tracé uniquement depuis le thread principale

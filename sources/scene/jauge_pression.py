@@ -11,10 +11,10 @@ class JaugePression(CustomWidget):
         Initializes a JaugePression widget.
 
         Args:
-        - translator: a translator object used for internationalization
-        - pos: a tuple representing the position of the widget
-        - key: a string representing the key of the widget
-        - parent: a parent widget (optional)
+        translator: a translator object used for internationalization
+        pos: a tuple representing the position of the widget
+        key: a string representing the key of the widget
+        parent: a parent widget (optional)
         """
         self.pirani_config_gui = None
         self.parent = parent
@@ -31,7 +31,7 @@ class JaugePression(CustomWidget):
         Creates labels for the JaugePression widget.
 
         Args:
-        - key: a string representing the key of the widget
+        key: a string representing the key of the widget
         """
         self.create_label(key,alignment=Qt.AlignmentFlag.AlignHCenter)
         self.create_label("gas_type", gas_type = "")

@@ -5,3 +5,4 @@ dist
 *.pyc
 data/*
 *.log
+*.zip

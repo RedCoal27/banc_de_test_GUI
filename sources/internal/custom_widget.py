@@ -8,16 +8,63 @@ from PyQt5.QtCore import Qt, QSize
 
 
 class CustomWidget(QGraphicsWidget):
-    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, font_size=8):
+    """
+    Description:
+    Classe CustomWidget, un widget personnalisé pouvant contenir des étiquettes et des boutons.
+
+    Methods:
+        __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color:str, font_size=8):
+            Constructeur de la classe CustomWidget.
+
+        create_label(self, key, color="black", **kwargs):
+            Crée une étiquette avec la clé donnée et l'ajoute au widget.
+
+        update_label(self, key, **kwargs):
+            Met à jour une étiquette avec la clé donnée.
+
+        create_label_with_spin_box(self, key, initial_value=0, min_value=0, max_value=1000, color="black", unit="", function=None, **kwargs):
+            Crée une étiquette avec une boîte à filer et l'ajoute au widget.
+
+        update_spin_box(self, key, max_value):
+            Met à jour une boîte à filer avec la clé donnée.
+
+        create_button(self, key, function=None, **kwargs):
+            Crée un bouton avec la clé donnée et l'ajoute au widget.
+
+        update_button(self, key, state):
+            Met à jour un bouton avec la clé donnée.
+
+        create_label_with_indicator(self, key, color="black", **kwargs):
+            Crée une étiquette avec un indicateur et l'ajoute au widget.
+
+        update_indicator(self, indicator, key, state):
+            Met à jour un indicateur avec la clé et l'état donnés.
+
+        create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_key="", **kwargs):
+            Crée une étiquette avec une boîte de combinaison et un bouton et les ajoute au widget.
+
+        paint(self, painter, option, widget):
+            Peint le widget.
+
+        change_language(self):
+            Change la langue du widget.
+
+        set_font_size(self, size):
+            Modifie la taille de police du widget.
+
+        set_pos_size(self, width, height):
+            Définit la position et la taille du widget.
+    """
+    def __init__(self, translator, pos: tuple[float,float], ratio: tuple[float,float], color: str, font_size=8):
         """
-        A custom widget that can contain labels and buttons.
+        Constructeur de la classe CustomWidget.
 
         Args:
-            translator: a translator object used for internationalization
-            pos (tuple): A tuple containing the x and y position of the widget as a ratio of the parent widget's width and height.
-            ratio (tuple): A tuple containing the x and y ratios of the widget's width and height relative to the parent widget's width and height.
-            color (str): The background color of the widget in hexadecimal format (e.g. "#FFFFFF").
-            parent (QGraphicsWidget, optional): The parent widget. Defaults to None.
+            translator: Un objet traducteur utilisé pour l'internationalisation.
+            pos (tuple): Un tuple contenant la position x et y du widget en tant que ratio de la largeur et de la hauteur du widget parent.
+            ratio (tuple): Un tuple contenant les rapports x et y de la largeur et de la hauteur du widget par rapport à la largeur et à la hauteur du widget parent.
+            color (str): La couleur de fond du widget au format hexadécimal (par exemple, "#FFFFFF").
+            font_size (int): La taille de la police. Par défaut, 8.
         """
         super(CustomWidget, self).__init__(None)
         self.translator = translator
@@ -45,11 +92,12 @@ class CustomWidget(QGraphicsWidget):
 
     def create_label(self, key, color="black", **kwargs):
         """
-        Creates a label with the given key and adds it to the widget.
+        Crée une étiquette avec la clé donnée et l'ajoute au widget.
 
         Args:
-            key (str): The translation key for the label.
-            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+            key (str) : Clé de traduction pour l'étiquette.
+            color (str) : Couleur du texte de l'étiquette (par défaut : "black").
+            **kwargs : Arguments supplémentaires pour le constructeur QLabel et pour la traduction.
         """
         label_translate = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']: #argument du QLabel possible
@@ -77,10 +125,11 @@ class CustomWidget(QGraphicsWidget):
 
     def update_label(self, key, **kwargs):
         """
-        Updates a label with the given key.
+        Met à jour une étiquette avec la clé donnée.
 
         Args:
-            key (str): The translation key for the label.
+            key (str) : Clé de traduction pour l'étiquette.
+            **kwargs : Arguments supplémentaires pour la traduction.
         """
         # Loop over all labels
         for label, label_proxy, label_key, label_kwargs in self.labels:
@@ -96,14 +145,17 @@ class CustomWidget(QGraphicsWidget):
 
     def create_label_with_spin_box(self, key, initial_value=0, min_value = 0,max_value=1000 , color="black", unit="", function=None, **kwargs):
         """
-        Creates a QLabel and a QSpinBox, and adds them to the widget in a QHBoxLayout.
+        Crée une étiquette avec une boîte à filer (spin box) et l'ajoute au widget.
 
         Args:
-            key (str): The translation key for the label.
-            initial_value (int, optional): The initial value of the QSpinBox. Defaults to 0.
-            unit (str, optional): The unit to display after the QSpinBox. Defaults to "".
-            function (function, optional): The function to be called when the QSpinBox is edited and confirmed. Defaults to None.
-            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+            key (str) : Clé de traduction pour l'étiquette.
+            initial_value (int) : Valeur initiale de la boîte à filer.
+            min_value (int) : Valeur minimale de la boîte à filer.
+            max_value (int) : Valeur maximale de la boîte à filer.
+            color (str) : Couleur du texte de l'étiquette.
+            unit (str) : Unité à afficher après la boîte à filer.
+            function (fonction) : Fonction à appeler lorsque la valeur de la boîte à filer est modifiée.
+            **kwargs : Arguments supplémentaires pour le constructeur QLabel et pour la traduction.
         """
         label_translate = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']:  # argument du QLabel possible
@@ -171,11 +223,11 @@ class CustomWidget(QGraphicsWidget):
 
     def update_spin_box(self, key, max_value):
         """
-        Updates a spin box with the given key.
+        Met à jour une boîte à filer avec la clé donnée.
 
         Args:
-            key (str): The translation key for the spin box.
-            max_value (int): The new maximum value.
+            key (str) : Clé de traduction pour la boîte à filer.
+            max_value (int) : Nouvelle valeur maximale.
         """
         # Loop over all spin boxes
         for spin_box, spin_box_key, _, spin_box_kwargs in self.spin_boxes:
@@ -191,14 +243,13 @@ class CustomWidget(QGraphicsWidget):
 
     def create_button(self, key, function=None, **kwargs):
         """
-        Creates a button with the given key and adds it to the widget.
+        Crée un bouton avec la clé donnée et l'ajoute au widget.
 
         Args:
-            key (str): The translation key for the button.
-            function (function, optional): The function to be called when the button is clicked. Defaults to None.
+            key (str) : Clé de traduction pour le bouton.
+            function (fonction) : Fonction à appeler lors du clic sur le bouton.
+            **kwargs : Arguments supplémentaires pour le constructeur QPushButton et pour la traduction.
         """
-
-
         button = QPushButton(self.translator.translate(key, **kwargs))
         if function is not None:
             button.clicked.connect(function)
@@ -219,11 +270,11 @@ class CustomWidget(QGraphicsWidget):
 
     def update_button(self, key, state):
         """
-        Updates a button with the given key.
+        Met à jour un bouton avec la clé donnée.
 
         Args:
-            key (str): The translation key for the button.
-            state (str): The new state ("true" or "false").
+            key (str) : Clé de traduction pour le bouton.
+            state (str) : Nouvel état à afficher sur le bouton
         """
         # Loop over all buttons
         for button, button_proxy, button_key, kwargs in self.buttons:
@@ -240,12 +291,12 @@ class CustomWidget(QGraphicsWidget):
 
     def create_label_with_indicator(self, key, color="black", **kwargs):
         """
-        Creates a label with an indicator and adds it to the widget.
+        Met à jour un indicateur avec la clé et l'état donnés.
 
         Args:
-            key (str): The translation key for the label.
-            state (bool): The initial state of the indicator. Defaults to False.
-            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+            indicator : Indicateur à mettre à jour.
+            key (str) : Clé de traduction pour l'indicateur.
+            state (bool) : Nouvel état de l'indicateur.
         """
         # Create the label as before
         label_translate = {}
@@ -313,6 +364,14 @@ class CustomWidget(QGraphicsWidget):
 
 
     def update_indicator(self, indicator, key, state):
+        """
+        Met à jour un indicateur avec la clé et l'état donnés.
+
+        Args:
+            indicator : Indicateur à mettre à jour.
+            key (str) : Clé de traduction lié à l'indicateur.
+            state (bool) : Nouvel état de l'indicateur.
+        """
         for indicator, indicator_key, _ in self.indicators:
             if indicator_key == key:
                 pixmap = QPixmap(indicator.size())
@@ -332,15 +391,15 @@ class CustomWidget(QGraphicsWidget):
 
     def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_key="", **kwargs):
         """
-        Creates a QLabel, a QComboBox, and a QPushButton, and adds them to the widget in a QHBoxLayout.
+        Crée une étiquette avec une boîte de combinaison et un bouton, et les ajoute au widget.
 
         Args:
-            key (str): The translation key for the label.
-            combo_items (list, optional): The items to add to the QComboBox. Defaults to [].
-            button_function (function, optional): The function to be called when the QPushButton is clicked. Defaults to None.
-            color (str, optional): The color of the QLabel text. Defaults to "black".
-            button_text (str, optional): The text to display on the QPushButton. Defaults to "".
-            **kwargs: Additional keyword arguments to be passed to the QLabel constructor and for translation.
+            key (str) : Clé de traduction pour l'étiquette.
+            combo_items (list) : Éléments à ajouter à la boîte de combinaison.
+            button_function (fonction) : Fonction à appeler lors du clic sur le bouton.
+            color (str) : Couleur du texte de l'étiquette.
+            button_key (str) : Clé de traduction pour le bouton.
+            **kwargs : Arguments supplémentaires pour les constructeurs QLabel, QComboBox, et QPushButton et pour la traduction.
         """
         label_translate = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']:  # argument du QLabel possible
@@ -402,10 +461,12 @@ class CustomWidget(QGraphicsWidget):
 
     def paint(self, painter, option, widget):
         """
-        Paints the widget.
+        Dessine le widget.
 
         Args:
-            painter (QPainter): The painter object to use for painting.
+            painter (QPainter) : Objet de dessin utilisé pour peindre.
+            option : Options de dessin.
+            widget : Widget à dessiner.
         """
         path = QPainterPath()
         path.addRoundedRect(self.rect(), 6, 6)
@@ -414,10 +475,7 @@ class CustomWidget(QGraphicsWidget):
 
     def change_language(self):
         """
-        Changes the language of the widget.
-
-        Args:
-            lang (str): The language to change to.
+        Change la langue du widget pour toutes les éléments traduisibles.
         """
         for label, _ , key, kwargs in self.labels:
             label.setText(self.translator.translate(key,**kwargs))
@@ -427,16 +485,22 @@ class CustomWidget(QGraphicsWidget):
             unit_label.setText(self.translator.translate(unit,**kwargs))  # Update the text of the unit QLabel
 
     def set_font_size(self,size):
+        """
+        Modifie la taille de la police du widget.
+
+        Args:
+            size (int) : Nouvelle taille de la police.
+        """
         self.font_size = size
 
 
-    def set_pos_size(self,width, height):
+    def set_pos_size(self, width, height):
         """
-        Sets the position and size of the widget.
+        Définit la position et la taille du widget.
 
         Args:
-            width (int): The width of the parent widget.
-            height (int): The height of the parent widget.
+            width (int) : Largeur du widget parent.
+            height (int) : Hauteur du widget parent.
         """
         for label in self.labels:
             font = label[0].font()

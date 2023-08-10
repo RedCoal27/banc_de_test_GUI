@@ -1,44 +1,53 @@
-"""
-This module contains the Gate class, which represents a gate in a graphical interface.
-
-The Gate class has the following methods:
-- __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], key: str, cmd: int, sens: str, parent, color="#4472C4"): initializes the Gate object with the given parameters.
-- on_left_click(self): a method called when the gate is clicked. Toggles the state of the gate and updates the line connecting the circle to the gate accordingly.
-- change_state(self, new_state=None): changes the state of the gate and updates the line connecting the circle to the gate accordingly.
-- set_value(self, value): sets the state of the gate. Used for recipes.
-"""
 from PyQt5.QtCore import Qt
-
 from internal.custom_widget import CustomWidget
 from scene.circle import Circle
 from scene.line import Line
 from internal.logger import Logger
 
-
-
 class Gate():
-    def __init__(self, pos: tuple[float,float], relative_pos: tuple[float,float], key: str, cmd: int, sens: str, parent, color="#4472C4"):
+    """
+    Cette classe représente une porte dans une interface graphique.
+
+    Methods:
+        __init__(self, pos, relative_pos, key, cmd, sens, parent, color="#4472C4"):
+            Initialise un objet Gate avec les paramètres donnés.
+        
+        on_left_click(self):
+            Méthode appelée lorsqu'on clique sur la porte. Bascule l'état de la porte et met à jour la ligne connectant le cercle à la porte.
+        
+        change_state(self, new_state=None):
+            Change l'état de la porte et met à jour la ligne connectant le cercle à la porte.
+        
+        set_value(self, value):
+            Définit l'état de la porte. Utilisé pour les recettes.
+    """
+
+    def __init__(self, pos: tuple[float, float], relative_pos: tuple[float, float], key: str, cmd: int, sens: str, parent, color="#4472C4"):
         """
-        A class representing a gate in a graphical interface.
+        Initialise un objet Gate avec les paramètres donnés.
 
         Args:
-        - pos: a tuple representing the position of the gate in the scene
-        - relative_pos: a tuple representing the relative position for the label
-        - key: a string representing the key of the gate
-        - cmd: a string representing the command to be sent to the serial port
-        - sens: a string representing the orientation of the gate ('horizontal' or 'vertical')
-        - parent: the main window of the application
+            pos: Tuple représentant la position de la porte dans la scène.
+            relative_pos: Tuple représentant la position relative pour l'étiquette.
+            key: Chaîne représentant la clé de la porte.
+            cmd: Entier représentant la commande à envoyer au port série.
+            sens: Chaîne représentant l'orientation de la porte ('horizontal' ou 'vertical').
+            parent: Fenêtre principale de l'application.
+            color: Couleur de la porte (par défaut : "#4472C4").
 
         Attributes:
-        - ratio: a list representing the ratio of the gate's size to the size of its parent widget
-        - pos: a tuple representing the position of the gate in the scene
-        - relative_pos: a tuple representing the relative position of the gate within its parent widget
-        - scene: a QGraphicsScene object representing the scene in which the gate will be displayed
-        - sens: a string representing the orientation of the gate ('horizontal' or 'vertical')
-        - text: a CustomWidget object representing the text label of the gate
-        - circle: a Circle object representing the circle next to the text label
-        - state: a boolean representing the state of the gate (open or closed)
-        - line: a Line object representing the line connecting the circle to the gate (horizontal or vertical)
+            ratio: Liste représentant le rapport de la taille de la porte par rapport à la taille de son widget parent.
+            pos: Tuple représentant la position de la porte dans la scène.
+            relative_pos: Tuple représentant la position relative de la porte dans son widget parent.
+            scene: Objet QGraphicsScene représentant la scène dans laquelle la porte sera affichée.
+            sens: Chaîne représentant l'orientation de la porte ('horizontal' ou 'vertical').
+            key: Chaîne représentant la clé de la porte.
+            state: Booléen représentant l'état de la porte (ouverte ou fermée).
+            cmd: Entier représentant la commande à envoyer au port série.
+            parent: Fenêtre principale de l'application.
+            text: Objet CustomWidget représentant l'étiquette textuelle de la porte.
+            circle: Objet Circle représentant le cercle à côté de l'étiquette textuelle.
+            line: Objet Line représentant la ligne connectant le cercle à la porte (horizontale ou verticale).
         """
         self.ratio = (0.05, 0.035)
         self.pos = pos
@@ -48,40 +57,37 @@ class Gate():
         self.key = key
         self.state = False
         self.cmd = cmd
-
         self.parent = parent
 
-        #add text label
-        self.text = CustomWidget(parent.translator, (pos[0]+relative_pos[0]-self.ratio[0]/2,pos[1]+relative_pos[1]-self.ratio[0]/2), self.ratio, "#FFFFFF")
-        self.text.create_label(key, color="#8FAADC", alignment = Qt.AlignmentFlag.AlignCenter)
+        # Ajout de l'étiquette textuelle
+        self.text = CustomWidget(parent.translator, (pos[0] + relative_pos[0] - self.ratio[0] / 2, pos[1] + relative_pos[1] - self.ratio[0] / 2), self.ratio, "#FFFFFF")
+        self.text.create_label(key, color="#8FAADC", alignment=Qt.AlignmentFlag.AlignCenter)
         self.scene.addItem(self.text)
 
-        #add circle next to text
-        self.circle = Circle(pos[0] , pos[1], 0.015, "#4472C4", self.on_left_click)
+        # Ajout du cercle à côté du texte
+        self.circle = Circle(pos[0], pos[1], 0.015, "#4472C4", self.on_left_click)
         self.scene.addItem(self.circle)
-        
 
-
-        #draw horizontal line
-        self.line = Line(0,0,0,0, color)
+        # Dessine la ligne horizontale
+        self.line = Line(0, 0, 0, 0, color)
         self.on_left_click()
         self.scene.addItem(self.line)
 
     def on_left_click(self):
         """
-        A method called when the gate is clicked.
+        Méthode appelée lorsqu'on clique sur la porte.
 
-        Toggles the state of the gate and updates the line connecting the circle to the gate accordingly.
+        Bascule l'état de la porte et met à jour la ligne connectant le cercle à la porte en conséquence.
         """
         if self.parent.serial_reader.ser is not None and self.parent.auto_mode is False:
             self.change_state()
 
     def change_state(self, new_state=None):
         """
-        Changes the state of the gate and updates the line connecting the circle to the gate accordingly.
+        Change l'état de la porte et met à jour la ligne connectant le cercle à la porte en conséquence.
 
         Args:
-        - new_state: a boolean representing the new state of the gate. If None, the state is toggled.
+            new_state: Booléen représentant le nouvel état de la porte. Si None, l'état est basculé.
         """
         if new_state is not None:
             self.state = new_state
@@ -93,26 +99,25 @@ class Gate():
         else:
             test_value = not self.state
 
-        if test_value == False: 
-            #draw vertical line
-            self.line.set_line(self.scene,self.circle.center[0], self.circle.center[1]-self.circle.radius*1.2, self.circle.center[0], self.circle.center[1]+self.circle.radius*1.2)
+        if test_value is False:
+            # Dessine la ligne verticale
+            self.line.set_line(self.scene, self.circle.center[0], self.circle.center[1] - self.circle.radius * 1.2, self.circle.center[0], self.circle.center[1] + self.circle.radius * 1.2)
         else:
-            #draw horizontal line
-            self.line.set_line(self.scene,self.circle.center[0]-self.circle.radius, self.circle.center[1], self.circle.center[0]+self.circle.radius, self.circle.center[1])
+            # Dessine la ligne horizontale
+            self.line.set_line(self.scene, self.circle.center[0] - self.circle.radius, self.circle.center[1], self.circle.center[0] + self.circle.radius, self.circle.center[1])
 
         if isinstance(self.cmd, int):
             self.parent.serial_reader.write_data(self.cmd, self.state)
         else:
             self.parent.serial_reader.write_data(self.cmd.DO, self.state)
 
-        Logger.debug(f"Gate {self.key} is set to {self.state}")
-
+        Logger.debug(f"La porte {self.key} est définie sur {self.state}")
 
     def set_value(self, value):
         """
-        Sets the state of the gate. Used for recipes.
+        Définit l'état de la porte. Utilisé pour les recettes.
 
         Args:
-        - value: a boolean representing the new state of the gate
+            value: Booléen représentant le nouvel état de la porte.
         """
         self.change_state(value)

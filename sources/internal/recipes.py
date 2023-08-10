@@ -176,8 +176,8 @@ class Recipes(QObject):
         Condition can be a single condition or a list of conditions.
         A condition is a dictionary with the name of the widget as key and a test to perform as value.
         The test can be:
-        - a boolean: the state of the widget must be equal to the boolean
-        - < or > followed by a number: the value of the widget must be less than or greater than the number
+        a boolean: the state of the widget must be equal to the boolean
+        < or > followed by a number: the value of the widget must be less than or greater than the number
         '''
         for condition_name, condition_value in conditions.items():
             value = self.parent.custom_widgets[condition_name].get_value()

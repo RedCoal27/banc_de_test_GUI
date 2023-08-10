@@ -35,7 +35,7 @@ class GateCH(Gate):
         Updates the DO label of the gate.
 
         Args:
-        - state: a boolean representing the state of the gate
+        state: a boolean representing the state of the gate
         """
         self.change_state(state)
 
@@ -44,8 +44,8 @@ class GateCH(Gate):
         Updates the sensor state of the gate.
 
         Args:
-        - sensor_open: a boolean representing the state of the upper sensor
-        - sensor_close: a boolean representing the state of the lower sensor
+        sensor_open: a boolean representing the state of the upper sensor
+        sensor_close: a boolean representing the state of the lower sensor
         """
         self.sensor_open = sensor_open
         self.sensor_close = sensor_close
