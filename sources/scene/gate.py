@@ -111,8 +111,6 @@ class Gate():
         else:
             self.parent.serial_reader.write_data(self.cmd.DO, self.state)
 
-        Logger.debug(f"La porte {self.key} est définie sur {self.state}")
-
     def set_value(self, value):
         """
         Définit l'état de la porte. Utilisé pour les recettes.

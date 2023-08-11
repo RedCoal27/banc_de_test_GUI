@@ -128,7 +128,7 @@ class Generator(CustomWidget):
                 self.interlock_state = new_state
             else:
                 self.interlock_state = not self.interlock_state
-            self.serial_reader.write_data(self.cmd.Interlock, self.interlock_state)
+            self.serial_reader.write_data(self.cmd.Interlock, not self.interlock_state)
             self.update_button("interlock_state", state="on" if self.interlock_state else "off")
 
     def click_interlock(self):
@@ -173,8 +173,8 @@ class Generator(CustomWidget):
         """
         self.source_value = (float(value[0]) / 10 * self.parent.config.get_constant_value(self.key))
         self.voltage_reflected = (float(value[1]) / 10 * self.parent.config.get_constant_value(self.key))
-        self.update_label("source_power", value=self.source_value)
-        self.update_label("voltage_reflected", value=self.voltage_reflected)
+        self.update_label("source_power", value=round(self.source_value,1))
+        self.update_label("voltage_reflected", value=round(self.voltage_reflected,1))
         
 
     def update_AO(self, spin_box):

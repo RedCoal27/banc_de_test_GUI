@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
             key (str): La clé du widget personnalisé.
             value (float): La nouvelle valeur.
         """
-        print(f"Setting value of {key} to {value}")
+        Logger.debug(f"Setting value of {key} to {value}")
         self.custom_widgets[key].set_value(value)
 
 

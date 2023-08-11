@@ -1,6 +1,7 @@
 1:
   name: Starting pump
   actions:
+    nupro_vent: close
     roughing_pump: on
   conditions:
     pump_pressure: "<0.02" #Torr
@@ -27,7 +28,7 @@
   actions:
     iso_turbo: open
   conditions:
-    pump_pressure: "<0.02"
+    pump_pressure: "<0.02" #Torr
   timeout: 60
   error_message: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
   
@@ -35,10 +36,7 @@
   name: Starting turbo pump
   actions:
     turbo_pump_ch: on
-  conditions:
-    pump_pressure: "<0.02"
-  timeout: 10
-  error_message: La turbo pompe n'a pas atteint la pression de 0.02 mbar en 60 secondes.
+  timeout: 5
 
 6:
   name: Close iso turbo 2

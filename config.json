@@ -1,7 +1,7 @@
 {
     "gui": {
         "lang": "en",
-        "font_size": 9
+        "font_size": 10
     },
     "chamber_pressure": {
         "address": 7,

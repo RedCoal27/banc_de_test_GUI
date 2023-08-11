@@ -12,15 +12,21 @@
   actions:
     turbo_pump_rga: off
     turbo_pump_ch: off
+    roughing_pump: off
   timeout: 10
 3:
   name: Ventilation
   actions:
     nupro_vent: open
   conditions:
-    chamber_pressure: ">740"
+    chamber_pressure: ">740" #Torr
   error_message: La chambre n'a pas atteint la pression de 740 Torr en 60 secondes.
   timeout: 10000
 4:
   name: Wait
   timeout: 60
+5:
+  name: Close vent
+  actions:
+    nupro_vent: close
+  timeout: 1

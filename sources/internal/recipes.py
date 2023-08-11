@@ -67,14 +67,14 @@ class Recipes(QObject):
     valid_conditions = ['interlock','wafer_lift1','wafer_lift2','wafer_lift3','SV','baratron1','baratron2','MFC1','MFC2','chamber_pressure','pump_pressure','ion_gauge','roughing_pump','turbo_pump_ch','turbo_pump_rga','turbo_pump_gate']
 
     dictionnaire = {
-        "on":0,
-        "off":1,
-        "open":0,
-        "close":1,
-        "at_speed": 0,
-        "slow":1,
-        "up": 1,
-        "down":0,
+        "on":False,
+        "off":True,
+        "open":False,
+        "close":True,
+        "at_speed": False,
+        "slow":True,
+        "up": True,
+        "down":False,
     }
     
     finished = pyqtSignal()

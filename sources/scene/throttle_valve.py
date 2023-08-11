@@ -59,3 +59,11 @@ class ThrottleValve(CustomWidget):
         Crée des boutons pour le widget ThrottleValve.
         """
         self.create_button("cycle")
+
+
+    def relative_move(self):
+        z
+
+    def Home(self):
+        data = relative_move(100)
+        data = relative_move(-1000)

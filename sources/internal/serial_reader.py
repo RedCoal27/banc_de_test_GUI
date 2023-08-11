@@ -194,9 +194,10 @@ class SerialReaderThread(QThread):
                         self.custom_widgets["baratron2"].update_AI(data[3])
                         
                     #read analog inputs 2 (generator1 source power, generator1 reflected power, generator2 source power, generator2 reflected power)
-                    self.serial_reader.send_data(6,5)
+                    self.serial_reader.send_data(7,4)
                     data = None
                     data = self.serial_reader.wait_and_read_data(until='\n'.encode())
+                    # print(data)
                     if data is not None and len(data) > 0:
                         data = data.decode().strip().split(' ')
                         self.custom_widgets["generator1"].update_AI(data[0:2])
