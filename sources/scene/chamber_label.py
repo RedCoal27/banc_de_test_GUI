@@ -51,7 +51,7 @@ class ChamberLabel(CustomWidget):
         self.combo_items = self.recipes.recipes.keys()
 
         # Création de QLabel, QComboBox et QPushButton dans le CustomWidget
-        self.create_label_with_combo_box_and_button("recipes", self.combo_items, self.button_function, color="black", button_key="set_state", state="Start")
+        self.create_label_with_combo_box_and_button("recipes", self.combo_items, self.button_function, button_key="set_state", state="Start")
         self.create_label("step", name="", step="", total_steps="")
         self.create_label("time_display", type="")
 

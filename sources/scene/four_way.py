@@ -3,7 +3,7 @@ from internal.custom_widget import CustomWidget
 
 from internal.logger import Logger
 
-from window.graph_window import GraphWindow
+from window.cycle_gui import CycleGui
 
 class FourWay(CustomWidget):
     """
@@ -46,7 +46,7 @@ class FourWay(CustomWidget):
             Fonction de rappel pour le bouton set_state. Met à jour les étiquettes DO du widget FourWay.
 
         open_windows(self):
-            Fonction de rappel pour le bouton cycle. Ouvre un objet GraphWindow.
+            Fonction de rappel pour le bouton cycle. Ouvre un objet CycleGui.
 
         set_value(self, value):
             Définit la valeur du FourWay. Utilisé pour les recettes.
@@ -63,7 +63,7 @@ class FourWay(CustomWidget):
             position : Étiquette représentant la position de la vanne.
         buttons: Dictionnaire contenant les boutons du widget.
             set_state : Bouton permettant de changer l'état du DO.
-            cycle : Bouton permettant d'ouvrir un objet GraphWindow.
+            cycle : Bouton permettant d'ouvrir un objet CycleGui.
     """
 
     def __init__(self, pos, cmd, key, parent, number=""):
@@ -150,9 +150,9 @@ class FourWay(CustomWidget):
 
     def open_windows(self):
         """
-        Fonction de rappel pour le bouton cycle. Ouvre un objet GraphWindow.
+        Fonction de rappel pour le bouton cycle. Ouvre un objet CycleGui.
         """
-        self.window = GraphWindow(self)
+        self.window = CycleGui(self)
         self.window.show()
 
     def set_value(self, value):

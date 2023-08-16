@@ -98,13 +98,13 @@ class CustomWidget(QGraphicsWidget):
             color (str) : Couleur du texte de l'étiquette (par défaut : "black").
             **kwargs : Arguments supplémentaires pour le constructeur QLabel et pour la traduction.
         """
-        label_translate = {}
+        label_arg = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']: #argument du QLabel possible
             if arg_name in kwargs:
-                label_translate[arg_name] = kwargs.pop(arg_name)
+                label_arg[arg_name] = kwargs.pop(arg_name)
 
 
-        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label = QLabel(self.translator.translate(key, **kwargs), **label_arg)
         label_proxy = QGraphicsProxyWidget(self)
         label_proxy.setWidget(label)
 
@@ -156,12 +156,12 @@ class CustomWidget(QGraphicsWidget):
             function (fonction) : Fonction à appeler lorsque la valeur de la boîte à filer est modifiée.
             **kwargs : Arguments supplémentaires pour le constructeur QLabel et pour la traduction.
         """
-        label_translate = {}
+        label_arg = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']:  # argument du QLabel possible
             if arg_name in kwargs:
-                label_translate[arg_name] = kwargs.pop(arg_name)
+                label_arg[arg_name] = kwargs.pop(arg_name)
 
-        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label = QLabel(self.translator.translate(key, **kwargs), **label_arg)
         label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
@@ -298,12 +298,12 @@ class CustomWidget(QGraphicsWidget):
             state (bool) : Nouvel état de l'indicateur.
         """
         # Create the label as before
-        label_translate = {}
+        label_arg = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']: #argument du QLabel possible
             if arg_name in kwargs:
-                label_translate[arg_name] = kwargs.pop(arg_name)
+                label_arg[arg_name] = kwargs.pop(arg_name)
 
-        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label = QLabel(self.translator.translate(key, **kwargs), **label_arg)
         label.setStyleSheet(f"background-color: transparent;color: {color};")
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         label.setContentsMargins(0, 0, 0, 0)  # Set smaller margins for the unit QLabel
@@ -388,7 +388,7 @@ class CustomWidget(QGraphicsWidget):
                 indicator.setPixmap(pixmap)
                 break
 
-    def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, color="black", button_key="", **kwargs):
+    def create_label_with_combo_box_and_button(self, key, combo_items=[], button_function=None, button_key="", color="black", **kwargs):
         """
         Crée une étiquette avec une boîte de combinaison et un bouton, et les ajoute au widget.
 
@@ -400,12 +400,12 @@ class CustomWidget(QGraphicsWidget):
             button_key (str) : Clé de traduction pour le bouton.
             **kwargs : Arguments supplémentaires pour les constructeurs QLabel, QComboBox, et QPushButton et pour la traduction.
         """
-        label_translate = {}
+        label_arg = {}
         for arg_name in ['alignment', 'indent', 'margin', 'text', 'wordWrap']:  # argument du QLabel possible
             if arg_name in kwargs:
-                label_translate[arg_name] = kwargs.pop(arg_name)
+                label_arg[arg_name] = kwargs.pop(arg_name)
 
-        label = QLabel(self.translator.translate(key, **kwargs), **label_translate)
+        label = QLabel(self.translator.translate(key, **kwargs), **label_arg)
         label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         label.setContentsMargins(1, 1, 0, 1)  # Set margins for the unit QLabel
 
@@ -430,7 +430,9 @@ class CustomWidget(QGraphicsWidget):
         button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         button.setStyleSheet("QPushButton { font-size: " + str(self.font_size) + "pt; background-color: None; }")
-        button.setContentsMargins(1, 0, 0, 0)  # Remove margins for the QPushButton
+        button.setContentsMargins(0, 0, 0, 0)  # Remove margins for the QPushButton
+
+
 
         font = button.font()
         font.setPointSizeF(self.font_size)
@@ -496,7 +498,7 @@ class CustomWidget(QGraphicsWidget):
     def set_pos_size(self, width, height):
         """
         Définit la position et la taille du widget.
-
+        Et redéfinit la taille des éléments du widget.
         Args:
             width (int) : Largeur du widget parent.
             height (int) : Hauteur du widget parent.
@@ -510,8 +512,6 @@ class CustomWidget(QGraphicsWidget):
             font = button[0].font()
             font.setPointSizeF(self.font_size)
             button[0].setFont(font)
-            #change button size
-            button[0].setFixedWidth(int(width*self.ratio[0]))
 
         #number of élément in the layout
         nb_element = self.layout.count()

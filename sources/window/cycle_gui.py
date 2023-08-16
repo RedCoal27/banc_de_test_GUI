@@ -9,10 +9,10 @@ from time import sleep
 
 from internal.logger import Logger
 
-class GraphWindow(QMainWindow):
+class CycleGui(QMainWindow):
     def __init__(self, parent, state_up_key='ascent', state_down_key='descent'):
         """
-        Constructeur de la classe GraphWindow.
+        Constructeur de la classe CycleGui.
 
         Args:
             parent: Objet parent.

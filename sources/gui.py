@@ -169,7 +169,7 @@ class MainWindow(QMainWindow):
         self.scene.addItem(Line(0.73, 0.74, 0.78, 0.74, "#4472C4")) #Chamber pressure
         self.scene.addItem(Line(0.73, 0.88, 0.78, 0.88, "#4472C4")) #Chamber pressure
 
-        self.scene.addItem(Line(0.315, 0.58, 0.315, 0.8, "#4472C4")) #throttle valve/rouffing pump
+        self.scene.addItem(Line(0.3225, 0.58, 0.3225, 0.8, "#4472C4")) #throttle valve/rouffing pump
 
     def create_custom_widgets(self):
         """
@@ -186,7 +186,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["wafer_lift3"] = FourWay([0.385, 0.01], Cmd.wafer_lift3, "wafer_lift_n", number="3", parent=self)
         self.custom_widgets["slit_valve"] = FourWay([0.51, 0.01], Cmd.slit_valve, "slit_valve", parent=self)
         self.custom_widgets["throttle_valve"] = ThrottleValve([0.26, 0.44], "throttle_valve", parent=self)
-        self.custom_widgets["motor_lift"] = MotorisedLift([0.39, 0.44], "motor_lift", parent=self)
+        self.custom_widgets["motor_lift"] = MotorisedLift([0.41, 0.44], "motor_lift", parent=self)
         self.custom_widgets["wafer_lift1"] = FourWay([0.53, 0.44], Cmd.wafer_lift1, "wafer_lift_n", number="1", parent=self)
         self.custom_widgets["baratron1"] = Baratron([0.78, 0.44], "baratron1", parent=self)
         self.custom_widgets["baratron2"] = Baratron([0.78, 0.57], "baratron2", parent=self)
@@ -202,7 +202,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02, 0.50], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = TurboPump([0.14, 0.50], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
-        self.custom_widgets["roughing_pump"] = RoughingPump([0.265, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
+        self.custom_widgets["roughing_pump"] = RoughingPump([0.2725, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 
         self.custom_widgets["generator1"] = Generator([0.0105, 0.795], Cmd.Generator1, "generator1", parent=self)
         self.custom_widgets["generator2"] = Generator([0.135, 0.795], Cmd.Generator2, "generator2", parent=self)
@@ -223,7 +223,7 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["turbo_pump_gate"] = GateCH((0.19, 0.42), (-0.04, 0.0), "turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["iso_chamber"] = Gate((0.315, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_chamber"] = Gate((0.3225, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
 
 
     def update_AI(self):

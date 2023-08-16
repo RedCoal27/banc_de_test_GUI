@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from internal.custom_widget import CustomWidget
+from window.throttle_valve_gui import ThrottleValveGUI
 
 class ThrottleValve(CustomWidget):
     """
@@ -48,22 +49,23 @@ class ThrottleValve(CustomWidget):
             key: Clé utilisée pour identifier la vanne.
         """
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
-        self.create_label("open", state="false")
-        self.create_label("close", state="false")
+        self.create_label("do_up", state="false")
+        self.create_label("do_close", state="false")
         self.create_label("steps", state="false")
-        self.create_label("hysteresis", state="")
-        self.create_label("cmd", state="false")
+        self.create_label_with_spin_box("close_position", state="false", min=0, max=100, step=1, value=0)
+        self.create_label_with_spin_box("hysteresis", state="false", min=0, max=100, step=1, value=0)
 
     def create_buttons(self):
         """
         Crée des boutons pour le widget ThrottleValve.
         """
-        self.create_button("cycle")
+        self.create_button("routine", function=self.open_window)
+        # self.create_button("cycle", state="false")
 
-
-    def relative_move(self):
-        z
-
-    def Home(self):
-        data = relative_move(100)
-        data = relative_move(-1000)
+    def open_window(self):
+        """
+        Ouvre une fenêtre pour configurer la vanne.
+        """
+        self.window = ThrottleValveGUI(self)
+        self.window.show()
+        self.window.raise_()

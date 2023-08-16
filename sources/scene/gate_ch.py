@@ -1,5 +1,5 @@
 from scene.gate import *
-from window.graph_window import GraphWindow
+from window.cycle_gui import CycleGui
 from PyQt5.QtWidgets import QMenu, QAction
 import math
 
@@ -99,7 +99,7 @@ class GateCH(Gate):
 
 
     def open_windows(self):
-        self.window = GraphWindow(self, state_up_key="opening", state_down_key="closing")
+        self.window = CycleGui(self, state_up_key="opening", state_down_key="closing")
         self.window.show()
 
     def get_value(self):
