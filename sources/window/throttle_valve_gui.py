@@ -5,37 +5,106 @@ from PyQt5.QtCore import QTimer,QThread, pyqtSignal
 
 
 class ThrottleValveThread(QThread):
+    class StopThreadException(Exception):
+        pass
+
     stepUpdated = pyqtSignal(str, int, int)
     finishedCycle = pyqtSignal()
-
-    def __init__(self, serial_reader, steps, repetitions):
+    targetPressure = 40
+    
+    def __init__(self, serial_reader, selected_steps, repetitions):
         super().__init__()
         self.serial_reader = serial_reader
-        self.steps = steps
+        self.steps = selected_steps
         self.repetitions = repetitions
+        self.is_running = True
+
+        self.test = 447
 
     def run(self):
-        for step_index, step_name in enumerate(self.steps):
-            for sub_step in range(self.repetitions[step_index]):
-                self.stepUpdated.emit(step_name, sub_step + 1, self.repetitions[step_index])
-                getattr(self, step_name.replace(' ', '_'))()
-                self.msleep(1000)  # Attente entre les sous-étapes
-            self.msleep(1000)  # Attente entre les étapes
+        try:
+            for step_index, step_name in enumerate(self.steps):
+                for sub_step in range(self.repetitions[step_index]):
+                    self.test += 1
+                    self.stepUpdated.emit(step_name, sub_step + 1, self.repetitions[step_index])
+                    getattr(self, step_name.replace(' ', '_'))()
+                    self.sleep_while_running(1000)
+                self.sleep_while_running(1000)
+        except self.StopThreadException:
+            pass
         self.finishedCycle.emit()
 
 
     def set_value(self, value):
-        while self.serial_reader.busy:
-            self.msleep(10)
-        self.serial_reader.busy = True
-        # self.serial_reader.send_data(1, self.serial_reader.cmd.Port)
-        # data = self.serial_reader.wait_and_read_data(1)
-        self.serial_reader.busy = False
+        while self.serial_reader.busy == True:
+            print("t")
+            self.sleep_while_running(1000)
+
+        self.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
+        # self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
+        # data = self.parent.serial_reader.wait_and_read_data(1)
+        self.serial_reader.busy = False # free the serial reade
+
+
+    def sleep_while_running(self, milliseconds):
+        for _ in range(milliseconds // 100):
+            if not self.is_running:
+                raise self.StopThreadException()
+            self.msleep(100)
 
     def read_pressure(self):
-        # Logique pour lire la pression
-        # Vous pouvez ajouter ici la logique spécifique pour lire la pression
-        pass
+        return (self.current_value-self.test+40)
+
+
+    def wait_pressure_or_time(self,pressure,time):
+        """
+        Attendre que la pression soit atteinte ou que le temps soit écoulé
+
+        Args:
+            pressure (float): Pression à atteindre
+            time (int): Temps à attendre en secondes
+        """
+        while self.read_pressure() < pressure and time > 0:
+            self.sleep_while_running(1000)
+            time -= 1
+
+    def calibrate_close_position(self):
+        print('Calibrate close position')
+        self.lower_bound = 150
+        self.upper_bound = 450
+        self.current_value = int((self.lower_bound + self.upper_bound) / 2)
+        self.set_value(self.current_value)
+        self.wait_pressure_or_time(self.targetPressure, 25)  # Attendre que la pression soit atteinte ou que le temps soit écoulé
+
+
+        while self.upper_bound - self.lower_bound > 1 and self.is_running:
+            pressure = self.read_pressure()
+
+
+            if pressure <= self.targetPressure:
+                self.lower_bound = self.current_value
+            else:
+                self.upper_bound = self.current_value
+
+            self.current_value = int((self.lower_bound + self.upper_bound) / 2)
+            self.set_value(self.current_value)  # Régler la valeur de dichotomie suivante
+            self.wait_pressure_or_time(self.targetPressure, 25)  # Attendre que la pression soit atteinte ou que le temps soit écoulé
+
+            self.set_value(800)  # Retourner à 800
+            self.sleep_while_running(15000)
+
+        if(self.lower_bound != self.test):
+            print('lower bound: ', self.lower_bound)
+            print('upper bound: ', self.upper_bound)
+            print('test: ', self.test)
+
+
+    def home(self):
+        self.set_value(200)
+        self.sleep_while_running(1000)
+
+
+
 
 
 class ThrottleValveGUI(QtWidgets.QWidget):
@@ -88,24 +157,6 @@ class ThrottleValveGUI(QtWidgets.QWidget):
         layout.addWidget(self.sub_step_label)
 
 
-        # Variables pour la dichotomie
-        self.target_pressure = 40
-        self.check_pressure_timer = QTimer()
-        self.check_pressure_timer.setInterval(1000)  # 1 seconde en ms
-        self.check_pressure_timer.timeout.connect(self.check_pressure)
-
-        # QTimer pour commencer à vérifier la pression après 15 secondes
-        self.timeout_timer = QTimer()
-        self.timeout_timer.setInterval(15 * 1000)  # 15 secondes en ms
-        self.timeout_timer.timeout.connect(self.start_checking_pressure)
-
-        # QTimer pour lancer la dichotomie après 25 secondes
-        self.dichotomy_timer = QTimer()
-        self.dichotomy_timer.setInterval(25 * 1000)  # 25 secondes en ms
-        self.dichotomy_timer.timeout.connect(self.dichotomy_step)
-        self.dichotomy_timer.setSingleShot(True)  # S'exécute une seule fois
-
-
         self.setLayout(layout)
 
 
@@ -118,101 +169,33 @@ class ThrottleValveGUI(QtWidgets.QWidget):
             self.stop_actions()
 
     def start_actions(self):
-        self.current_step = 0
-        self.current_sub_step = 0
-        self.execute_step()
+        selected_steps = []
+        repetitions = []
+        for step, (checkbox, spinbox) in zip(self.steps, self.step_spinboxes):
+            if checkbox.isChecked():
+                selected_steps.append(step)
+                repetitions.append(spinbox.value())
+        self.throttle_valve_thread = ThrottleValveThread(self.serial_reader, selected_steps, repetitions)
+        self.throttle_valve_thread.stepUpdated.connect(self.update_step_labels)
+        self.throttle_valve_thread.finishedCycle.connect(self.on_finished_cycle)
+        self.throttle_valve_thread.start()
 
     def stop_actions(self):
-        self.check_pressure_timer.stop()
-        self.timeout_timer.stop()
-        self.dichotomy_timer.stop()  # Arrêter le délai d'attente de 25 secondes
+        if hasattr(self, 'throttle_valve_thread'):
+            print('Stopping thread')
+            self.throttle_valve_thread.is_running = False
+            self.throttle_valve_thread.quit()
+            self.throttle_valve_thread.wait()
+            print('Thread stopped') 
 
-    def execute_step(self):
-        if self.current_step < len(self.step_spinboxes):
-            checkbox, spinbox = self.step_spinboxes[self.current_step]
-            if checkbox.isChecked():
-                step_name = self.steps[self.current_step]
-                self.current_repetitions = spinbox.value()
-                if self.current_sub_step < self.current_repetitions:
-                    self.step_label.setText(f'Étape: {step_name}')
-                    self.sub_step_label.setText(f'Sous-étape: {self.current_sub_step + 1}/{self.current_repetitions}')
-                    getattr(self, step_name.replace(' ', '_'))()  # Appel de la fonction correspondante
-                    return
-                else:
-                    self.current_sub_step = 0
-            self.current_step += 1
-            self.execute_step()
-        else:
-            self.start_stop_button.setText('Start')
-            self.stop_actions()
+    def update_step_labels(self, step_name, sub_step, total_repetitions):
+        self.step_label.setText(f'Étape: {step_name}')
+        self.sub_step_label.setText(f'Sous-étape: {sub_step}/{total_repetitions}')
 
-    def calibrate_close_position(self):
-        print('Calibrate close position')
-        self.lower_bound = 150
-        self.upper_bound = 450
-        self.current_value = int((self.lower_bound + self.upper_bound) / 2)
-        self.set_value(self.current_value)
-        self.dichotomy_timer.start()  # Commencer le délai d'attente de 25 secondes
+    def on_finished_cycle(self):
+        self.start_stop_button.setText('Start')
+        self.stop_actions()
 
-    def start_checking_pressure(self):
-        self.timeout_timer.stop()  # Arrêter le délai d'attente de 15 secondes
-        self.current_value = int((self.lower_bound + self.upper_bound) / 2)
-        self.set_value(self.current_value)  # Régler la valeur de dichotomie suivante
-        self.check_pressure_timer.start()  # Commencer à vérifier la pression toutes les secondes
-
-        if self.upper_bound - self.lower_bound <= 1:
-            self.stop_actions()
-            self.current_sub_step += 1
-            self.execute_step()
-        else:
-            self.dichotomy_timer.start()  # Recommencer le délai d'attente de 25 secondes
-
-    def dichotomy_step(self):
-        self.check_pressure_timer.stop()  # Arrêter de vérifier la pression toutes les secondes
-        self.dichotomy_timer.stop()  # Arrêter le délai d'attente de 25 secondes
-
-        pressure = self.read_pressure()
-        print("current value: ", self.current_value)
-        print("fake pressure: ", pressure)
-
-        if pressure < self.target_pressure:
-            self.lower_bound = self.current_value
-        else:
-            self.upper_bound = self.current_value
-
-        self.set_value(800)  # Retourner à 800
-        self.timeout_timer.start()  # Commencer le délai d'attente de 15 secondes
-
-    def check_pressure(self):
-        pressure = self.read_pressure()
-        print(pressure)
-        if pressure >= self.target_pressure:
-            self.dichotomy_timer.stop()  # Arrêter le délai d'attente de 25 secondes
-            self.dichotomy_step()
-
-
-    def Home(self):
-        self.set_value(200)
-
-    
-
-    def set_value(self, value):
-        while self.serial_reader.busy == True:
-            print("t")
-            self.msleep(1000)
-
-        self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
-        # self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
-        # data = self.parent.serial_reader.wait_and_read_data(1)
-        self.parent.serial_reader.busy = False # free the serial reade
-
-
-    def read_pressure(self):
-
-        return (self.current_value-174+40)
-
-
-    # Autres méthodes pour les autres étapes ici
 
     def closeEvent(self, event):
         self.stop_actions()
