@@ -88,7 +88,10 @@ class SerialReader(QObject):
                 else:
                     self.ser.write(bytes([data]))
                 for d in other_data:
-                    self.ser.write(bytes(d, 'utf-8'))
+                    try:
+                        self.ser.write(d.to_bytes(1))
+                    except:
+                        self.ser.write(bytes(d,"utf-8"))
             except SerialException:
                 Logger.warning(f"Error while sending data to serial port {self.ser.port}.")
                 self.error_occurred.emit(self.translator.translate("serial_port_disconnected", port=self.ser.port))
@@ -211,6 +214,19 @@ class SerialReaderThread(QThread):
                         if len(data)==2 or data[0]=='error':
                             self.custom_widgets[key].update_pressure(data)
 
+                    # read throttle valve sensor
+                    self.serial_reader.send_data(9, Cmd.ThrottleValve.sensors)
+                    data = self.serial_reader.wait_and_read_data(1)
+                    self.custom_widgets["throttle_valve"].update_sensor(data[0])
+                    data = None
+                    # read throttle valve position
+                    self.serial_reader.send_data(9, Cmd.ThrottleValve.position)
+                    data = self.serial_reader.wait_and_read_data(2)
+                    print(data)
+                    self.custom_widgets["throttle_valve"].update_position(int.from_bytes(data, byteorder='big'))
+
+
+
                 except Exception as e:
                     # print("Serial Reader:",e)
                     pass
@@ -220,5 +236,4 @@ class SerialReaderThread(QThread):
             else:
                 # print("busy")
                 self.msleep(50)
-
 

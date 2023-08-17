@@ -22,7 +22,7 @@
     "position" : "Position: {state}",
     "p_home" : "Position Home: {state}",  
     "p_prcs" : "Position Prcs: {state}",
-    "steps" : "Pas: {state}",
+    "steps" : "Pas: {value}",
     "false" : "Faux",
     "true" : "Vrai",
     "open" : "Ouverte",

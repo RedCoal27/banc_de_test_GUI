@@ -1,10 +1,50 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer,QThread, pyqtSignal
+
+
+
+
+class ThrottleValveThread(QThread):
+    stepUpdated = pyqtSignal(str, int, int)
+    finishedCycle = pyqtSignal()
+
+    def __init__(self, serial_reader, steps, repetitions):
+        super().__init__()
+        self.serial_reader = serial_reader
+        self.steps = steps
+        self.repetitions = repetitions
+
+    def run(self):
+        for step_index, step_name in enumerate(self.steps):
+            for sub_step in range(self.repetitions[step_index]):
+                self.stepUpdated.emit(step_name, sub_step + 1, self.repetitions[step_index])
+                getattr(self, step_name.replace(' ', '_'))()
+                self.msleep(1000)  # Attente entre les sous-étapes
+            self.msleep(1000)  # Attente entre les étapes
+        self.finishedCycle.emit()
+
+
+    def set_value(self, value):
+        while self.serial_reader.busy:
+            self.msleep(10)
+        self.serial_reader.busy = True
+        # self.serial_reader.send_data(1, self.serial_reader.cmd.Port)
+        # data = self.serial_reader.wait_and_read_data(1)
+        self.serial_reader.busy = False
+
+    def read_pressure(self):
+        # Logique pour lire la pression
+        # Vous pouvez ajouter ici la logique spécifique pour lire la pression
+        pass
+
 
 class ThrottleValveGUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle('Throttle Valve GUI')
+        
+        self.parent = parent
+        self.serial_reader = parent.serial_reader
 
         # Layout principal
         layout = QtWidgets.QVBoxLayout()
@@ -47,10 +87,6 @@ class ThrottleValveGUI(QtWidgets.QWidget):
         layout.addWidget(self.step_label)
         layout.addWidget(self.sub_step_label)
 
-        # QTimer pour vérifier les capteurs
-        self.sensor_timer = QTimer()
-        self.sensor_timer.timeout.connect(self.check_sensors)
-        self.sensor_timer.setInterval(40)  # Vérifier les capteurs toutes les 40 ms
 
         # Variables pour la dichotomie
         self.target_pressure = 40
@@ -88,7 +124,6 @@ class ThrottleValveGUI(QtWidgets.QWidget):
 
     def stop_actions(self):
         self.check_pressure_timer.stop()
-        self.sensor_timer.stop()
         self.timeout_timer.stop()
         self.dichotomy_timer.stop()  # Arrêter le délai d'attente de 25 secondes
 
@@ -117,7 +152,6 @@ class ThrottleValveGUI(QtWidgets.QWidget):
         self.upper_bound = 450
         self.current_value = int((self.lower_bound + self.upper_bound) / 2)
         self.set_value(self.current_value)
-        self.sensor_timer.start()  # Commencer à vérifier les capteurs
         self.dichotomy_timer.start()  # Commencer le délai d'attente de 25 secondes
 
     def start_checking_pressure(self):
@@ -157,14 +191,21 @@ class ThrottleValveGUI(QtWidgets.QWidget):
             self.dichotomy_step()
 
 
-    def check_sensors(self):
-        # Lire les capteurs ici
-        pass
+    def Home(self):
+        self.set_value(200)
+
+    
 
     def set_value(self, value):
-        # Code pour régler la valeur
-        print("set value: ", value)
-        pass
+        while self.serial_reader.busy == True:
+            print("t")
+            self.msleep(1000)
+
+        self.parent.serial_reader.busy = True # tell to serial_reader that it will be busy for some time
+        # self.parent.serial_reader.send_data(1,self.parent.cmd.Port)
+        # data = self.parent.serial_reader.wait_and_read_data(1)
+        self.parent.serial_reader.busy = False # free the serial reade
+
 
     def read_pressure(self):
 

@@ -97,6 +97,15 @@ class Cmd:
         Interlock = 32
         AO = 5
 
+    class ThrottleValve:
+        """
+        Constante lié a la Throttle Valve
+        """
+        cmd = 9
+        set_position = 1
+        sensors = 3
+        position = 2
+
 
 class PiraniConfig:
     """

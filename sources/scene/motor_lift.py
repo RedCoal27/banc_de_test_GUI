@@ -39,7 +39,7 @@ class MotorisedLift(CustomWidget):
         self.create_label(key, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.create_label("p_home", state="false")
         self.create_label("p_prcs", state="false")
-        self.create_label("steps", state="false")
+        self.create_label("steps", value="")
         self.create_label("cmd", state="")
 
     def create_buttons(self):
