@@ -88,6 +88,15 @@ class ThrottleValve(CustomWidget):
             Logger.debug(f"Throttle valve position go to home")
         self.serial_reader.send_data(Cmd.ThrottleValve.cmd, Cmd.ThrottleValve.set_position, value.to_bytes(2, byteorder='little', signed=True))
 
+        if value == (-100): #si Home afficher 0
+            value = 0
+        #change the value of the spinbox
+        for spin_box, spin_box_key, _, spin_box_kwargs in self.spin_boxes:
+            if spin_box_key == "goto_step":
+
+                spin_box.setValue(value)
+                break
+
     def update_step(self, spin_box):
         self.set_position(spin_box.value())
 
@@ -156,3 +165,21 @@ class ThrottleValve(CustomWidget):
         self.window.show()
         self.window.raise_()
 
+
+    def set_value(self, value):
+        """
+        Définit la position de la throttle valve.
+
+        Args:
+            value: La nouvelle position de la throttle valve.
+        """
+        self.set_position(value)
+                
+    def get_value(self):
+        """
+        Renvois la position actuelle de la throttle valve.
+
+        Returns:
+            La position actuelle de la throttle valve.
+        """
+        return self.step

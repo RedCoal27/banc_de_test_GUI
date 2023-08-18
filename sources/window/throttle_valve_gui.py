@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+from internal.logger import Logger
+
 import csv
 import os
 
@@ -83,8 +85,8 @@ class ThrottleValveThread(QThread):
             self.sleep_while_running(1)
             time -= 1
 
-    def Hysteresis(self):
-        print("t")
+    def calibrate_hysteresis(self):
+        Logger.error("Calibration de l'hystérésis non implémentée")
 
 
     def return_to_close(self):

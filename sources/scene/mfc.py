@@ -96,10 +96,16 @@ class MFC(CustomWidget):
         Args:
             spin_box: L'objet spin box contenant la nouvelle valeur.
         """
+        if spin_box.value() > 0: #open gate if new value is > 0
+            self.parent.custom_widgets["nupro_final"].set_value(0)
+            self.parent.custom_widgets[f"nupro_{self.key}"].set_value(0)
+
         value = spin_box.value()/self.parent.config.get_constant_value(self.key)*5  # transformer la valeur en plage 0-5V
         self.parent.serial_reader.send_data(self.cmd, value)  
         Logger.debug(f"{self.key} setpoint changed to {spin_box.value()}")
 
+
+        
     def update_offset(self, spin_box):
         """
         Met à jour la valeur de l'offset.
@@ -123,6 +129,8 @@ class MFC(CustomWidget):
                 spin_box.setValue(value)
                 self.update_AO(spin_box)
                 break
+
+
 
     def get_value(self):
         """

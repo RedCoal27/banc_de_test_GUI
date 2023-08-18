@@ -36,7 +36,8 @@
     "off" : "Off",
     "enabled" : "Enabled",
     "disabled" : "Disabled",
-    
+    "goto_step" : "Go to step",
+
     "throttle_valve_gui_title": "Throttle Valve GUI",
     "name_label": "Name:",
     "home": "Home",
@@ -141,6 +142,14 @@
 
     "tempo_high" : "Temporisation High",
     "tempo_low" : "Temporisation Low",
+
+    "hysteresis_ref": "Ref Pression hysteresis",
+    "hysteresis_timeout": "Timeout hysteresis",
+    "hysteresis_mfc_flow": "Flow MFC hysteresis",
+    "close_time_at_800": "Close time at 800 mTorr",
+    "close_time_max_pressure": "Close time max pressure",
+    "close_ref": "Close pressure ref",
+    "close_mfc_flow": "Close MFC flow",
 
     "value": "Value",
     "status_flag": "Status Flag",

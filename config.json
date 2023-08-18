@@ -1,6 +1,6 @@
 {
     "gui": {
-        "lang": "fr",
+        "lang": "en",
         "font_size": 9
     },
     "chamber_pressure": {
@@ -61,7 +61,7 @@
             }
         },
         {
-            "name": "routine",
+            "name": "routine_throttle",
             "values": {
                 "hysteresis_ref": {
                     "value": 24,
