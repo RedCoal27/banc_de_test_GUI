@@ -200,7 +200,6 @@ class SerialReaderThread(QThread):
                     self.serial_reader.send_data(7,4)
                     data = None
                     data = self.serial_reader.wait_and_read_data(until='\n'.encode())
-                    # print(data)
                     if data is not None and len(data) > 0:
                         data = data.decode().strip().split(' ')
                         self.custom_widgets["generator1"].update_AI(data[0:2])
@@ -222,7 +221,7 @@ class SerialReaderThread(QThread):
                     # read throttle valve position
                     self.serial_reader.send_data(9, Cmd.ThrottleValve.position)
                     data = self.serial_reader.wait_and_read_data(2)
-                    print(data)
+                    # print(data)
                     self.custom_widgets["throttle_valve"].update_position(int.from_bytes(data, byteorder='big'))
 
 

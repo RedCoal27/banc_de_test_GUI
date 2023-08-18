@@ -69,7 +69,7 @@
     "generator2": "Générateur 2",
     "interlock_state" : "Interlock {state}",
     "source_power" : "Puissance source: {value}W",
-    "voltage_reflected" : "Tension ou réfléchie: {value}V ou W",
+    "voltage_reflected" : "V ou Préf: {value}V ou W",
 
     "nupro_final" : "Nupro \nFinal",
     "nupro_mfc1" : "Nupro \nMFC1",

@@ -3,6 +3,7 @@ from internal.custom_widget import CustomWidget
 from window.throttle_valve_gui import ThrottleValveGUI
 from internal.constant import Cmd
 
+
 class ThrottleValve(CustomWidget):
     """
     La classe ThrottleValve gère une Throttle Valve. Elle hérite de la classe CustomWidget.
@@ -36,12 +37,17 @@ class ThrottleValve(CustomWidget):
             key: Clé utilisée pour identifier la vanne.
             parent: Référence à l'objet parent du widget.
         """
-        ratio = (0.11, 0.25)
+        ratio = (0.12, 0.25)
+        self.parent = parent
         self.serial_reader = parent.serial_reader
         super().__init__(parent.translator, pos, ratio, "#F8CBAD")
         self.create_labels(key)
         self.create_buttons()
         self.state = 1
+        self.step = 0
+
+        self.window = ThrottleValveGUI(self)
+
 
     def create_labels(self, key):
         """
@@ -66,23 +72,25 @@ class ThrottleValve(CustomWidget):
         # self.create_button("cycle", state="false")
 
 
+    def set_position(self, value):
+        self.serial_reader.send_data(Cmd.ThrottleValve.cmd, Cmd.ThrottleValve.set_position, value.to_bytes(2, byteorder='little', signed=True))
+
 
     def update_DO(self, new_state=None):
         """
         Met à jour les étiquettes DO du widget FourWay.
         """
-        if self.serial_reader.ser is not None:
-            print(new_state)
+        if self.serial_reader.ser is not None and not self.window.isVisible():
             if new_state is not None:
                 self.state = new_state
             else:
                 self.state = not self.state
-            print(self.state)
-            new_pos = 0
+            new_pos = 800
             if(self.state):
-                new_pos = 800
-            self.serial_reader.send_data(Cmd.ThrottleValve.cmd, Cmd.ThrottleValve.set_position, new_pos.to_bytes(2, byteorder='big', signed=True))
-            self.update_button("set_state", state="open" if self.state else "close")
+                new_pos = 0
+                
+            self.set_position(new_pos)
+            self.update_button("set_state", state="close" if self.state else "open")
 
     def click_DO(self):
         """
@@ -99,20 +107,20 @@ class ThrottleValve(CustomWidget):
             up: Booléen représentant l'état du DI supérieur.
             down: Booléen représentant l'état du DI inférieur.
         """
-        print(data)
         self.sensor_open = data & 2
         self.sensor_close = data & 1
         self.update_label('di_open', state="true" if self.sensor_open else "false")
         self.update_label('di_close', state="true" if self.sensor_close else "false")
 
     def update_position(self,pos):
-        print(pos)
+        self.step = pos
         self.update_label("steps", value =  pos)
 
     def open_window(self):
         """
         Ouvre une fenêtre pour configurer la vanne.
         """
-        self.window = ThrottleValveGUI(self)
+        self.window.setWindowModality(Qt.ApplicationModal)  # Rend la fenêtre modale
         self.window.show()
         self.window.raise_()
+

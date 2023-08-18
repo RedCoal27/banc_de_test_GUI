@@ -65,10 +65,10 @@ class MainWindow(QMainWindow):
 
         self.init_ui()
 
+        self.destroyed.connect(self.close_all_windows)
 
 
         QTimer.singleShot(0, self.resize_widgets)
-
 
         self.thread = SerialReaderThread(self)  # type: ignore
         self.thread.start()
@@ -100,6 +100,10 @@ class MainWindow(QMainWindow):
         """
         Initialise l'interface utilisateur en créant la minuterie, les menus, l'arrière-plan et les boutons.
         """
+        base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        self.icon = QIcon(base_path + "\\images\\xfab.jpg")
+
+
         self.menu_manager.create_menus()
         self.create_background_and_buttons()
         self.setWindowTitle("Benchmark GUI")
@@ -109,8 +113,6 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(int(screen_size.width()*8.8/10), int(screen_size.height()*8.8/10))
         self.view.resize(self.width(), self.height()-self.menuBar().height() - 2)
 
-        base_path = os.environ.get('_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-        self.icon = QIcon(base_path + "\\images\\xfab.jpg")
 
         self.setWindowIcon(self.icon)
 
@@ -169,7 +171,7 @@ class MainWindow(QMainWindow):
         self.scene.addItem(Line(0.73, 0.74, 0.78, 0.74, "#4472C4")) #Chamber pressure
         self.scene.addItem(Line(0.73, 0.88, 0.78, 0.88, "#4472C4")) #Chamber pressure
 
-        self.scene.addItem(Line(0.3225, 0.58, 0.3225, 0.8, "#4472C4")) #throttle valve/rouffing pump
+        self.scene.addItem(Line(0.32, 0.58, 0.32, 0.8, "#4472C4")) #throttle valve/rouffing pump
 
     def create_custom_widgets(self):
         """
@@ -202,7 +204,7 @@ class MainWindow(QMainWindow):
         self.custom_widgets["turbo_pump_rga"] = TurboPump([0.02, 0.50], Cmd.TurboRGA, "turbo_pump_rga", parent=self)
         self.custom_widgets["turbo_pump_ch"] = TurboPump([0.14, 0.50], Cmd.TurboCH, "turbo_pump_ch", parent=self)
 
-        self.custom_widgets["roughing_pump"] = RoughingPump([0.2725, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
+        self.custom_widgets["roughing_pump"] = RoughingPump([0.27, 0.8], Cmd.RoughingPump, "roughing_pump", parent=self)
 
         self.custom_widgets["generator1"] = Generator([0.0105, 0.795], Cmd.Generator1, "generator1", parent=self)
         self.custom_widgets["generator2"] = Generator([0.135, 0.795], Cmd.Generator2, "generator2", parent=self)
@@ -223,7 +225,7 @@ class MainWindow(QMainWindow):
 
         self.custom_widgets["turbo_pump_gate"] = GateCH((0.19, 0.42), (-0.04, 0.0), "turbo_pump_gate", Cmd.RGAGate, sens='horizontal', parent=self, color="#FD6801")
 
-        self.custom_widgets["iso_chamber"] = Gate((0.3225, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
+        self.custom_widgets["iso_chamber"] = Gate((0.32, 0.73), (-0.04, -0.005), "iso_chamber", Cmd.iso_chamber, sens='horizontal', parent=self, color="#FD6801")
 
 
     def update_AI(self):
@@ -269,6 +271,17 @@ class MainWindow(QMainWindow):
         super().resizeEvent(event)
         self.resize_widgets()  # Call the new function here
 
+    def closeEvent(self, event):
+        self.close_all_windows()
+        super().closeEvent(event)
+
+    def close_all_windows(self):
+        for _, custom_widget in self.custom_widgets.items():
+            try:
+                custom_widget.window.close()
+            except:
+                pass
+
 
 
 if __name__ == "__main__":
@@ -276,5 +289,7 @@ if __name__ == "__main__":
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, False) 
     app = QApplication(sys.argv)
     window = MainWindow()
+    app.aboutToQuit.connect(window.close_all_windows)
     window.show()
     sys.exit(app.exec_())
+

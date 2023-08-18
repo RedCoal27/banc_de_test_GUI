@@ -16,14 +16,14 @@ class JaugePression(CustomWidget):
         key: a string representing the key of the widget
         parent: a parent widget (optional)
         """
-        self.pirani_config_gui = None
+        self.window = None
         self.parent = parent
         self.key = key
         self.value = 1000
         ratio = (0.12, 0.12)
         super().__init__(parent.translator, pos, ratio, "#E2F0D9")
         self.create_labels(key)
-        self.create_button("pirani_config", self.open_pirani_config)
+        self.create_button("pirani_config", self.open_window)
         
 
     def create_labels(self,key):
@@ -59,13 +59,13 @@ class JaugePression(CustomWidget):
         pressure += " "
 
         self.update_label('pressure', value = pressure, unit = PiraniConfig.units_types[unit - 1])
-        if self.pirani_config_gui is not None and self.pirani_config_gui.isVisible():
-            self.pirani_config_gui.update_status_bits(int(value[1], 16))
+        if self.window is not None and self.window.isVisible():
+            self.window.update_status_bits(int(value[1], 16))
 
-    def open_pirani_config(self):
+    def open_window(self):
         if self.parent.serial_reader.ser is not None:
-            self.pirani_config_gui = PiraniConfigGui(self.parent,self.key)
-            self.pirani_config_gui.show()
+            self.window = PiraniConfigGui(self.parent,self.key)
+            self.window.show()
 
 
     def get_value(self):

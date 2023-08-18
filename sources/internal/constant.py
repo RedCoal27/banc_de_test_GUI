@@ -102,9 +102,15 @@ class Cmd:
         Constante lié a la Throttle Valve
         """
         cmd = 9
-        set_position = 1
-        sensors = 3
-        position = 2
+        set_position = 0
+        position = 1
+        sensors = 2
+        delta_home = 3
+        tension1 = 4
+        tension2 = 5
+        tension3 = 6
+        tension4 = 7
+
 
 
 class PiraniConfig:
