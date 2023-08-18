@@ -1,7 +1,9 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
+
 from internal.custom_widget import CustomWidget
 from window.throttle_valve_gui import ThrottleValveGUI
 from internal.constant import Cmd
+from internal.logger import Logger
 
 
 class ThrottleValve(CustomWidget):
@@ -46,6 +48,10 @@ class ThrottleValve(CustomWidget):
         self.state = 1
         self.step = 0
 
+        for button in self.buttons:
+            if button[2] != "home":
+                button[0].setEnabled(True)
+
         self.window = ThrottleValveGUI(self)
 
 
@@ -60,20 +66,46 @@ class ThrottleValve(CustomWidget):
         self.create_label("di_open", state="false")
         self.create_label("di_close", state="false")
         self.create_label("steps", value="")
-        self.create_label_with_spin_box("close_position", state="false", min=0, max=100, step=1, value=0)
-        self.create_label_with_spin_box("hysteresis", state="false", min=0, max=100, step=1, value=0)
+        # self.create_label_with_spin_box("close_position", state="false", min=0, max=100, step=1, value=0)
+        # self.create_label_with_spin_box("hysteresis", state="false", min=0, max=100, step=1, value=0)
+        self.create_label_with_spin_box("goto_step", unit="", initial_value=0, min_value=-99, max_value=800, function=self.update_step)
 
     def create_buttons(self):
         """
         Crée des boutons pour le widget ThrottleValve.
         """
-        self.create_button("set_state", state="", function=self.click_DO)
+        self.create_button("open", function=self.open)
+        self.create_button("close", function=self.close)
+        self.create_button("home", function=self.home)
         self.create_button("routine", function=self.open_window)
         # self.create_button("cycle", state="false")
 
 
     def set_position(self, value):
+        if value != (-100):
+            Logger.debug(f"Throttle valve position set to {value}")
+        else:
+            Logger.debug(f"Throttle valve position go to home")
         self.serial_reader.send_data(Cmd.ThrottleValve.cmd, Cmd.ThrottleValve.set_position, value.to_bytes(2, byteorder='little', signed=True))
+
+    def update_step(self, spin_box):
+        self.set_position(spin_box.value())
+
+
+    def open(self):
+        self.set_position(800)
+
+    def close(self):
+        self.set_position(0)
+
+    def home(self):
+        self.set_position(-100) #-100 = Home
+        QTimer.singleShot(3000, self.enable_button)
+
+    def enable_button(self): # Lancer après le Home
+        for button in self.buttons:
+            if button[2] != "home":
+                button[0].setEnabled(True)
 
 
     def update_DO(self, new_state=None):

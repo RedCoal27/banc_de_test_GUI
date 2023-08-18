@@ -157,6 +157,7 @@ class SerialReaderThread(QThread):
         """
         Démarre le thread de lecture série.
         """
+        self.msleep(3000) #attend que tous démarre bien
         while True:
             if self.serial_reader.busy == False and self.serial_reader.ser is not None:
                 try:

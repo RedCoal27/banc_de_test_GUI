@@ -51,11 +51,11 @@
             "name": "cycle",
             "values": {
                 "tempo_high": {
-                    "value": 0,
+                    "value": 1,
                     "unit": "s"
                 },
                 "tempo_low": {
-                    "value": 0,
+                    "value": 1,
                     "unit": "s"
                 }
             }
@@ -82,11 +82,11 @@
                     "unit": "s"
                 },
                 "close_time_max_pressure": {
-                    "value": 60,
+                    "value": 30,
                     "unit": "s"
                 },
                 "close_ref": {
-                    "value": 40,
+                    "value": 20,
                     "unit": "Torr"
                 },
                 "close_mfc_flow": {

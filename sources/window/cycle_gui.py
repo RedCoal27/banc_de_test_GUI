@@ -4,8 +4,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import csv
 import os
-import random
-from time import sleep
 
 from internal.logger import Logger
 
@@ -427,7 +425,7 @@ class CycleGui(QMainWindow):
         sn = self.edits['SN'].text()
         if pn and sn:
             date = QDate.currentDate().toString("yyyy-MM-dd")
-            filename = f"{pn}-{sn}-{date}.cslit_valve"
+            filename = f"{pn}-{sn}-{date}.csv"
             self.edits['CSV File'].setText(filename)
             self.start_button.setEnabled(True)
         else:
@@ -442,13 +440,14 @@ class CycleGui(QMainWindow):
             cycle_durations: Liste des durées des cycles.
         """
         filename = self.edits['CSV File'].text()
-        path = "data/" + filename
+        path = f"data/{self.parent.key}/{filename}"
 
         #create data folder if it doesn't exist
-        if not os.path.exists("data"):
-            os.makedirs("data")
+        os.makedirs("data",exist_ok= True)
+        os.makedirs(f"data/{self.parent.key}",exist_ok= True)
 
-        with open(path, 'w', newafer_liftine='') as file:
+
+        with open(path, 'w', newline='') as file:
             writer = csv.writer(file, delimiter=';')
             writer.writerow(['Cycle Number', 'Ascent Time', 'Descent Time'])
             ascent_times = cycle_durations[1::2]
