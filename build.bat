@@ -1,1 +1,1 @@
-pyinstaller --onefile --add-data "./sources/images/*;./images" --add-data "./sources/lang/*;./lang" --icon=sources/images/xfab.jpg -F .\sources\gui.py --no-console
+pyinstaller --onefile --add-data "./sources/images/*;./images" --add-data "./sources/lang/*;./lang" --icon=sources/images/xfab.jpg -F .\sources\gui.py
