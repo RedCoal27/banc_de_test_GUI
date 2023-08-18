@@ -216,13 +216,13 @@ class SerialReaderThread(QThread):
                     # read throttle valve sensor
                     self.serial_reader.send_data(9, Cmd.ThrottleValve.sensors)
                     data = self.serial_reader.wait_and_read_data(1)
-                    print(data)
+                    # print(data)
                     self.custom_widgets["throttle_valve"].update_sensor(data[0])
                     data = None
                     # read throttle valve position
                     self.serial_reader.send_data(9, Cmd.ThrottleValve.position)
                     data = self.serial_reader.wait_and_read_data(2)
-                    print(data)
+                    # print(data)
                     self.custom_widgets["throttle_valve"].update_position(int.from_bytes(data, byteorder='big'))
 
 
